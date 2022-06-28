@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/gov-site",
+  "sourceRoot": "apps/gov-website",
   "projectType": "application",
   "targets": {
     "build": {
@@ -8,8 +8,8 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "root": "apps/gov-site",
-        "outputPath": "dist/apps/gov-site"
+        "root": "apps/gov-website",
+        "outputPath": "dist/apps/gov-website"
       },
       "configurations": {
         "development": {},
@@ -20,16 +20,16 @@
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "gov-site:build",
+        "buildTarget": "gov-website:build",
         "dev": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "gov-site:build:development",
+          "buildTarget": "gov-website:build:development",
           "dev": true
         },
         "production": {
-          "buildTarget": "gov-site:build:production",
+          "buildTarget": "gov-website:build:production",
           "dev": false
         }
       }
@@ -37,14 +37,14 @@
     "export": {
       "executor": "@nrwl/next:export",
       "options": {
-        "buildTarget": "gov-site:build:production"
+        "buildTarget": "gov-website:build:production"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/gov-site"],
+      "outputs": ["coverage/apps/gov-website"],
       "options": {
-        "jestConfig": "apps/gov-site/jest.config.ts",
+        "jestConfig": "apps/gov-website/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -52,7 +52,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/gov-site/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/gov-website/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },
