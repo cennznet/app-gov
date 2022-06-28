@@ -2,7 +2,6 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "gov-site": "apps/gov-site",
-    "gov-site-e2e": "apps/gov-site-e2e"
+    "gov-site": "apps/gov-site"
   }
 }
