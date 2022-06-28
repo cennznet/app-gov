@@ -2,7 +2,14 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "access-cennznet": "libs/access/cennznet",
+    "common-constants": "libs/common/constants",
+    "common-utils": "libs/common/utils",
     "gov-website": "apps/gov-website",
+    "ui-bitmaps": "libs/ui/bitmaps",
+    "ui-components": "libs/ui/components",
+    "ui-hooks": "libs/ui/hooks",
+    "ui-providers": "libs/ui/providers",
     "ui-vectors": "libs/ui/vectors"
   }
 }

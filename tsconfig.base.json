@@ -15,7 +15,14 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@app-gov/access/cennznet": ["libs/access/cennznet/src/index.ts"],
       "@app-gov/assets/*": ["libs/assets/src/*/index.ts"],
+      "@app-gov/common/constants": ["libs/common/constants/src/index.ts"],
+      "@app-gov/common/utils": ["libs/common/utils/src/index.ts"],
+      "@app-gov/ui/bitmaps": ["libs/ui/bitmaps/src/index.ts"],
+      "@app-gov/ui/components": ["libs/ui/components/src/index.ts"],
+      "@app-gov/ui/hooks": ["libs/ui/hooks/src/index.ts"],
+      "@app-gov/ui/providers": ["libs/ui/providers/src/index.ts"],
       "@app-gov/ui/vectors": ["libs/ui/vectors/src/index.ts"],
       "@gov-app/*": ["apps/gov-website/*"]
     }
