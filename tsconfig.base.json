@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@gov-app/*": ["apps/gov-website/*"],
       "@app-gov/assets": ["libs/assets/src/index.ts"],
       "@app-gov/components": ["libs/components/src/index.ts"],
       "@app-gov/constants": ["libs/constants/src/index.ts"],
