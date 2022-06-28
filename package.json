@@ -6,7 +6,8 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "format": "prettier --config .prettierrc.json ./ --write"
+    "format": "prettier --config .prettierrc.json ./ --write",
+    "clean": "nx clear-cache"
   },
   "private": true,
   "dependencies": {

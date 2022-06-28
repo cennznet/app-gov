@@ -11,7 +11,7 @@ import {
 	TextField,
 	WalletSelect,
 } from "@gov-app/libs/components";
-import { Spinner } from "@gov-app/libs/assets/vectors";
+import { Spinner } from "@app-gov/ui/vectors";
 import { IPFS_GATEWAY } from "@gov-app/libs/constants";
 import { FormEventHandler, useCallback, useState } from "react";
 import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";

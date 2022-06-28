@@ -2,13 +2,13 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "assets": "libs/assets",
     "components": "libs/components",
     "constants": "libs/constants",
     "data": "libs/data",
     "gov-website": "apps/gov-website",
     "hooks": "libs/hooks",
     "providers": "libs/providers",
+    "ui-vectors": "libs/ui/vectors",
     "utils": "libs/utils"
   }
 }

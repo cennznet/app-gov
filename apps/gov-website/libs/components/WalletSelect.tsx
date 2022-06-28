@@ -3,7 +3,7 @@ import type { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import { Button, Select } from "@gov-app/libs/components";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvider";
-import { CENNZLogo } from "@gov-app/libs/assets/vectors";
+import { CENNZLogo } from "@app-gov/ui/vectors";
 
 export const WalletSelect: typeof Select = (props) => {
 	const {

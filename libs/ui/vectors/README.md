@@ -1,7 +1,7 @@
-# assets
+# ui-vectors
 
 This library was generated with [Nx](https://nx.dev).
 
 ## Building
 
-Run `nx build assets` to build the library.
+Run `nx build ui-vectors` to build the library.

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { classNames, If } from "react-extras";
 import { TextField } from "@gov-app/libs/components";
 import { NULL_ADDRESS } from "@gov-app/libs/constants";
-import { ChevronDown } from "@gov-app/libs/assets/vectors";
+import { ChevronDown } from "@app-gov/ui/vectors";
 
 interface ProposalAdvancedProps {
 	proposalExtrinsic: string;

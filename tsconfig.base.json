@@ -15,14 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@gov-app/*": ["apps/gov-website/*"],
-      "@app-gov/assets": ["libs/assets/src/index.ts"],
+      "@app-gov/assets/*": ["libs/assets/src/*/index.ts"],
       "@app-gov/components": ["libs/components/src/index.ts"],
       "@app-gov/constants": ["libs/constants/src/index.ts"],
       "@app-gov/data": ["libs/data/src/index.ts"],
       "@app-gov/hooks": ["libs/hooks/src/index.ts"],
       "@app-gov/providers": ["libs/providers/src/index.ts"],
-      "@app-gov/utils": ["libs/utils/src/index.ts"]
+      "@app-gov/ui/vectors": ["libs/ui/vectors/src/index.ts"],
+      "@app-gov/utils": ["libs/utils/src/index.ts"],
+      "@gov-app/*": ["apps/gov-website/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
