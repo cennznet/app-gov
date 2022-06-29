@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "nx serve",
     "build": "nx build",
-    "test": "nx test",
-    "format": "prettier --config .prettierrc.json ./ --write",
     "clean": "nx clear-cache",
+    "dev": "nx serve",
+    "format": "prettier --config .prettierrc.json ./ --write",
+    "gov-website:build": "nx run gov-website:build",
     "gov-website:dev": "nx run gov-website:serve",
-    "gov-website:build": "nx run gov-website:build"
+    "test": "nx test",
+    "docker:up": "docker compose up"
   },
   "private": true,
   "dependencies": {
