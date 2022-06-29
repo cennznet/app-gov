@@ -2,8 +2,6 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "chain-cennznet": "libs/chain/cennznet",
-    "chain-constants": "libs/chain/constants",
     "gov-website": "apps/gov-website",
     "node-constants": "libs/node/constants",
     "node-utils": "libs/node/utils",
