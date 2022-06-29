@@ -12,7 +12,7 @@ import {
 import { FC } from "react";
 import { SessionProvider } from "next-auth/react";
 
-import "../globals.css";
+import "@app-gov/website/globals.css";
 
 const NextApp: FC<AppProps> = ({
 	Component,
