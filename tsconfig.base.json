@@ -17,6 +17,7 @@
     "paths": {
       "@app-gov/assets/*": ["libs/assets/src/*/index.ts"],
       "@app-gov/node/constants": ["libs/node/constants/src/index.ts"],
+      "@app-gov/node/types": ["libs/node/types/src/index.ts"],
       "@app-gov/node/utils": ["libs/node/utils/src/index.ts"],
       "@app-gov/service/constants": ["libs/service/constants/src/index.ts"],
       "@app-gov/service/pinata": ["libs/service/pinata/src/index.ts"],

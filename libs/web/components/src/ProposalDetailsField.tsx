@@ -6,12 +6,14 @@ import ReactMarkdown from "react-markdown";
 import { classNames, If } from "react-extras";
 import { Button, TextArea } from "@app-gov/web/components";
 
-interface ProposalDetailsProps {
+interface ProposalDetailsFieldProps {
 	proposalDetails: string;
-	onProposalDetailsChange: ChangeEventHandler<HTMLTextAreaElement>;
+	onProposalDetailsChange: ChangeEventHandler<
+		HTMLTextAreaElement & HTMLInputElement
+	>;
 }
 
-export const ProposalDetails: FC<ProposalDetailsProps> = ({
+export const ProposalDetailsField: FC<ProposalDetailsFieldProps> = ({
 	proposalDetails,
 	onProposalDetailsChange,
 }) => {
