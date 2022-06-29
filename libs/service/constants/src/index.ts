@@ -47,5 +47,5 @@ export const TWITTER_CLIENT: Pick<
 	clientSecret: process.env.TWITTER_CLIENT_SECRET ?? "",
 };
 
-export const PINATA_JWT: string = process.env.PINATA_JWT ?? "";
+export const PINATA_JWT: string = process.env.NX_PINATA_JWT ?? "";
 export const PINATA_GATEWAY: string = process.env.NX_PINATA_GATEWAY ?? "";
