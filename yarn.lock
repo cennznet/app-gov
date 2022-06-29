@@ -1502,6 +1502,7 @@ __metadata:
     babel-jest: 27.5.1
     core-js: ^3.6.5
     cypress: ^9.1.0
+    emittery: ^0.11.0
     eslint: ~8.15.0
     eslint-config-next: 12.1.6
     eslint-config-prettier: 8.1.0
@@ -7070,6 +7071,13 @@ __metadata:
     minimalistic-assert: ^1.0.1
     minimalistic-crypto-utils: ^1.0.1
   checksum: d56d21fd04e97869f7ffcc92e18903b9f67f2d4637a23c860492fbbff5a3155fd9ca0184ce0c865dd6eb2487d234ce9551335c021c376cd2d3b7cb749c7d10f4
+  languageName: node
+  linkType: hard
+
+"emittery@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "emittery@npm:0.11.0"
+  checksum: fba43607e6184a9e318541c1613b742e4d4753bab4fd27f17b93127172f62aa34da8096c78c290dd1a65f12a63abe5ae6765a1d555194d60e5f42eed8548c23d
   languageName: node
   linkType: hard
 
