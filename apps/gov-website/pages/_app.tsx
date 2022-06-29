@@ -1,16 +1,18 @@
 /* eslint-disable react/jsx-key */
-import "@gov-app/libs/globals.css";
-
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { CENNZ_NETWORK } from "@gov-app/libs/constants";
-import { MainProvider } from "@gov-app/libs/providers/MainProvider";
-import { CENNZApiProvider } from "@gov-app/libs/providers/CENNZApiProvider";
-import { CENNZExtensionProvider } from "@gov-app/libs/providers/CENNZExtensionProvider";
-import { CENNZWalletProvider } from "@gov-app/libs/providers/CENNZWalletProvider";
-import { UserAgentProvider } from "@gov-app/libs/providers/UserAgentProvider";
+import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import {
+	MainProvider,
+	CENNZApiProvider,
+	CENNZExtensionProvider,
+	CENNZWalletProvider,
+	UserAgentProvider,
+} from "@app-gov/web/providers";
 import { FC } from "react";
 import { SessionProvider } from "next-auth/react";
+
+import "../globals.css";
 
 const NextApp: FC<AppProps> = ({
 	Component,
@@ -22,7 +24,7 @@ const NextApp: FC<AppProps> = ({
 				providers={[
 					<UserAgentProvider />,
 					<CENNZExtensionProvider appName="CENNZnet Governance" />,
-					<CENNZApiProvider endpoint={CENNZ_NETWORK.ApiUrl.InWebSocket} />,
+					<CENNZApiProvider network={CENNZ_NETWORK.ChainSlug} />,
 					<CENNZWalletProvider />,
 				]}
 			>

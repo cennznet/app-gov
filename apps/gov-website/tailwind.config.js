@@ -5,8 +5,8 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
 	content: [
 		join(__dirname, "./pages/**/*.{js,ts,jsx,tsx}"),
-		join(__dirname, "./libs/components/**/*.{js,ts,jsx,tsx}"),
-		join(__dirname, "./libs/assets/**/*.svg"),
+		join(__dirname, "../../libs/web/components/**/*.{js,ts,jsx,tsx}"),
+		join(__dirname, "../../libs/web/vectors/**/*.svg"),
 	],
 	theme: {
 		fontFamily: {

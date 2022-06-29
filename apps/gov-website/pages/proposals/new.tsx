@@ -10,14 +10,13 @@ import {
 	ProposalDetails,
 	TextField,
 	WalletSelect,
-} from "@gov-app/libs/components";
-import { Spinner } from "@app-gov/ui/vectors";
-import { IPFS_GATEWAY } from "@gov-app/libs/constants";
+} from "@app-gov/web/components";
+import { Spinner } from "@app-gov/web/vectors";
+import { PINATA_GATEWAY } from "@app-gov/service/constants";
 import { FormEventHandler, useCallback, useState } from "react";
-import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
-import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
-import { pinProposalToIPFS } from "@gov-app/libs/utils/pinProposalToIPFS";
-import { useControlledInput } from "@gov-app/libs/hooks/useControlledInput";
+import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
+import { useControlledInput } from "@app-gov/web/hooks";
+import { pinProposal } from "@app-gov/service/pinata";
 
 const NewProposal: NextPage = () => {
 	const { value: proposalTitle, onChange: onProposalTitleChange } =
@@ -155,7 +154,7 @@ const useFormSubmit = () => {
 			try {
 				const proposalData = new FormData(event.target as HTMLFormElement);
 
-				const { IpfsHash } = await pinProposalToIPFS({
+				const { IpfsHash } = await pinProposal({
 					proposalTitle: proposalData.get("proposalTitle").toString(),
 					proposalDetails: proposalData.get("proposalDetails").toString(),
 				});
@@ -163,7 +162,7 @@ const useFormSubmit = () => {
 				await api.tx.governance
 					.submitProposal(
 						proposalData.get("proposalExtrinsic"),
-						IPFS_GATEWAY.concat(IpfsHash),
+						PINATA_GATEWAY.concat(IpfsHash),
 						proposalData.get("proposalDelay")
 					)
 					.signAndSend(

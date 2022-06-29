@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/vectors/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/web/vectors",
+        "main": "libs/web/vectors/src/index.ts",
+        "tsConfig": "libs/web/vectors/tsconfig.lib.json",
+        "assets": ["libs/web/vectors/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/vectors/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

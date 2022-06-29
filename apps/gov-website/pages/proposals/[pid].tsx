@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { Layout, Header } from "@gov-app/libs/components";
+import { Layout, Header } from "@app-gov/web/components";
 
 const Proposal: NextPage = () => {
 	const router = useRouter();

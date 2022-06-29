@@ -2,14 +2,19 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "access-cennznet": "libs/access/cennznet",
-    "common-constants": "libs/common/constants",
-    "common-utils": "libs/common/utils",
+    "chain-cennznet": "libs/chain/cennznet",
+    "chain-constants": "libs/chain/constants",
     "gov-website": "apps/gov-website",
-    "ui-bitmaps": "libs/ui/bitmaps",
-    "ui-components": "libs/ui/components",
-    "ui-hooks": "libs/ui/hooks",
-    "ui-providers": "libs/ui/providers",
-    "ui-vectors": "libs/ui/vectors"
+    "node-constants": "libs/node/constants",
+    "node-utils": "libs/node/utils",
+    "service-constants": "libs/service/constants",
+    "service-pinata": "libs/service/pinata",
+    "web-bitmaps": "libs/web/bitmaps",
+    "web-components": "libs/web/components",
+    "web-hooks": "libs/web/hooks",
+    "web-providers": "libs/web/providers",
+    "web-types": "libs/web/types",
+    "web-utils": "libs/web/utils",
+    "web-vectors": "libs/web/vectors"
   }
 }

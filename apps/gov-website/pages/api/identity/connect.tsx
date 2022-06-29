@@ -1,5 +1,5 @@
-import { NEXTAUTH_SECRET } from "@gov-app/libs/constants";
-import { withMethodGuard } from "@gov-app/libs/utils/withMethodGuard";
+import { NEXTAUTH_SECRET } from "@app-gov/node/constants";
+import { withMethodGuard } from "@app-gov/node/utils";
 import { getToken } from "next-auth/jwt";
 
 export default withMethodGuard(

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/bitmaps/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/web/bitmaps",
+        "main": "libs/web/bitmaps/src/index.ts",
+        "tsConfig": "libs/web/bitmaps/tsconfig.lib.json",
+        "assets": ["libs/web/bitmaps/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/bitmaps/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

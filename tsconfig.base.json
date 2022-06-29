@@ -15,16 +15,20 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app-gov/access/cennznet": ["libs/access/cennznet/src/index.ts"],
       "@app-gov/assets/*": ["libs/assets/src/*/index.ts"],
-      "@app-gov/common/constants": ["libs/common/constants/src/index.ts"],
-      "@app-gov/common/utils": ["libs/common/utils/src/index.ts"],
-      "@app-gov/ui/bitmaps": ["libs/ui/bitmaps/src/index.ts"],
-      "@app-gov/ui/components": ["libs/ui/components/src/index.ts"],
-      "@app-gov/ui/hooks": ["libs/ui/hooks/src/index.ts"],
-      "@app-gov/ui/providers": ["libs/ui/providers/src/index.ts"],
-      "@app-gov/ui/vectors": ["libs/ui/vectors/src/index.ts"],
-      "@gov-app/*": ["apps/gov-website/*"]
+      "@app-gov/chain/cennznet": ["libs/chain/cennznet/src/index.ts"],
+      "@app-gov/chain/constants": ["libs/chain/constants/src/index.ts"],
+      "@app-gov/node/constants": ["libs/node/constants/src/index.ts"],
+      "@app-gov/node/utils": ["libs/node/utils/src/index.ts"],
+      "@app-gov/service/constants": ["libs/service/constants/src/index.ts"],
+      "@app-gov/service/pinata": ["libs/service/pinata/src/index.ts"],
+      "@app-gov/web/bitmaps": ["libs/web/bitmaps/src/index.ts"],
+      "@app-gov/web/components": ["libs/web/components/src/index.ts"],
+      "@app-gov/web/hooks": ["libs/web/hooks/src/index.ts"],
+      "@app-gov/web/providers": ["libs/web/providers/src/index.ts"],
+      "@app-gov/web/types": ["libs/web/types/src/index.ts"],
+      "@app-gov/web/utils": ["libs/web/utils/src/index.ts"],
+      "@app-gov/web/vectors": ["libs/web/vectors/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

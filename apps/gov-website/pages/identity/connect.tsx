@@ -10,9 +10,9 @@ import {
 	TwitterLogo,
 	Spinner,
 	CloseIcon,
-} from "@app-gov/ui/vectors";
+} from "@app-gov/web/vectors";
 
-import { useWindowPopup } from "@gov-app/libs/hooks/useWindowPopup";
+import { useWindowPopup } from "@app-gov/web/hooks";
 import { getSession } from "next-auth/react";
 import { If } from "react-extras";
 import {
@@ -21,9 +21,9 @@ import {
 	WalletSelect,
 	Layout,
 	Header,
-} from "@gov-app/libs/components";
-import { submitIdentityConnectForm } from "@gov-app/libs/utils/submitIdentityConnectForm";
-import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
+} from "@app-gov/web/components";
+import { submitIdentityConnectForm } from "@app-gov/web/utils";
+import { useCENNZApi } from "@app-gov/web/providers";
 
 const Connect: NextPage = () => {
 	const {
