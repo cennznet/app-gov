@@ -1,11 +1,11 @@
-import type { FC } from "react";
+import type { ChangeEvent, FC } from "react";
 import type { ProposalCall } from "@app-gov/web/types";
 
 import { useMemo, useState } from "react";
 import { classNames, If } from "react-extras";
 import { ChevronDown } from "@app-gov/web/vectors";
 import { Extrinsics } from "@app-gov/node/artifacts";
-import { AutoGrowInput } from "@app-gov/web/components";
+import { AutoGrowInput, Select } from "@app-gov/web/components";
 
 interface ProposalAdvancedProps {
 	proposalCall: ProposalCall | undefined;
@@ -18,7 +18,8 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 }) => {
 	const [open, setOpen] = useState<boolean>(false);
 
-	const extrinsicArgs = useExtrinsicArgs(proposalCall);
+	const { cennzCalls, cennzModules, extrinsicArgs } =
+		useExtrinsic(proposalCall);
 
 	return (
 		<div className="w-full">
@@ -41,20 +42,38 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 				</label>
 				<fieldset
 					id="cennzExtrinsic"
-					className="border-dark mb-4 inline-flex w-full items-center border-[3px] bg-white px-4 py-2"
+					className="border-dark mb-4 inline-flex w-full items-center space-x-6 border-[3px] bg-white px-4 py-2"
 				>
 					<p className="mr-2 tracking-widest text-gray-600">api.tx.</p>
-					<AutoGrowInput
+					<Select
+						className="w-[12em] rounded border border-gray-200"
+						inputClassName="cursor-pointer"
 						placeholder="module"
-						value={proposalCall?.module || ""}
-						onChange={(value) => updateProposalCall("module", value)}
-					/>
+						defaultValue={proposalCall?.module}
+						onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+							updateProposalCall("module", event.target.value)
+						}
+					>
+						{cennzModules?.map((_module: string) => (
+							<option value={_module}>{_module}</option>
+						))}
+					</Select>
 					<p className="mx-2 tracking-widest">.</p>
-					<AutoGrowInput
+					<Select
+						className="min-w-[12em] rounded border border-gray-200"
+						inputClassName={classNames(
+							proposalCall?.module && "cursor-pointer"
+						)}
 						placeholder="call"
-						value={proposalCall?.call || ""}
-						onChange={(value) => updateProposalCall("call", value)}
-					/>
+						defaultValue={proposalCall?.call}
+						onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+							updateProposalCall("call", event.target.value)
+						}
+					>
+						{cennzCalls?.map((call: string) => (
+							<option value={call}>{call}</option>
+						))}
+					</Select>
 				</fieldset>
 				<label htmlFor="cennzValues" className="text-lg">
 					Values
@@ -67,7 +86,7 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 						{extrinsicArgs?.map((arg, index) => (
 							<div key={index}>
 								<AutoGrowInput
-									inputClassName="border-b border-hero min-w-[15em]"
+									inputClassName="border-b border-hero min-w-[15em] truncate"
 									placeholder={arg}
 									value={proposalCall?.values?.[arg] || ""}
 									onChange={(value) => updateProposalCall("values", value, arg)}
@@ -84,21 +103,41 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 	);
 };
 
-const useExtrinsicArgs = (proposalCall: ProposalCall | undefined) => {
-	return useMemo<string[]>(() => {
-		const cennzModule = Extrinsics.find(
-			(ex: any) => ex.section === proposalCall?.module
-		);
-		if (!cennzModule) return [];
+interface Extrinsic {
+	section: string;
+	methods: Array<ExtrinsicMethod>;
+}
 
-		const call = cennzModule.methods.find(
+interface ExtrinsicMethod {
+	name: string;
+	args: string;
+}
+
+const useExtrinsic = (proposalCall: ProposalCall | undefined) => {
+	const cennzModules = Extrinsics.map((ex: Extrinsic) => ex.section);
+
+	const selectedModule = useMemo(
+		() =>
+			Extrinsics.find((ex: Extrinsic) => ex.section === proposalCall?.module),
+		[proposalCall?.module]
+	);
+
+	const cennzCalls = useMemo(
+		() => selectedModule?.methods.map((method: ExtrinsicMethod) => method.name),
+		[selectedModule, proposalCall?.module]
+	);
+
+	const extrinsicArgs = useMemo<string[]>(() => {
+		const selectedCall = selectedModule?.methods.find(
 			(method: any) => method.name === proposalCall?.call
 		);
-		if (!call) return [];
+		if (!selectedCall) return [];
 
-		return call.args
+		return selectedCall.args
 			.split(",")
 			.map((args: string) => args.split(":")[0])
 			.filter(Boolean);
-	}, [proposalCall]);
+	}, [selectedModule, proposalCall]);
+
+	return { cennzModules, cennzCalls, extrinsicArgs };
 };
