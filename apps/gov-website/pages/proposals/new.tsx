@@ -33,15 +33,17 @@ const NewProposal: NextPage = () => {
 
 	const { api } = useCENNZApi();
 
-	const proposalExtrinsic = useMemo<SubmittableExtrinsic<"promise"> | undefined>(() => {
+	const proposalExtrinsic = useMemo<
+		SubmittableExtrinsic<"promise"> | undefined
+	>(() => {
 		if (!api || !cennzModule || !cennzCall) return undefined;
 
 		try {
-				return api.tx[cennzModule][cennzCall](...Object.values(cennzValues))
+			return api.tx[cennzModule][cennzCall](...Object.values(cennzValues));
 		} catch (_) {
 			return undefined;
 		}
-	}, [cennzModule, cennzCall, cennzValues, api])
+	}, [cennzModule, cennzCall, cennzValues, api]);
 
 	const { busy, onFormSubmit } = useFormSubmit(proposalExtrinsic);
 
@@ -171,7 +173,9 @@ const useCennzValues = () => {
 	};
 };
 
-const useFormSubmit = (proposalExtrinsic: SubmittableExtrinsic<"promise"> | undefined) => {
+const useFormSubmit = (
+	proposalExtrinsic: SubmittableExtrinsic<"promise"> | undefined
+) => {
 	const [busy, setBusy] = useState<boolean>(false);
 
 	const { api } = useCENNZApi();
