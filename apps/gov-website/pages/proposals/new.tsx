@@ -28,6 +28,10 @@ const NewProposal: NextPage = () => {
 	const { value: proposalDelay, onChange: onProposalDelayChange } =
 		useControlledInput<number, HTMLInputElement>(0);
 
+	const [cennzModule, setCennzModule] = useState<string>("");
+	const [cennzCall, setCennzCall] = useState<string>("");
+	const { cennzValues, setCennzValue } = useCennzValues();
+
 	const { busy, onFormSubmit } = useFormSubmit();
 
 	return (
@@ -112,8 +116,12 @@ const NewProposal: NextPage = () => {
 					</fieldset>
 
 					<ProposalAdvanced
-						proposalExtrinsic={proposalExtrinsic}
-						onProposalExtrinsicChange={onProposalExtrinsicChange}
+						cennzModule={cennzModule}
+						setCennzModule={setCennzModule}
+						cennzCall={cennzCall}
+						setCennzCall={setCennzCall}
+						cennzValues={cennzValues}
+						setCennzValue={setCennzValue}
 					/>
 
 					<fieldset className="mt-16 text-center">
@@ -136,6 +144,21 @@ const NewProposal: NextPage = () => {
 };
 
 export default NewProposal;
+
+const useCennzValues = () => {
+	const [cennzValues, setCennzValues] = useState<Record<string, string>>();
+
+	const setCennzValue = (arg: string, value: string) =>
+		setCennzValues((prevValues) => ({
+			...prevValues,
+			[arg]: value,
+		}));
+
+	return {
+		cennzValues,
+		setCennzValue,
+	};
+};
 
 const useFormSubmit = () => {
 	const [busy, setBusy] = useState<boolean>(false);

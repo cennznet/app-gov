@@ -1,1 +1,1 @@
-export {default as Extrinsics} from "./extrinsics.json"
+export { default as Extrinsics } from "./extrinsics.json";
