@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "gov-website": "apps/gov-website",
+    "node-artifacts": "libs/node/artifacts",
     "node-constants": "libs/node/constants",
     "node-types": "libs/node/types",
     "node-utils": "libs/node/utils",
