@@ -409,5 +409,27 @@
       { "name": "asDerivative", "args": "index: `u16`, call: `Call`" },
       { "name": "batch", "args": "calls: `Vec<Call>`" }
     ]
+  },
+  {
+    "section": "governance",
+    "methods": [
+      { "name": "addCouncilMember", "args": "newMember" },
+      { "name": "cancelEnactment", "args": "proposalId" },
+      { "name": "enactReferendum", "args": "proposalId" },
+      { "name": "removeCouncilMember", "args": "removeMember" },
+      { "name": "setMinimumCouncilStake", "args": "newMinimumCouncilStake" },
+      {
+        "name": "setMinimumVoterStakedAmount",
+        "args": "newMinimumStakedAmount"
+      },
+      { "name": "setProposalBond", "args": "newProposalBond" },
+      { "name": "setReferendumThreshold", "args": "newReferendumThreshold" },
+      {
+        "name": "submitProposal",
+        "args": "call, justificationUri, enactmentDelay"
+      },
+      { "name": "voteAgainstReferendum", "args": "proposalId" },
+      { "name": "voteOnProposal", "args": "proposalId, vote" }
+    ]
   }
 ]
