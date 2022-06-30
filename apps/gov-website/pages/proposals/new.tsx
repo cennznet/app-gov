@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
-import type { SubmittableResult } from "@cennznet/api";
+import type { Api, SubmittableResult } from "@cennznet/api";
+import type { SubmittableExtrinsic } from "@cennznet/api/types";
+import type { ProposalCall } from "@app-gov/web/types";
 
 import { If } from "react-extras";
 import {
@@ -17,35 +19,16 @@ import { FormEventHandler, useCallback, useMemo, useState } from "react";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 import { useControlledInput } from "@app-gov/web/hooks";
 import { pinProposal } from "@app-gov/service/pinata";
-import { SubmittableExtrinsic } from "@cennznet/api/types";
 
 const NewProposal: NextPage = () => {
 	const { value: proposalTitle, onChange: onProposalTitleChange } =
 		useControlledInput<string, HTMLInputElement>("");
-	const { value: proposalDetails, onChange: onProposalDetailsChange } =
-		useControlledInput<string, HTMLTextAreaElement>("");
 	const { value: proposalDelay, onChange: onProposalDelayChange } =
-		useControlledInput<number, HTMLInputElement>(0);
+		useControlledInput<string, HTMLInputElement>("");
 
-	const [cennzModule, setCennzModule] = useState<string>("");
-	const [cennzCall, setCennzCall] = useState<string>("");
-	const { cennzValues, setCennzValue } = useCennzValues();
+	const { proposalCall, updateProposalCall } = useProposal();
 
-	const { api } = useCENNZApi();
-
-	const proposalExtrinsic = useMemo<
-		SubmittableExtrinsic<"promise"> | undefined
-	>(() => {
-		if (!api || !cennzModule || !cennzCall) return undefined;
-
-		try {
-			return api.tx[cennzModule][cennzCall](...Object.values(cennzValues));
-		} catch (_) {
-			return undefined;
-		}
-	}, [cennzModule, cennzCall, cennzValues, api]);
-
-	const { busy, onFormSubmit } = useFormSubmit(proposalExtrinsic);
+	const { busy, onFormSubmit } = useFormSubmit(proposalCall);
 
 	return (
 		<Layout>
@@ -100,16 +83,14 @@ const NewProposal: NextPage = () => {
 								id="proposalTitle"
 								name="proposalTitle"
 								inputClassName="w-full"
+								placeholder="|"
 								value={proposalTitle}
 								onChange={onProposalTitleChange}
 								required
 							/>
 						</div>
 
-						<ProposalDetailsField
-							proposalDetails={proposalDetails}
-							onProposalDetailsChange={onProposalDetailsChange}
-						/>
+						<ProposalDetailsField />
 
 						<div>
 							<label htmlFor="proposalDelay" className="text-lg">
@@ -119,7 +100,7 @@ const NewProposal: NextPage = () => {
 								id="proposalDelay"
 								name="proposalDelay"
 								type="number"
-								placeholder={"0"}
+								placeholder="1"
 								inputClassName="w-full"
 								value={proposalDelay}
 								onChange={onProposalDelayChange}
@@ -129,12 +110,8 @@ const NewProposal: NextPage = () => {
 					</fieldset>
 
 					<ProposalAdvanced
-						cennzModule={cennzModule}
-						setCennzModule={setCennzModule}
-						cennzCall={cennzCall}
-						setCennzCall={setCennzCall}
-						cennzValues={cennzValues}
-						setCennzValue={setCennzValue}
+						proposalCall={proposalCall}
+						updateProposalCall={updateProposalCall}
 					/>
 
 					<fieldset className="mt-16 text-center">
@@ -158,24 +135,23 @@ const NewProposal: NextPage = () => {
 
 export default NewProposal;
 
-const useCennzValues = () => {
-	const [cennzValues, setCennzValues] = useState<Record<string, string>>();
-
-	const setCennzValue = (arg: string, value: string) =>
-		setCennzValues((prevValues) => ({
-			...prevValues,
-			[arg]: value,
+const useProposal = () => {
+	const [proposalCall, setProposalCall] = useState<ProposalCall>();
+	const updateProposalCall = (section: string, value: string, arg?: string) =>
+		setProposalCall((prev) => ({
+			...prev,
+			[section]: arg ? { ...prev.values, [arg]: value } : value,
 		}));
 
-	return {
-		cennzValues,
-		setCennzValue,
-	};
+	return { proposalCall, updateProposalCall };
 };
 
-const useFormSubmit = (
-	proposalExtrinsic: SubmittableExtrinsic<"promise"> | undefined
-) => {
+const getProposalExtrinsic = (
+	api: Api,
+	{ module: cennzModule, call, values }: ProposalCall
+) => api.tx[cennzModule][call](...Object.values(values));
+
+const useFormSubmit = (proposalCall: ProposalCall) => {
 	const [busy, setBusy] = useState<boolean>(false);
 
 	const { api } = useCENNZApi();
@@ -199,7 +175,7 @@ const useFormSubmit = (
 
 				await api.tx.governance
 					.submitProposal(
-						proposalExtrinsic,
+						proposalCall ? getProposalExtrinsic(api, proposalCall) : undefined,
 						PINATA_GATEWAY.concat(IpfsHash),
 						proposalData.get("proposalDelay")
 					)

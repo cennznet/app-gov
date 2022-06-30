@@ -1,44 +1,24 @@
-import { FC, useMemo, Dispatch, SetStateAction } from "react";
+import type { FC } from "react";
+import type { ProposalCall } from "@app-gov/web/types";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { classNames, If } from "react-extras";
-import { AutoGrowInput } from "@app-gov/web/components";
 import { ChevronDown } from "@app-gov/web/vectors";
 import { Extrinsics } from "@app-gov/node/artifacts";
+import { AutoGrowInput } from "@app-gov/web/components";
 
 interface ProposalAdvancedProps {
-	cennzModule: string;
-	setCennzModule: Dispatch<SetStateAction<string>>;
-	cennzCall: string;
-	setCennzCall: Dispatch<SetStateAction<string>>;
-	cennzValues: Record<string, string>;
-	setCennzValue: (arg: string, value: string) => void;
+	proposalCall: ProposalCall | undefined;
+	updateProposalCall: (section: string, value: string, arg?: string) => void;
 }
 
 export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
-	cennzModule,
-	setCennzModule,
-	cennzCall,
-	setCennzCall,
-	cennzValues,
-	setCennzValue,
+	proposalCall,
+	updateProposalCall,
 }) => {
 	const [open, setOpen] = useState<boolean>(false);
 
-	const extrinsicArgs = useMemo<string[]>(() => {
-		const _module = Extrinsics.find((ex: any) => ex.section === cennzModule);
-		if (!_module) return [];
-
-		const call = _module.methods.find(
-			(method: any) => method.name === cennzCall
-		);
-		if (!call) return [];
-
-		return call.args
-			.split(",")
-			.map((args: string) => args.split(":")[0])
-			.filter(Boolean);
-	}, [cennzModule, cennzCall]);
+	const extrinsicArgs = useExtrinsicArgs(proposalCall);
 
 	return (
 		<div className="w-full">
@@ -66,14 +46,14 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 					<p className="mr-2 tracking-widest text-gray-600">api.tx.</p>
 					<AutoGrowInput
 						placeholder="module"
-						value={cennzModule}
-						onChange={setCennzModule}
+						value={proposalCall?.module || ""}
+						onChange={(value) => updateProposalCall("module", value)}
 					/>
 					<p className="mx-2 tracking-widest">.</p>
 					<AutoGrowInput
 						placeholder="call"
-						value={cennzCall}
-						onChange={setCennzCall}
+						value={proposalCall?.call || ""}
+						onChange={(value) => updateProposalCall("call", value)}
 					/>
 				</fieldset>
 				<label htmlFor="cennzValues" className="text-lg">
@@ -83,18 +63,42 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 					id="cennzValues"
 					className="border-dark w-full space-y-6 border-[3px] bg-white px-4 py-4"
 				>
-					{extrinsicArgs?.map((arg, index) => (
-						<div key={index}>
-							<AutoGrowInput
-								inputClassName="border-b border-hero min-w-[15em]"
-								placeholder={arg}
-								value={cennzValues?.[arg] || ""}
-								onChange={(value) => setCennzValue(arg, value)}
-							/>
-						</div>
-					))}
+					<If condition={!!extrinsicArgs}>
+						{extrinsicArgs?.map((arg, index) => (
+							<div key={index}>
+								<AutoGrowInput
+									inputClassName="border-b border-hero min-w-[15em]"
+									placeholder={arg}
+									value={proposalCall?.values?.[arg] || ""}
+									onChange={(value) => updateProposalCall("values", value, arg)}
+								/>
+							</div>
+						))}
+					</If>
+					<If condition={!extrinsicArgs?.length}>
+						<p className="tracking-wide text-gray-600">No values required</p>
+					</If>
 				</fieldset>
 			</If>
 		</div>
 	);
+};
+
+const useExtrinsicArgs = (proposalCall: ProposalCall | undefined) => {
+	return useMemo<string[]>(() => {
+		const cennzModule = Extrinsics.find(
+			(ex: any) => ex.section === proposalCall?.module
+		);
+		if (!cennzModule) return [];
+
+		const call = cennzModule.methods.find(
+			(method: any) => method.name === proposalCall?.call
+		);
+		if (!call) return [];
+
+		return call.args
+			.split(",")
+			.map((args: string) => args.split(":")[0])
+			.filter(Boolean);
+	}, [proposalCall]);
 };
