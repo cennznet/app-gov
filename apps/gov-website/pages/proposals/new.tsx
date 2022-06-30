@@ -137,10 +137,18 @@ export default NewProposal;
 const useProposal = () => {
 	const [proposalCall, setProposalCall] = useState<ProposalCall>();
 	const updateProposalCall = (section: string, value: string, arg?: string) =>
-		setProposalCall((prev) => ({
-			...prev,
-			[section]: arg ? { ...prev.values, [arg]: value } : value,
-		}));
+		setProposalCall((prev) =>
+			section === "values"
+				? {
+						...prev,
+						[section]: { ...prev.values, [arg]: value },
+				  }
+				: {
+						...prev,
+						values: null,
+						[section]: value,
+				  }
+		);
 
 	return { proposalCall, updateProposalCall };
 };
