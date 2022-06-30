@@ -13,17 +13,16 @@ import {
 } from "@app-gov/web/components";
 import { Spinner } from "@app-gov/web/vectors";
 import { PINATA_GATEWAY } from "@app-gov/service/constants";
-import { FormEventHandler, useCallback, useState } from "react";
+import { FormEventHandler, useCallback, useMemo, useState } from "react";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 import { useControlledInput } from "@app-gov/web/hooks";
 import { pinProposal } from "@app-gov/service/pinata";
+import { SubmittableExtrinsic } from "@cennznet/api/types";
 
 const NewProposal: NextPage = () => {
 	const { value: proposalTitle, onChange: onProposalTitleChange } =
 		useControlledInput<string, HTMLInputElement>("");
 	const { value: proposalDetails, onChange: onProposalDetailsChange } =
-		useControlledInput<string, HTMLTextAreaElement>("");
-	const { value: proposalExtrinsic, onChange: onProposalExtrinsicChange } =
 		useControlledInput<string, HTMLTextAreaElement>("");
 	const { value: proposalDelay, onChange: onProposalDelayChange } =
 		useControlledInput<number, HTMLInputElement>(0);
@@ -32,7 +31,19 @@ const NewProposal: NextPage = () => {
 	const [cennzCall, setCennzCall] = useState<string>("");
 	const { cennzValues, setCennzValue } = useCennzValues();
 
-	const { busy, onFormSubmit } = useFormSubmit();
+	const { api } = useCENNZApi();
+
+	const proposalExtrinsic = useMemo<SubmittableExtrinsic<"promise"> | undefined>(() => {
+		if (!api || !cennzModule || !cennzCall) return undefined;
+
+		try {
+				return api.tx[cennzModule][cennzCall](...Object.values(cennzValues))
+		} catch (_) {
+			return undefined;
+		}
+	}, [cennzModule, cennzCall, cennzValues, api])
+
+	const { busy, onFormSubmit } = useFormSubmit(proposalExtrinsic);
 
 	return (
 		<Layout>
@@ -160,7 +171,7 @@ const useCennzValues = () => {
 	};
 };
 
-const useFormSubmit = () => {
+const useFormSubmit = (proposalExtrinsic: SubmittableExtrinsic<"promise"> | undefined) => {
 	const [busy, setBusy] = useState<boolean>(false);
 
 	const { api } = useCENNZApi();
@@ -184,7 +195,7 @@ const useFormSubmit = () => {
 
 				await api.tx.governance
 					.submitProposal(
-						proposalData.get("proposalExtrinsic"),
+						proposalExtrinsic,
 						PINATA_GATEWAY.concat(IpfsHash),
 						proposalData.get("proposalDelay")
 					)
