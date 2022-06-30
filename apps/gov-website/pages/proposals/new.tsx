@@ -1,9 +1,7 @@
 import type { NextPage } from "next";
-import type { Api, SubmittableResult } from "@cennznet/api";
-import type { SubmittableExtrinsic } from "@cennznet/api/types";
 import type { ProposalCall } from "@app-gov/web/types";
+import type { Api, SubmittableResult } from "@cennznet/api";
 
-import { If } from "react-extras";
 import {
 	Button,
 	Header,
@@ -13,12 +11,13 @@ import {
 	TextField,
 	WalletSelect,
 } from "@app-gov/web/components";
+import { If } from "react-extras";
 import { Spinner } from "@app-gov/web/vectors";
-import { PINATA_GATEWAY } from "@app-gov/service/constants";
-import { FormEventHandler, useCallback, useMemo, useState } from "react";
-import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
-import { useControlledInput } from "@app-gov/web/hooks";
 import { pinProposal } from "@app-gov/service/pinata";
+import { useControlledInput } from "@app-gov/web/hooks";
+import { PINATA_GATEWAY } from "@app-gov/service/constants";
+import { FormEventHandler, useCallback, useState } from "react";
+import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 const NewProposal: NextPage = () => {
 	const { value: proposalTitle, onChange: onProposalTitleChange } =
@@ -193,7 +192,7 @@ const useFormSubmit = (proposalCall: ProposalCall) => {
 
 			setBusy(false);
 		},
-		[api, selectedAccount, signer]
+		[api, selectedAccount, signer, proposalCall]
 	);
 
 	return { busy, onFormSubmit };
