@@ -8,10 +8,12 @@ import {
 	CENNZExtensionProvider,
 	CENNZWalletProvider,
 	UserAgentProvider,
+	ProposalProvider,
 } from "@app-gov/web/providers";
 import { FC } from "react";
 import { SessionProvider } from "next-auth/react";
 
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import "@app-gov/website/globals.css";
 
 const NextApp: FC<AppProps> = ({
@@ -26,6 +28,7 @@ const NextApp: FC<AppProps> = ({
 					<CENNZExtensionProvider appName="CENNZnet Governance" />,
 					<CENNZApiProvider network={CENNZ_NETWORK.ChainSlug} />,
 					<CENNZWalletProvider />,
+					<ProposalProvider />,
 				]}
 			>
 				<Head>
