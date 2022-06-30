@@ -431,5 +431,83 @@
       { "name": "voteAgainstReferendum", "args": "proposalId" },
       { "name": "voteOnProposal", "args": "proposalId, vote" }
     ]
+  },
+  {
+    "section": "baseFee",
+    "methods": [
+      { "name": "setBaseFeePerGas", "args": "fee" },
+      { "name": "setElasticity", "args": "elasticity" },
+      { "name": "setIsActive", "args": "isActive" }
+    ]
+  },
+  {
+    "section": "erc20Peg",
+    "methods": [
+      { "name": "activateCennzDeposits", "args": "" },
+      { "name": "activateDeposits", "args": "activate" },
+      { "name": "activateWithdrawals", "args": "activate" },
+      { "name": "depositClaim", "args": "txHash, claim" },
+      { "name": "setClaimDelay", "args": "assetId, minBalance, delay" },
+      { "name": "setContractAddress", "args": "ethAddress" },
+      { "name": "setErc20Meta", "args": "details" },
+      { "name": "withdraw", "args": "assetId, amount, beneficiary" }
+    ]
+  },
+  {
+    "section": "ethBridge",
+    "methods": [
+      { "name": "setDelayedEventProofsPerBlock", "args": "count" },
+      { "name": "setEventConfirmations", "args": "confirmations" },
+      { "name": "setEventDeadline", "args": "seconds" },
+      { "name": "submitNotarization", "args": "payload, signature" }
+    ]
+  },
+  {
+    "section": "ethStateOracle",
+    "methods": [
+      { "name": "bondChallenger", "args": "" },
+      { "name": "bondRelayer", "args": "" },
+      { "name": "setMaxResponseDrift", "args": "n" },
+      {
+        "name": "submitCallResponse",
+        "args": "requestId, returnData, ethBlockNumber, ethBlockTimestamp"
+      },
+      { "name": "submitResponseChallenge", "args": "requestId" },
+      { "name": "unbondChallenger", "args": "" }
+    ]
+  },
+  {
+    "section": "ethWallet",
+    "methods": [{ "name": "call", "args": "call, ethAddress, signature" }]
+  },
+  {
+    "section": "ethereum",
+    "methods": [{ "name": "transact", "args": "transaction" }]
+  },
+  {
+    "section": "evm",
+    "methods": [
+      {
+        "name": "call",
+        "args": "source, target, input, value, gasLimit, maxFeePerGas, maxPriorityFeePerGas, nonce, accessList"
+      },
+      {
+        "name": "create",
+        "args": "source, init, value, gasLimit, maxFeePerGas, maxPriorityFeePerGas, nonce, accessList"
+      },
+      {
+        "name": "create2",
+        "args": "source, init, salt, value, gasLimit, maxFeePerGas, maxPriorityFeePerGas, nonce, accessList"
+      },
+      { "name": "withdraw", "args": "address, value" }
+    ]
+  },
+  {
+    "section": "tokenApprovals",
+    "methods": [
+      { "name": "erc20Approval", "args": "caller, spender, assetId, amount" },
+      { "name": "erc20RemoveApproval", "args": "caller, spender, assetId" },
+      { "name": "erc721Approval", "args": "caller, operatorAccount, tokenId" }
+    ]
   }
 ]
