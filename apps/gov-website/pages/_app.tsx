@@ -8,7 +8,6 @@ import {
 	CENNZExtensionProvider,
 	CENNZWalletProvider,
 	UserAgentProvider,
-	ProposalProvider,
 } from "@app-gov/web/providers";
 import { FC } from "react";
 import { SessionProvider } from "next-auth/react";
@@ -27,7 +26,6 @@ const NextApp: FC<AppProps> = ({
 					<CENNZExtensionProvider appName="CENNZnet Governance" />,
 					<CENNZApiProvider network={CENNZ_NETWORK.ChainSlug} />,
 					<CENNZWalletProvider />,
-					<ProposalProvider />,
 				]}
 			>
 				<Head>
