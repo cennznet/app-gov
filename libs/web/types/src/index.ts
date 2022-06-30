@@ -24,8 +24,15 @@ export interface IntrinsicElements {
 	textarea: TextareaHTMLAttributes<HTMLTextAreaElement>;
 }
 
-export interface ProposalCall {
-	module?: string;
-	call?: string;
-	values?: Record<string, string>;
+export interface CENNZEvent {
+	section?: string;
+	method?: string;
+	data?: any[];
+}
+
+export type TxType = "Idle" | "Pending" | "Success" | "Failure";
+
+export interface TxStatus {
+	status: TxType;
+	props?: any;
 }
