@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import type { ProposalCall } from "@app-gov/web/types";
 import type { Api } from "@cennznet/api";
+import type { FC } from "react";
 
 import {
 	Button,
@@ -11,7 +12,7 @@ import {
 	TextField,
 	WalletSelect,
 } from "@app-gov/web/components";
-import { If } from "react-extras";
+import { Choose, If } from "react-extras";
 import { Spinner } from "@app-gov/web/vectors";
 import { signAndSendTx } from "@app-gov/web/utils";
 import { useProposal } from "@app-gov/web/providers";
@@ -32,7 +33,6 @@ const NewProposal: NextPage = () => {
 	const onFormSubmit = useFormSubmit(proposalCall);
 
 	const busy = txStatus?.status === "Pending";
-	const { ...txProps } = txStatus?.props ?? {};
 
 	return (
 		<Layout>
@@ -130,8 +130,10 @@ const NewProposal: NextPage = () => {
 							</div>
 						</Button>
 						<p className="mt-2 text-sm">
-							<If condition={!txProps?.errorCode}>Estimated gas fee 2 CPAY</If>
-							<If condition={!!txProps?.errorCode}>Error: {txProps.errorCode}</If>
+							<TxMessage
+								errorCode={txStatus?.props?.errorCode}
+								txHashLink={txStatus?.props?.txHashLink}
+							/>
 						</p>
 					</fieldset>
 				</form>
@@ -141,6 +143,34 @@ const NewProposal: NextPage = () => {
 };
 
 export default NewProposal;
+
+interface TxMessageProps {
+	errorCode: string | undefined;
+	txHashLink: string | undefined;
+}
+
+const TxMessage: FC<TxMessageProps> = ({ errorCode, txHashLink }) => (
+	<Choose>
+		<Choose.When condition={!errorCode && !txHashLink}>
+			Estimated gas fee 2 CPAY
+		</Choose.When>
+
+		<Choose.When condition={!!errorCode}>
+			<span className="italic">Error:</span> {errorCode}
+		</Choose.When>
+
+		<Choose.When condition={!!txHashLink}>
+			<a
+				href={txHashLink}
+				rel="noreferrer"
+				target="_blank"
+				className="border-hero border-b italic"
+			>
+				View transaction on UNcover
+			</a>
+		</Choose.When>
+	</Choose>
+);
 
 const useProposalCall = () => {
 	const [proposalCall, setProposalCall] = useState<ProposalCall>();
