@@ -1,7 +1,7 @@
-import type { NextPage } from "next";
-import type { ProposalCall } from "@app-gov/web/types";
-import type { Api } from "@cennznet/api";
 import type { FC } from "react";
+import type { NextPage } from "next";
+import type { Api } from "@cennznet/api";
+import type { ProposalCall, TxType } from "@app-gov/web/types";
 
 import {
 	Button,
@@ -131,6 +131,7 @@ const NewProposal: NextPage = () => {
 						</Button>
 						<p className="mt-2 text-sm">
 							<TxMessage
+								txStatus={txStatus?.status}
 								errorCode={txStatus?.props?.errorCode}
 								txHashLink={txStatus?.props?.txHashLink}
 							/>
@@ -145,21 +146,20 @@ const NewProposal: NextPage = () => {
 export default NewProposal;
 
 interface TxMessageProps {
-	errorCode: string | undefined;
-	txHashLink: string | undefined;
+	txStatus: TxType;
+	errorCode: string;
+	txHashLink: string;
 }
 
-const TxMessage: FC<TxMessageProps> = ({ errorCode, txHashLink }) => (
+const TxMessage: FC<TxMessageProps> = ({ txStatus, errorCode, txHashLink }) => (
 	<Choose>
-		<Choose.When condition={!errorCode && !txHashLink}>
-			Estimated gas fee 2 CPAY
+		<Choose.When condition={!txStatus}>Estimated gas fee 2 CPAY</Choose.When>
+
+		<Choose.When condition={txStatus === "Failure"}>
+			<span className="italic">Error</span> {errorCode}
 		</Choose.When>
 
-		<Choose.When condition={!!errorCode}>
-			<span className="italic">Error:</span> {errorCode}
-		</Choose.When>
-
-		<Choose.When condition={!!txHashLink}>
+		<Choose.When condition={!!txHashLink && txStatus === "Pending"}>
 			<a
 				href={txHashLink}
 				rel="noreferrer"
