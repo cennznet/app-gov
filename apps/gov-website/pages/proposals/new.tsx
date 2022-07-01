@@ -194,7 +194,7 @@ const useProposalCall = () => {
 const getProposalExtrinsic = (
 	api: Api,
 	{ module: cennzModule, call, values }: ProposalCall
-) => api.tx[cennzModule][call](...Object.values(values));
+) => api.tx[cennzModule][call](...(values ? Object.values(values) : []));
 
 const useFormSubmit = (
 	proposalCall: ProposalCall
