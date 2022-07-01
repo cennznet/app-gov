@@ -32,6 +32,7 @@ const NewProposal: NextPage = () => {
 	const onFormSubmit = useFormSubmit(proposalCall);
 
 	const busy = txStatus?.status === "Pending";
+	const { ...txProps } = txStatus?.props ?? {};
 
 	return (
 		<Layout>
@@ -128,7 +129,10 @@ const NewProposal: NextPage = () => {
 								<span>{busy ? "Processing..." : "Sign and Submit"}</span>
 							</div>
 						</Button>
-						<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
+						<p className="mt-2 text-sm">
+							<If condition={!txProps?.errorCode}>Estimated gas fee 2 CPAY</If>
+							<If condition={!!txProps?.errorCode}>Error: {txProps.errorCode}</If>
+						</p>
 					</fieldset>
 				</form>
 			</div>
