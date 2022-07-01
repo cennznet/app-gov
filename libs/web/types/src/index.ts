@@ -24,6 +24,12 @@ export interface IntrinsicElements {
 	textarea: TextareaHTMLAttributes<HTMLTextAreaElement>;
 }
 
+export interface ProposalCall {
+	module?: string;
+	call?: string;
+	values?: Record<string, string>;
+}
+
 export interface CENNZEvent {
 	section?: string;
 	method?: string;
