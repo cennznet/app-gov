@@ -54,8 +54,10 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 							updateProposalCall("module", event.target.value)
 						}
 					>
-						{cennzModules?.map((_module: string) => (
-							<option value={_module}>{_module}</option>
+						{cennzModules?.map((_module: string, index: number) => (
+							<option key={index} value={_module}>
+								{_module}
+							</option>
 						))}
 					</Select>
 					<p className="mx-2 tracking-widest">.</p>
@@ -70,8 +72,10 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 							updateProposalCall("call", event.target.value)
 						}
 					>
-						{cennzCalls?.map((call: string) => (
-							<option value={call}>{call}</option>
+						{cennzCalls?.map((call: string, index: number) => (
+							<option key={index} value={call}>
+								{call}
+							</option>
 						))}
 					</Select>
 				</fieldset>
