@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import type { ProposalCall } from "@app-gov/web/types";
-import type { Api, SubmittableResult } from "@cennznet/api";
+import type { Api } from "@cennznet/api";
 
 import {
 	Button,
@@ -13,6 +13,8 @@ import {
 } from "@app-gov/web/components";
 import { If } from "react-extras";
 import { Spinner } from "@app-gov/web/vectors";
+import { signAndSendTx } from "@app-gov/web/utils";
+import { useProposal } from "@app-gov/web/providers";
 import { pinProposal } from "@app-gov/service/pinata";
 import { useControlledInput } from "@app-gov/web/hooks";
 import { PINATA_GATEWAY } from "@app-gov/service/constants";
@@ -25,9 +27,11 @@ const NewProposal: NextPage = () => {
 	const { value: proposalDelay, onChange: onProposalDelayChange } =
 		useControlledInput<string, HTMLInputElement>("");
 
-	const { proposalCall, updateProposalCall } = useProposal();
+	const { txStatus } = useProposal();
+	const { proposalCall, updateProposalCall } = useProposalCall();
+	const onFormSubmit = useFormSubmit(proposalCall);
 
-	const { busy, onFormSubmit } = useFormSubmit(proposalCall);
+	const busy = txStatus?.status === "Pending";
 
 	return (
 		<Layout>
@@ -134,7 +138,7 @@ const NewProposal: NextPage = () => {
 
 export default NewProposal;
 
-const useProposal = () => {
+const useProposalCall = () => {
 	const [proposalCall, setProposalCall] = useState<ProposalCall>();
 	const updateProposalCall = (section: string, value: string, arg?: string) =>
 		setProposalCall((prev) =>
@@ -158,50 +162,75 @@ const getProposalExtrinsic = (
 	{ module: cennzModule, call, values }: ProposalCall
 ) => api.tx[cennzModule][call](...Object.values(values));
 
-const useFormSubmit = (proposalCall: ProposalCall) => {
-	const [busy, setBusy] = useState<boolean>(false);
-
+const useFormSubmit = (
+	proposalCall: ProposalCall
+): FormEventHandler<HTMLFormElement> => {
 	const { api } = useCENNZApi();
 	const { selectedAccount, wallet } = useCENNZWallet();
-	const signer = wallet?.signer;
 
-	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+	const { setTxIdle, setTxPending, setTxSuccess, setTxFailure } = useProposal();
+
+	return useCallback(
 		async (event) => {
 			event.preventDefault();
 
-			if (!api || !selectedAccount || !signer) return;
-			setBusy(true);
+			if (!api || !selectedAccount || !wallet) return;
+			setTxPending();
 
 			try {
 				const proposalData = new FormData(event.target as HTMLFormElement);
 
 				const { IpfsHash } = await pinProposal({
-					proposalTitle: proposalData.get("proposalTitle").toString(),
-					proposalDetails: proposalData.get("proposalDetails").toString(),
+					proposalTitle: proposalData.get("proposalTitle") as string,
+					proposalDetails: proposalData.get("proposalDetails") as string,
 				});
 
-				await api.tx.governance
-					.submitProposal(
-						proposalCall ? getProposalExtrinsic(api, proposalCall) : undefined,
-						PINATA_GATEWAY.concat(IpfsHash),
-						proposalData.get("proposalDelay")
-					)
-					.signAndSend(
-						selectedAccount.address,
-						{ signer },
-						(result: SubmittableResult) => {
-							const { txHash } = result;
-							console.info("Transaction", txHash.toString());
-						}
-					);
+				const extrinsic = api.tx.governance.submitProposal(
+					proposalCall ? getProposalExtrinsic(api, proposalCall) : undefined,
+					PINATA_GATEWAY.concat(IpfsHash),
+					proposalData.get("proposalDelay")
+				);
+
+				const tx = await signAndSendTx(
+					extrinsic,
+					selectedAccount.address,
+					wallet.signer
+				);
+
+				tx.on("txCancelled", () => setTxIdle());
+
+				tx.on("txHashed", () => {
+					setTxPending({
+						txHashLink: tx.getHashLink(),
+					});
+				});
+
+				tx.on("txFailed", (result) =>
+					setTxFailure({
+						errorCode: tx.decodeError(result),
+						txHashLink: tx.getHashLink(),
+					})
+				);
+
+				tx.on("txSucceeded", () => {
+					setTxSuccess({
+						txHashLink: tx.getHashLink(),
+					});
+				});
 			} catch (error) {
-				console.log("error", error.message);
+				console.info(error);
+				return setTxFailure({ errorCode: error?.code as string });
 			}
-
-			setBusy(false);
 		},
-		[api, selectedAccount, signer, proposalCall]
+		[
+			api,
+			selectedAccount,
+			wallet,
+			proposalCall,
+			setTxIdle,
+			setTxPending,
+			setTxSuccess,
+			setTxFailure,
+		]
 	);
-
-	return { busy, onFormSubmit };
 };
