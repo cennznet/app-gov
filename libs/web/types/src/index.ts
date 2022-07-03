@@ -23,3 +23,9 @@ export interface IntrinsicElements {
 	select: InputHTMLAttributes<HTMLSelectElement>;
 	textarea: TextareaHTMLAttributes<HTMLTextAreaElement>;
 }
+
+export interface ProposalCall {
+	module?: string;
+	call?: string;
+	values?: Record<string, string>;
+}

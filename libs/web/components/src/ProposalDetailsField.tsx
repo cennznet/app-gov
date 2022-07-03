@@ -2,20 +2,14 @@ import type { ChangeEventHandler, FC } from "react";
 
 import { useState } from "react";
 import { classNames, If } from "react-extras";
+import { useControlledInput } from "@app-gov/web/hooks";
 import { Button, Markdown, TextArea } from "@app-gov/web/components";
 
-interface ProposalDetailsFieldProps {
-	proposalDetails: string;
-	onProposalDetailsChange: ChangeEventHandler<
-		HTMLTextAreaElement & HTMLInputElement
-	>;
-}
-
-export const ProposalDetailsField: FC<ProposalDetailsFieldProps> = ({
-	proposalDetails,
-	onProposalDetailsChange,
-}) => {
+export const ProposalDetailsField: FC = () => {
 	const [showPreview, setShowPreview] = useState<boolean>(false);
+
+	const { value: proposalDetails, onChange: onProposalDetailsChange } =
+		useControlledInput<string, HTMLTextAreaElement>("");
 
 	return (
 		<div className="w-full">
@@ -49,6 +43,7 @@ export const ProposalDetailsField: FC<ProposalDetailsFieldProps> = ({
 					id="proposalDetails"
 					name="proposalDetails"
 					inputClassName="w-full"
+					placeholder="|"
 					value={proposalDetails}
 					onChange={onProposalDetailsChange}
 					required

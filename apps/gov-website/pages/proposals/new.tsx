@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
-import type { SubmittableResult } from "@cennznet/api";
+import type { ProposalCall } from "@app-gov/web/types";
+import type { Api, SubmittableResult } from "@cennznet/api";
 
-import { If } from "react-extras";
 import {
 	Button,
 	Header,
@@ -11,24 +11,23 @@ import {
 	TextField,
 	WalletSelect,
 } from "@app-gov/web/components";
+import { If } from "react-extras";
 import { Spinner } from "@app-gov/web/vectors";
+import { pinProposal } from "@app-gov/service/pinata";
+import { useControlledInput } from "@app-gov/web/hooks";
 import { PINATA_GATEWAY } from "@app-gov/service/constants";
 import { FormEventHandler, useCallback, useState } from "react";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
-import { useControlledInput } from "@app-gov/web/hooks";
-import { pinProposal } from "@app-gov/service/pinata";
 
 const NewProposal: NextPage = () => {
 	const { value: proposalTitle, onChange: onProposalTitleChange } =
 		useControlledInput<string, HTMLInputElement>("");
-	const { value: proposalDetails, onChange: onProposalDetailsChange } =
-		useControlledInput<string, HTMLTextAreaElement>("");
-	const { value: proposalExtrinsic, onChange: onProposalExtrinsicChange } =
-		useControlledInput<string, HTMLTextAreaElement>("");
 	const { value: proposalDelay, onChange: onProposalDelayChange } =
-		useControlledInput<number, HTMLInputElement>(0);
+		useControlledInput<string, HTMLInputElement>("");
 
-	const { busy, onFormSubmit } = useFormSubmit();
+	const { proposalCall, updateProposalCall } = useProposal();
+
+	const { busy, onFormSubmit } = useFormSubmit(proposalCall);
 
 	return (
 		<Layout>
@@ -83,16 +82,14 @@ const NewProposal: NextPage = () => {
 								id="proposalTitle"
 								name="proposalTitle"
 								inputClassName="w-full"
+								placeholder="|"
 								value={proposalTitle}
 								onChange={onProposalTitleChange}
 								required
 							/>
 						</div>
 
-						<ProposalDetailsField
-							proposalDetails={proposalDetails}
-							onProposalDetailsChange={onProposalDetailsChange}
-						/>
+						<ProposalDetailsField />
 
 						<div>
 							<label htmlFor="proposalDelay" className="text-lg">
@@ -102,7 +99,7 @@ const NewProposal: NextPage = () => {
 								id="proposalDelay"
 								name="proposalDelay"
 								type="number"
-								placeholder={"0"}
+								placeholder="1"
 								inputClassName="w-full"
 								value={proposalDelay}
 								onChange={onProposalDelayChange}
@@ -112,8 +109,8 @@ const NewProposal: NextPage = () => {
 					</fieldset>
 
 					<ProposalAdvanced
-						proposalExtrinsic={proposalExtrinsic}
-						onProposalExtrinsicChange={onProposalExtrinsicChange}
+						proposalCall={proposalCall}
+						updateProposalCall={updateProposalCall}
 					/>
 
 					<fieldset className="mt-16 text-center">
@@ -137,7 +134,31 @@ const NewProposal: NextPage = () => {
 
 export default NewProposal;
 
-const useFormSubmit = () => {
+const useProposal = () => {
+	const [proposalCall, setProposalCall] = useState<ProposalCall>();
+	const updateProposalCall = (section: string, value: string, arg?: string) =>
+		setProposalCall((prev) =>
+			section === "values"
+				? {
+						...prev,
+						[section]: { ...prev.values, [arg]: value },
+				  }
+				: {
+						...prev,
+						values: null,
+						[section]: value,
+				  }
+		);
+
+	return { proposalCall, updateProposalCall };
+};
+
+const getProposalExtrinsic = (
+	api: Api,
+	{ module: cennzModule, call, values }: ProposalCall
+) => api.tx[cennzModule][call](...Object.values(values));
+
+const useFormSubmit = (proposalCall: ProposalCall) => {
 	const [busy, setBusy] = useState<boolean>(false);
 
 	const { api } = useCENNZApi();
@@ -161,7 +182,7 @@ const useFormSubmit = () => {
 
 				await api.tx.governance
 					.submitProposal(
-						proposalData.get("proposalExtrinsic"),
+						proposalCall ? getProposalExtrinsic(api, proposalCall) : undefined,
 						PINATA_GATEWAY.concat(IpfsHash),
 						proposalData.get("proposalDelay")
 					)
@@ -179,7 +200,7 @@ const useFormSubmit = () => {
 
 			setBusy(false);
 		},
-		[api, selectedAccount, signer]
+		[api, selectedAccount, signer, proposalCall]
 	);
 
 	return { busy, onFormSubmit };
