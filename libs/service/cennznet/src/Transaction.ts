@@ -1,7 +1,7 @@
 import type { GenericEvent } from "@cennznet/types";
 import { SubmittableResult } from "@cennznet/api";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
-import Emittery = require("emittery");
+import Emittery from "emittery";
 
 interface EmitEvents {
 	txCreated: undefined;
