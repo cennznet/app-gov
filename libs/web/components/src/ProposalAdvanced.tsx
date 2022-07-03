@@ -48,30 +48,30 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 					<Select
 						className="w-[12em] rounded border border-gray-200"
 						inputClassName="cursor-pointer"
-						placeholder="module"
 						defaultValue={proposalCall?.module}
 						onChange={(event: ChangeEvent<HTMLSelectElement>) =>
 							updateProposalCall("module", event.target.value)
 						}
 					>
-						{cennzModules?.map((_module: string) => (
-							<option value={_module}>{_module}</option>
+						{cennzModules?.map((module_: string) => (
+							<option value={module_} key={module_}>
+								{module_}
+							</option>
 						))}
 					</Select>
 					<p className="mx-2 tracking-widest">.</p>
 					<Select
 						className="min-w-[12em] rounded border border-gray-200"
-						inputClassName={classNames(
-							proposalCall?.module && "cursor-pointer"
-						)}
-						placeholder="call"
-						defaultValue={proposalCall?.call}
+						inputClassName="cursor-pointer"
+						defaultValue={proposalCall?.call || cennzCalls[0]}
 						onChange={(event: ChangeEvent<HTMLSelectElement>) =>
 							updateProposalCall("call", event.target.value)
 						}
 					>
 						{cennzCalls?.map((call: string) => (
-							<option value={call}>{call}</option>
+							<option value={call} key={call}>
+								{call}
+							</option>
 						))}
 					</Select>
 				</fieldset>
@@ -121,7 +121,8 @@ const useExtrinsic = (proposalCall: ProposalCall | undefined) => {
 
 	const selectedModule = useMemo(
 		() =>
-			Extrinsics.find((ex: Extrinsic) => ex.section === proposalCall?.module),
+			Extrinsics.find((ex: Extrinsic) => ex.section === proposalCall?.module) ||
+			Extrinsics[0],
 		[proposalCall?.module]
 	);
 
