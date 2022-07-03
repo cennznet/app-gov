@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { classNames, If } from "react-extras";
 import { ChevronDown } from "@app-gov/web/vectors";
 import { Extrinsics } from "@app-gov/node/artifacts";
-import { AutoGrowInput, Select } from "@app-gov/web/components";
+import { TextField, Select } from "@app-gov/web/components";
 
 interface ProposalAdvancedProps {
 	proposalCall: ProposalCall | undefined;
@@ -85,11 +85,14 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 					<If condition={!!extrinsicArgs}>
 						{extrinsicArgs?.map((arg, index) => (
 							<div key={index}>
-								<AutoGrowInput
-									inputClassName="border-b border-hero min-w-[15em] truncate"
+								<TextField
+									className="border-none"
+									inputClassName="border-b border-hero w-full truncate"
 									placeholder={arg}
 									value={proposalCall?.values?.[arg] || ""}
-									onChange={(value) => updateProposalCall("values", value, arg)}
+									onChange={(event) =>
+										updateProposalCall("values", event.target.value, arg)
+									}
 								/>
 							</div>
 						))}
