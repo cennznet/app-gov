@@ -1526,6 +1526,7 @@ __metadata:
     react-markdown: ^8.0.3
     react-test-renderer: 18.2.0
     regenerator-runtime: 0.13.7
+    remark-breaks: ^3.0.2
     remark-gfm: ^3.0.1
     store: ^2.0.12
     tailwindcss: ^3.1.2
@@ -13471,6 +13472,17 @@ __metadata:
   bin:
     regjsparser: bin/parser
   checksum: d069b932491761cda127ce11f6bd2729c3b1b394a35200ec33f1199e937423db28ceb86cf33f0a97c76ecd7c0f8db996476579eaf0d80a1f74c1934f4ca8b27a
+  languageName: node
+  linkType: hard
+
+"remark-breaks@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "remark-breaks@npm:3.0.2"
+  dependencies:
+    "@types/mdast": ^3.0.0
+    unified: ^10.0.0
+    unist-util-visit: ^4.0.0
+  checksum: 5f46b18818f8a77e4fbc607c99736eedbe1f8cbad3d7390ce8359f08e3b749de8778ec8812287a41f51ffef2524b0be0dd623fcdbcda5de7f13f9902851f80b3
   languageName: node
   linkType: hard
 
