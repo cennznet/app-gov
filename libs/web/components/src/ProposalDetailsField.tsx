@@ -1,11 +1,9 @@
 import type { ChangeEventHandler, FC } from "react";
 
 import { useState } from "react";
-import RemarkGfm from "remark-gfm";
-import ReactMarkdown from "react-markdown";
 import { classNames, If } from "react-extras";
-import { Button, TextArea } from "@app-gov/web/components";
 import { useControlledInput } from "@app-gov/web/hooks";
+import { Button, Markdown, TextArea } from "@app-gov/web/components";
 
 export const ProposalDetailsField: FC = () => {
 	const [showPreview, setShowPreview] = useState<boolean>(false);
@@ -53,9 +51,7 @@ export const ProposalDetailsField: FC = () => {
 			</If>
 			<If condition={showPreview}>
 				<div className="border-dark flex w-full border-[3px] bg-white px-4 py-2">
-					<ReactMarkdown remarkPlugins={[[RemarkGfm, { singleTilde: false }]]}>
-						{proposalDetails || "Nothing to preview"}
-					</ReactMarkdown>
+					<Markdown input={proposalDetails || "Nothing to preview"} />
 				</div>
 			</If>
 		</div>
