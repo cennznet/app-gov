@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app-gov/node/artifacts": ["libs/node/artifacts/src/index.ts"],
       "@app-gov/node/constants": ["libs/node/constants/src/index.ts"],
       "@app-gov/node/types": ["libs/node/types/src/index.ts"],
       "@app-gov/node/utils": ["libs/node/utils/src/index.ts"],

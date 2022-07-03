@@ -4,7 +4,7 @@ import type { ProposalCall } from "@app-gov/web/types";
 import { useMemo, useState } from "react";
 import { classNames, If } from "react-extras";
 import { ChevronDown } from "@app-gov/web/vectors";
-import { Extrinsics } from "@app-gov/node/artifacts";
+import { Extrinsics } from "@app-gov/service/cennznet";
 import { TextField, Select } from "@app-gov/web/components";
 
 interface ProposalAdvancedProps {
