@@ -1,26 +1,53 @@
-import { Transaction } from "@app-gov/service/cennznet";
 import { SubmittableResult } from "@cennznet/api";
 import type { Signer, SubmittableExtrinsic } from "@cennznet/api/types";
-import type { ISubmittableResult } from "@cennznet/types";
+import { Transaction } from "./Transaction";
+import { KeyringPair } from "@polkadot/keyring/types";
 
-export async function signAndSendTx(
-	extrinsic: SubmittableExtrinsic<"promise", ISubmittableResult>,
-	address: string,
-	signer: Signer
-): Promise<Transaction> {
+export const signAndSendTx = async (
+	extrinsic: SubmittableExtrinsic<"promise">,
+	signer: KeyringPair | Signer,
+	address?: string
+): Promise<Transaction> => {
 	const tx = new Transaction();
+	const onResult = (result: SubmittableResult) => {
+		const { txHash } = result;
+		tx.setHash(txHash.toString());
+		tx.setResult(result);
+	};
 
-	extrinsic
-		.signAndSend(address, { signer }, (result: SubmittableResult) => {
-			const { txHash } = result;
-			console.info("Transaction", txHash.toString());
-			tx.setHash(txHash.toString());
-			tx.setResult(result);
-		})
-		.catch((error) => {
-			if (error?.message !== "Cancelled") throw error;
-			tx.setCancel();
-		});
+	const onCatch = (error: Error) => {
+		if (error?.message === "Cancelled") return tx.setCancel();
+		return Promise.reject(error);
+	};
 
+	if (address) {
+		await extrinsic
+			.signAndSend(address, { signer: signer as Signer }, onResult)
+			.catch(onCatch);
+
+		return tx;
+	}
+
+	await extrinsic.signAndSend(signer as KeyringPair, onResult).catch(onCatch);
 	return tx;
-}
+};
+
+export const signAndSendPromise = async (
+	extrinsic: SubmittableExtrinsic<"promise">,
+	signer: KeyringPair | Signer,
+	address?: string
+): Promise<SubmittableResult> => {
+	return new Promise((resolve, reject) => {
+		signAndSendTx(extrinsic, signer, address)
+			.then((tx) => {
+				tx.on("txFailed", (error) => {
+					reject(tx.decodeError(error));
+				});
+
+				tx.on("txSuccessful", (result) => {
+					resolve(result);
+				});
+			})
+			.catch(reject);
+	});
+};
