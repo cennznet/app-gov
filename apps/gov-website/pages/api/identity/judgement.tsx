@@ -26,7 +26,7 @@ export default withMethodGuard(
 			// 2. Check the submitted identity details are matchted with what on chain
 			const { info: identity } = await fetchIdentityOf(api, address);
 
-			const isTwitteMatched = isIdentityValueMatched(
+			const isTwitterMatched = isIdentityValueMatched(
 				twitterUsername,
 				identity.twitter
 			);
@@ -35,7 +35,7 @@ export default withMethodGuard(
 				identity.discord
 			);
 
-			if (!isTwitteMatched || !isDiscordMatched) {
+			if (!isTwitterMatched || !isDiscordMatched) {
 				return res.status(400).json({
 					message:
 						"Social channel usernames are mismatched compared to on-chain data",
