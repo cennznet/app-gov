@@ -1,31 +1,49 @@
-import type { NextPage } from "next";
-import {
-	FormEventHandler,
-	MouseEventHandler,
-	useCallback,
-	useState,
-} from "react";
+import type { GetStaticProps, NextPage } from "next";
+import { FormEvent, useCallback, useEffect } from "react";
 import {
 	DiscordLogo,
 	TwitterLogo,
 	Spinner,
-	CloseIcon,
+	X,
+	CheckCircle,
+	ExclamationCircle,
 } from "@app-gov/web/vectors";
-
-import { useWindowPopup } from "@app-gov/web/hooks";
-import { getSession } from "next-auth/react";
-import { If } from "react-extras";
+import { useSocialSignIn, useIdentityConnectForm } from "@app-gov/web/hooks";
+import { Choose, If } from "react-extras";
 import {
 	Button,
 	TextField,
 	WalletSelect,
 	Layout,
 	Header,
+	TransactionDialog,
+	useTransactionDialog,
 } from "@app-gov/web/components";
-import { submitIdentityConnectForm } from "@app-gov/web/utils";
-import { useCENNZApi } from "@app-gov/web/providers";
+import { getApiInstance } from "@app-gov/service/cennznet";
+import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import { fetchRequiredRegistrars } from "@app-gov/node/utils";
 
-const Connect: NextPage = () => {
+interface StaticProps {
+	twitterRegistrarIndex: number;
+	discordRegistrarIndex: number;
+}
+
+export const getStaticProps: GetStaticProps<StaticProps> = async (context) => {
+	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
+	const { twitter, discord } = await fetchRequiredRegistrars(api);
+
+	return {
+		props: {
+			twitterRegistrarIndex: twitter.index,
+			discordRegistrarIndex: discord.index,
+		},
+	};
+};
+
+const Connect: NextPage<StaticProps> = ({
+	twitterRegistrarIndex,
+	discordRegistrarIndex,
+}) => {
 	const {
 		onSignInClick: onTwitterSignInClick,
 		username: twitterUsername,
@@ -37,10 +55,38 @@ const Connect: NextPage = () => {
 		clearUsername: clearDiscordUsername,
 	} = useSocialSignIn("Discord");
 
-	const { busy, onFormSubmit } = useFormSubmit();
+	const { submitForm, formState, resetFormState } = useIdentityConnectForm();
+	const { open, openDialog, closeDialog } = useTransactionDialog();
+
+	const onFormSubmit = useCallback(
+		(event: FormEvent) => {
+			event.preventDefault();
+			openDialog();
+			submitForm(new FormData(event.target as HTMLFormElement));
+		},
+		[openDialog, submitForm]
+	);
+
+	const onDismissClick = useCallback(() => {
+		closeDialog();
+		clearTwitterUsername();
+		clearDiscordUsername();
+		setTimeout(() => {
+			resetFormState();
+		}, 200);
+	}, [clearDiscordUsername, clearTwitterUsername, closeDialog, resetFormState]);
+
+	useEffect(() => {
+		if (formState?.status === "Cancelled") closeDialog();
+	}, [closeDialog, formState]);
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	const onTextInput = useCallback(() => {}, []);
+	const onNoop = useCallback(() => {}, []);
+
+	const onDialogClose = useCallback(() => {
+		if (formState?.status === "Cancelled") return;
+		onDismissClick();
+	}, [onDismissClick, formState?.status]);
 
 	return (
 		<Layout>
@@ -82,10 +128,10 @@ const Connect: NextPage = () => {
 							<TextField
 								placeholder="Sign-in to verify"
 								inputClassName="!py-4"
-								required
 								name="twitterUsername"
 								value={twitterUsername}
-								onInput={onTextInput}
+								onInput={onNoop}
+								required
 								endAdornment={
 									<div className="flex items-center">
 										<If condition={!!twitterUsername}>
@@ -93,7 +139,7 @@ const Connect: NextPage = () => {
 												className="hover:text-hero mr-2 cursor-pointer transition-colors"
 												onClick={clearTwitterUsername}
 											>
-												<CloseIcon />
+												<X />
 											</div>
 										</If>
 										<Button
@@ -111,10 +157,10 @@ const Connect: NextPage = () => {
 							<TextField
 								placeholder="Sign-in to verify"
 								inputClassName="!py-4"
-								required
 								name="discordUsername"
 								value={discordUsername}
-								onInput={onTextInput}
+								onChange={onNoop}
+								required
 								endAdornment={
 									<div className="flex items-center">
 										<If condition={!!discordUsername}>
@@ -122,7 +168,7 @@ const Connect: NextPage = () => {
 												className="hover:text-hero mr-2 cursor-pointer transition-colors"
 												onClick={clearDiscordUsername}
 											>
-												<CloseIcon />
+												<X />
 											</div>
 										</If>
 										<Button
@@ -140,88 +186,109 @@ const Connect: NextPage = () => {
 					</fieldset>
 
 					<fieldset className="mt-16 text-center">
-						<Button type="submit" className="w-1/3 text-center" disabled={busy}>
+						<Button type="submit" className="w-1/3 text-center" disabled={open}>
 							<div className="flex items-center justify-center">
-								<If condition={busy}>
-									<span className="mr-2">
-										<Spinner />
-									</span>
-								</If>
-								<span>{busy ? "Processing..." : "Sign and Submit"}</span>
+								<span>Sign and Submit</span>
 							</div>
 						</Button>
 						<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
 					</fieldset>
+
+					<input
+						type="hidden"
+						name="twitterRegistrarIndex"
+						value={twitterRegistrarIndex}
+					/>
+					<input
+						type="hidden"
+						name="discordRegistrarIndex"
+						value={discordRegistrarIndex}
+					/>
 				</form>
 			</div>
+
+			<TransactionDialog open={open} onClose={onDialogClose}>
+				<Choose>
+					<Choose.When condition={formState?.status === "Ok"}>
+						<CheckCircle className="text-hero mb-2 h-12 w-12  flex-shrink-0" />
+						<div className="font-display text-hero mb-4 text-2xl uppercase">
+							Success!
+						</div>
+						<p className="text-center">
+							Your identity has been set successfully, [and maybe some message
+							about a role has been granted, visit Discord].
+						</p>
+						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
+							<div className="mb-4">
+								<Button startAdornment={<DiscordLogo className="h-4" />}>
+									Join Our Discord
+								</Button>
+							</div>
+
+							<div>
+								<Button
+									onClick={onDismissClick}
+									variant="white"
+									className="w-28"
+								>
+									Dismiss
+								</Button>
+							</div>
+						</div>
+					</Choose.When>
+
+					<Choose.When condition={formState?.status === "NotOk"}>
+						<ExclamationCircle className="text-hero mb-2 h-12 w-12  flex-shrink-0" />
+						<div className="font-display text-hero mb-4 text-2xl uppercase">
+							Ah, Error!
+						</div>
+						<p className="text-center">
+							Something went wrong while processing your request.
+						</p>
+
+						<If condition={!!formState?.statusMessage}>
+							<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
+								{formState?.statusMessage}
+							</p>
+						</If>
+
+						<div className="mt-8 flex">
+							<Button onClick={onDismissClick} className="w-28">
+								Dismiss
+							</Button>
+						</div>
+					</Choose.When>
+					<Choose.When condition={formState?.step === "Await"}>
+						<Spinner className="text-hero mb-2 h-8 w-8 flex-shrink-0 animate-spin" />
+						<div className="font-display text-hero mb-4 text-2xl uppercase">
+							Confirm with Signature [1/3]
+						</div>
+						<p className="text-center">
+							Please sign the transaction when prompted...
+						</p>
+					</Choose.When>
+					<Choose.When condition={formState?.step === "Submit"}>
+						<Spinner className="text-hero mb-2 h-8 w-8 flex-shrink-0  animate-spin" />
+						<div className="font-display text-hero mb-4 text-2xl uppercase">
+							Submitting Request [2/3]
+						</div>
+						<p className="text-center">
+							Please wait until this proccess completes...
+						</p>
+					</Choose.When>
+					<Choose.When condition={formState?.step === "Process"}>
+						<Spinner className="text-hero mb-2 h-8 w-8 flex-shrink-0  animate-spin" />
+						<div className="font-display text-hero mb-4 text-2xl uppercase">
+							Providing Judgement [3/3]
+						</div>
+						<p className="text-center">
+							Please wait until this proccess completes...
+						</p>
+					</Choose.When>
+				</Choose>
+			</TransactionDialog>
 		</Layout>
 	);
 };
 
 export default Connect;
-
-const useSocialSignIn = (provider: "Twitter" | "Discord") => {
-	const popupWindow = useWindowPopup();
-	const [username, setUsername] = useState<string>("");
-	const onSignInClick: MouseEventHandler<HTMLButtonElement> =
-		useCallback(async () => {
-			setTimeout(() => {
-				popupWindow(
-					`/popup/signin?provider=${provider.toLowerCase()}`,
-					`${provider}Auth`
-				);
-			}, 100);
-
-			const onStorageEvent = async (event: StorageEvent) => {
-				if (event.key !== "nextauth.message") return;
-				const { url } = event;
-				if (url.indexOf(`provider=${provider.toLowerCase()}&callback=1`) < 0)
-					return;
-
-				const session = await getSession();
-				const [sessionProvider, username] = session?.user?.name?.split(
-					"://"
-				) ?? [null, null];
-				if (provider.toLowerCase() !== sessionProvider) return;
-
-				window.removeEventListener("storage", onStorageEvent);
-				setUsername(username);
-			};
-
-			window.addEventListener("storage", onStorageEvent);
-		}, [popupWindow, provider]);
-
-	const clearUsername = useCallback(() => {
-		setUsername("");
-	}, []);
-
-	return { onSignInClick, username, clearUsername };
-};
-
-const useFormSubmit = () => {
-	const { api } = useCENNZApi();
-	const [busy, setBusy] = useState<boolean>(false);
-	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-		async (event) => {
-			event.preventDefault();
-			setBusy(true);
-
-			const data = new FormData(event.target as HTMLFormElement);
-
-			try {
-				await submitIdentityConnectForm(api, {
-					address: data.get("address") as string,
-					twitterUsername: data.get("twitterUsername") as string,
-					discordUsername: data.get("discordUsername") as string,
-				}).finally(() => {
-					setBusy(false);
-				});
-			} catch (error) {
-				console.info(error);
-			}
-		},
-		[api]
-	);
-
-	return { busy, onFormSubmit };
-};

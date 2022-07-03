@@ -1,13 +1,12 @@
 import type { GenericEvent } from "@cennznet/types";
 import { SubmittableResult } from "@cennznet/api";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
-
-const Emittery = require("emittery");
+import Emittery from "emittery";
 
 interface EmitEvents {
 	txCreated: undefined;
 	txHashed: string;
-	txSucceeded: SubmittableResult;
+	txSuccessful: SubmittableResult;
 	txFailed: SubmittableResult;
 	txCancelled: undefined;
 }
@@ -28,28 +27,31 @@ export class Transaction extends Emittery<EmitEvents> {
 
 	setResult(result: SubmittableResult) {
 		const { status, dispatchError } = result;
-
-		if (status.isFinalized && !dispatchError)
-			return this.emit("txSucceeded", result);
-
-		if (status.isFinalized && dispatchError)
-			return this.emit("txFailed", result);
+		if (!status.isFinalized) return;
+		if (dispatchError) return this.emit("txFailed", result);
+		return this.emit("txSuccessful", result);
 	}
 
 	setCancel() {
 		this.emit("txCancelled");
 	}
 
-	decodeError(result: SubmittableResult): string | void {
+	decodeError(result: SubmittableResult): { code: string; message?: string } {
 		const { dispatchError } = result;
-		if (!dispatchError?.isModule) return;
+		if (!dispatchError?.isModule)
+			return { code: "I0E0", message: "Unknown error occurs" };
 		const { index, error } = dispatchError.asModule.toJSON();
 		const errorMeta = dispatchError.registry.findMetaError(
-			new Uint8Array([index as number, error as number])
+			dispatchError.asModule
 		);
-		return errorMeta?.section && errorMeta?.method
-			? `${errorMeta.section}.${errorMeta.method}`
-			: `I${index}E${error}`;
+		return {
+			code: `I${index}E${error}`,
+			message: errorMeta?.docs
+				? errorMeta.docs.join(" ")
+				: errorMeta?.section && errorMeta?.method
+				? `${errorMeta.section}.${errorMeta.method}`
+				: undefined,
+		};
 	}
 
 	findEvent(

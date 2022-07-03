@@ -3,33 +3,28 @@ import { CENNZNetNetwork } from "@cennznet/api/types";
 
 export const CENNZ_NETWORK = {
 	local: {
-		ChainSlug: "local",
+		ChainSlug: "local" as CENNZNetNetwork,
 		ChainName: "Local Testnet",
 		ExplorerUrl: "https://localhost",
 	},
 	rata: {
-		ChainSlug: "rata",
+		ChainSlug: "rata" as CENNZNetNetwork,
 		ChainName: "Rata Testnet",
 		ExplorerUrl: "https://rata.uncoverexplorer.com",
 	},
 
 	nikau: {
-		ChainSlug: "nikau",
+		ChainSlug: "nikau" as CENNZNetNetwork,
 		ChainName: "Nikau Testnet",
 		ExplorerUrl: "https://nikau.uncoverexplorer.com",
 	},
 
 	azalea: {
-		ChainSlug: "rata",
+		ChainSlug: "azalea" as CENNZNetNetwork,
 		ChainName: "CENNZnet Mainnet",
 		ExplorerUrl: "https://uncoverexplorer.com",
 	},
 }[(process.env.NX_CENNZ_NETWORK ?? "local") as CENNZNetNetwork];
-
-export const TWITTER_REGISTRAR_SEED: string =
-	process.env.TWITTER_REGISTRAR_SEED ?? "";
-export const DISCORD_REGISTRAR_SEED: string =
-	process.env.DISCORD_REGISTRAR_SEED ?? "";
 
 export const DISCORD_CLIENT: Pick<
 	OAuthUserConfig<"discord">,

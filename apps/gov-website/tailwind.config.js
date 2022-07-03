@@ -9,11 +9,6 @@ module.exports = {
 		join(__dirname, "../../libs/web/vectors/**/*.svg"),
 	],
 	theme: {
-		fontFamily: {
-			display: ["apotek", "sans-serif"],
-			body: ["gopher", "sans-serif"],
-		},
-
 		extend: {
 			colors: {
 				hero: "#9847FF",
@@ -23,6 +18,8 @@ module.exports = {
 			},
 			fontFamily: {
 				sans: ["gopher", ...defaultTheme.fontFamily.sans],
+				display: ["apotek", "sans-serif"],
+				body: ["gopher", "sans-serif"],
 			},
 			boxShadow: {
 				"sharp": "4px 4px 0px 0px",

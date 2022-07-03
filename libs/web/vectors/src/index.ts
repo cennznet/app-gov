@@ -4,7 +4,9 @@ export {
 	default as CENNZNetLogoSrc,
 } from "./cennznet.svg";
 export { ReactComponent as ChevronDown } from "./chevron-down.svg";
-export { ReactComponent as CloseIcon } from "./close-icon.svg";
+export { ReactComponent as X } from "./x.svg";
 export { ReactComponent as DiscordLogo } from "./discord.svg";
 export { ReactComponent as Spinner } from "./spinner.svg";
 export { ReactComponent as TwitterLogo } from "./twitter.svg";
+export { ReactComponent as CheckCircle } from "./check-circle.svg";
+export { ReactComponent as ExclamationCircle } from "./exclamation-circle.svg";
