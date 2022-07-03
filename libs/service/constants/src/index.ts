@@ -20,7 +20,7 @@ export const CENNZ_NETWORK = {
 	},
 
 	azalea: {
-		ChainSlug: "rata" as CENNZNetNetwork,
+		ChainSlug: "azalea" as CENNZNetNetwork,
 		ChainName: "CENNZnet Mainnet",
 		ExplorerUrl: "https://uncoverexplorer.com",
 	},
