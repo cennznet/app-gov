@@ -1,8 +1,7 @@
 import type { FC } from "react";
 import type { ProposalDetails, ProposalInfo } from "@app-gov/node/types";
 
-import RemarkGfm from "remark-gfm";
-import ReactMarkdown from "react-markdown";
+import { Markdown } from "@app-gov/web/components";
 
 interface ProposalDetailsDisplayProps {
 	proposalDetails: ProposalDetails;
@@ -38,9 +37,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 			</div>
 			<div className="border-hero my-6 w-full border-b-2" />
 			<div className="text-xl">
-				<ReactMarkdown remarkPlugins={[[RemarkGfm, { singleTilde: false }]]}>
-					{proposalDetails?.description}
-				</ReactMarkdown>
+				<Markdown input={proposalDetails?.description} />
 			</div>
 		</div>
 	);

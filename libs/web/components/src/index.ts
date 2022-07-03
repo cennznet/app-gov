@@ -1,6 +1,7 @@
 export * from "./Button";
 export * from "./Header";
 export * from "./Layout";
+export * from "./Markdown";
 export * from "./ProposalAdvanced";
 export * from "./Select";
 export * from "./TextField";

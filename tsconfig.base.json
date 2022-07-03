@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app-gov/website/*": ["apps/gov-website/*"],
       "@app-gov/node/constants": ["libs/node/constants/src/index.ts"],
       "@app-gov/node/types": ["libs/node/types/src/index.ts"],
       "@app-gov/node/utils": ["libs/node/utils/src/index.ts"],
@@ -28,7 +27,8 @@
       "@app-gov/web/providers": ["libs/web/providers/src/index.ts"],
       "@app-gov/web/types": ["libs/web/types/src/index.ts"],
       "@app-gov/web/utils": ["libs/web/utils/src/index.ts"],
-      "@app-gov/web/vectors": ["libs/web/vectors/src/index.ts"]
+      "@app-gov/web/vectors": ["libs/web/vectors/src/index.ts"],
+      "@app-gov/website/*": ["apps/gov-website/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
