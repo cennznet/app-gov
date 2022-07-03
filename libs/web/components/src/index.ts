@@ -7,3 +7,5 @@ export * from "./TextField";
 export * from "./WalletSelect";
 export * from "./ProposalDetailsField";
 export * from "./ProposalDetailsDisplay";
+export * from "./TransactionDialog";
+export * from "./Dialog";
