@@ -28,7 +28,7 @@ export const TextField: FC<IntrinsicElements["input"] & TextFieldProps> = ({
 				type={type}
 				className={classNames(
 					inputClassName,
-					"min-w-0 flex-shrink px-4 py-2 outline-none"
+					"min-w-0 flex-1 flex-shrink px-4 py-2 outline-none"
 				)}
 			/>
 			<If condition={!!endAdornment}>
@@ -56,7 +56,7 @@ export const TextArea: FC<IntrinsicElements["textarea"] & TextFieldProps> = ({
 				{...props}
 				className={classNames(
 					inputClassName,
-					"min-w-0 flex-shrink px-4 py-2 outline-none"
+					"min-w-0 flex-1 flex-shrink px-4 py-2 outline-none"
 				)}
 			/>
 			<If condition={!!endAdornment}>

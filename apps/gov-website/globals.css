@@ -13,3 +13,27 @@ body,
 input::-webkit-input-placeholder {
 	@apply text-slate-500;
 }
+
+.markdown p {
+	@apply mb-4;
+}
+
+.markdown a {
+	@apply text-hero;
+}
+
+.markdown a:hover {
+	@apply underline;
+}
+
+.markdown code {
+	@apply text-hero border-hero bg-light inline-block rounded border px-[4px] text-sm;
+}
+
+.markdown pre {
+	@apply mb-4 whitespace-pre-wrap bg-slate-50;
+}
+
+.markdown pre code {
+	@apply p-4 text-inherit;
+}

@@ -10,3 +10,4 @@ export * from "./ProposalDetailsField";
 export * from "./ProposalDetailsDisplay";
 export * from "./TransactionDialog";
 export * from "./Dialog";
+export * from "./MarkdownField";
