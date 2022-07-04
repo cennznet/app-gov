@@ -1,10 +1,11 @@
 import { useCallback, useState } from "react";
-import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
+
 import {
 	getRequestJudgementExtrinsic,
 	getSetIdentityExtrinsic,
 	signAndSendTx,
 } from "@app-gov/service/cennznet";
+import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface IdentityFormState {
 	step: "Await" | "Submit" | "Process";

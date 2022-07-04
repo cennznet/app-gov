@@ -1,27 +1,28 @@
 import type { GetStaticProps, NextPage } from "next";
 import { FormEvent, useCallback, useEffect } from "react";
-import {
-	DiscordLogo,
-	TwitterLogo,
-	Spinner,
-	X,
-	CheckCircle,
-	ExclamationCircle,
-} from "@app-gov/web/vectors";
-import { useSocialSignIn, useIdentityConnectForm } from "@app-gov/web/hooks";
 import { Choose, If } from "react-extras";
-import {
-	Button,
-	TextField,
-	WalletSelect,
-	Layout,
-	Header,
-	TransactionDialog,
-	useTransactionDialog,
-} from "@app-gov/web/components";
+
+import { fetchRequiredRegistrars } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
-import { fetchRequiredRegistrars } from "@app-gov/node/utils";
+import {
+	Button,
+	Header,
+	Layout,
+	TextField,
+	TransactionDialog,
+	useTransactionDialog,
+	WalletSelect,
+} from "@app-gov/web/components";
+import { useIdentityConnectForm, useSocialSignIn } from "@app-gov/web/hooks";
+import {
+	CheckCircle,
+	DiscordLogo,
+	ExclamationCircle,
+	Spinner,
+	TwitterLogo,
+	X,
+} from "@app-gov/web/vectors";
 
 interface StaticProps {
 	twitterRegistrarIndex: number;

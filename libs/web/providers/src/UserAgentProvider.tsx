@@ -1,5 +1,6 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import type { IBrowser, IOS, IDevice } from "ua-parser-js";
+import type { IBrowser, IDevice, IOS } from "ua-parser-js";
+
 import { PropsWithChildren } from "@app-gov/web/types";
 
 type UserAgentContextType = {

@@ -1,7 +1,8 @@
-import { PropsWithChildren } from "@app-gov/web/types";
 import { Dialog as BaseDialog, Transition } from "@headlessui/react";
-import { FC, MutableRefObject, Fragment } from "react";
+import { FC, Fragment, MutableRefObject } from "react";
 import { classNames } from "react-extras";
+
+import { PropsWithChildren } from "@app-gov/web/types";
 
 export interface DialogProps extends PropsWithChildren {
 	className?: string;

@@ -1,10 +1,11 @@
+import { capitalize } from "lodash-es";
 import type { NextPage } from "next";
-import { Layout } from "@app-gov/web/components";
+import { BuiltInProviderType } from "next-auth/providers";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { signIn } from "next-auth/react";
-import { BuiltInProviderType } from "next-auth/providers";
-import { capitalize } from "lodash-es";
+
+import { Layout } from "@app-gov/web/components";
 
 const SignIn: NextPage = () => {
 	const {

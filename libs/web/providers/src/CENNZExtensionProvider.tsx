@@ -1,19 +1,20 @@
-import type { PropsWithChildren } from "@app-gov/web/types";
-
+import type * as Extension from "@polkadot/extension-dapp";
 import {
-	InjectedExtension,
 	InjectedAccountWithMeta,
+	InjectedExtension,
 } from "@polkadot/extension-inject/types";
 import {
 	createContext,
+	FC,
+	useCallback,
 	useContext,
 	useEffect,
-	useState,
-	useCallback,
 	useMemo,
-	FC,
+	useState,
 } from "react";
-import type * as Extension from "@polkadot/extension-dapp";
+
+import type { PropsWithChildren } from "@app-gov/web/types";
+
 import { useUserAgent } from "./UserAgentProvider";
 
 interface CENNZExtensionContextType {

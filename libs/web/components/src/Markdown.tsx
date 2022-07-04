@@ -1,8 +1,7 @@
 import type { FC } from "react";
-
-import RemarkGfm from "remark-gfm";
-import RemarkBreaks from "remark-breaks";
 import ReactMarkdown from "react-markdown";
+import RemarkBreaks from "remark-breaks";
+import RemarkGfm from "remark-gfm";
 
 interface MarkdownProps {
 	input: string;

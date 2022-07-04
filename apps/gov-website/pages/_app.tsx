@@ -1,16 +1,17 @@
 /* eslint-disable react/jsx-key */
+import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { FC } from "react";
+
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
-	MainProvider,
 	CENNZApiProvider,
 	CENNZExtensionProvider,
 	CENNZWalletProvider,
+	MainProvider,
 	UserAgentProvider,
 } from "@app-gov/web/providers";
-import { FC } from "react";
-import { SessionProvider } from "next-auth/react";
 
 import "../globals.css";
 

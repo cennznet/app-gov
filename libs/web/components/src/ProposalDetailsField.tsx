@@ -1,9 +1,10 @@
-import type { ChangeEventHandler, FC } from "react";
-
+import type { FC } from "react";
 import { useState } from "react";
 import { classNames, If } from "react-extras";
+
 import { useControlledInput } from "@app-gov/web/hooks";
-import { Button, Markdown, TextArea } from "@app-gov/web/components";
+
+import { Button, Markdown, TextArea } from "./";
 
 export const ProposalDetailsField: FC = () => {
 	const [showPreview, setShowPreview] = useState<boolean>(false);

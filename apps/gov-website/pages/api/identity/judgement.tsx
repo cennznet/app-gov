@@ -1,14 +1,15 @@
+import { getToken } from "next-auth/jwt";
+
 import { NEXTAUTH_SECRET } from "@app-gov/node/constants";
 import { fetchRequiredRegistrars, withMethodGuard } from "@app-gov/node/utils";
 import {
 	fetchIdentityOf,
 	getApiInstance,
-	isIdentityValueMatched,
 	getProvideJudgementExtrinsic,
+	isIdentityValueMatched,
 	signAndSendPromise,
 } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
-import { getToken } from "next-auth/jwt";
 
 export default withMethodGuard(
 	async function identityConnectRoute(req, res) {

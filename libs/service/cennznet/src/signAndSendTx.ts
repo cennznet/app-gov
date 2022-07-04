@@ -1,7 +1,8 @@
 import { SubmittableResult } from "@cennznet/api";
 import type { Signer, SubmittableExtrinsic } from "@cennznet/api/types";
-import { Transaction } from "./Transaction";
 import { KeyringPair } from "@polkadot/keyring/types";
+
+import { Transaction } from "./Transaction";
 
 export const signAndSendTx = async (
 	extrinsic: SubmittableExtrinsic<"promise">,

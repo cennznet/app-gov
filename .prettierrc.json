@@ -17,5 +17,9 @@
         "tabWidth": 2
       }
     }
-  ]
+  ],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^@app-gov/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderCaseInsensitive": true
 }

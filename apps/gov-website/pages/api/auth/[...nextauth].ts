@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
-import TwitterProvider from "next-auth/providers/twitter";
 import DiscordProvider from "next-auth/providers/discord";
+import TwitterProvider from "next-auth/providers/twitter";
+
 import { DISCORD_CLIENT, TWITTER_CLIENT } from "@app-gov/service/constants";
 
 export default NextAuth({

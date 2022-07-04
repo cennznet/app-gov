@@ -1,5 +1,6 @@
-import { MouseEventHandler, useCallback, useState } from "react";
 import { getSession } from "next-auth/react";
+import { MouseEventHandler, useCallback, useState } from "react";
+
 import { useWindowPopup } from "./useWindowPopup";
 
 export const useSocialSignIn = (provider: "Twitter" | "Discord") => {

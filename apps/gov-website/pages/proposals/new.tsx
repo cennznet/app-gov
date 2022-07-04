@@ -1,7 +1,10 @@
-import type { NextPage } from "next";
-import type { ProposalCall } from "@app-gov/web/types";
 import type { Api, SubmittableResult } from "@cennznet/api";
+import type { NextPage } from "next";
+import { FormEventHandler, useCallback, useState } from "react";
+import { If } from "react-extras";
 
+import { PINATA_GATEWAY } from "@app-gov/service/constants";
+import { pinProposal } from "@app-gov/service/pinata";
 import {
 	Button,
 	Header,
@@ -11,13 +14,10 @@ import {
 	TextField,
 	WalletSelect,
 } from "@app-gov/web/components";
-import { If } from "react-extras";
-import { Spinner } from "@app-gov/web/vectors";
-import { pinProposal } from "@app-gov/service/pinata";
 import { useControlledInput } from "@app-gov/web/hooks";
-import { PINATA_GATEWAY } from "@app-gov/service/constants";
-import { FormEventHandler, useCallback, useState } from "react";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
+import type { ProposalCall } from "@app-gov/web/types";
+import { Spinner } from "@app-gov/web/vectors";
 
 const NewProposal: NextPage = () => {
 	const { value: proposalTitle, onChange: onProposalTitleChange } =

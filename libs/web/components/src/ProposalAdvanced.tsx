@@ -1,11 +1,12 @@
 import type { ChangeEvent, FC } from "react";
-import type { ProposalCall } from "@app-gov/web/types";
-
 import { useMemo, useState } from "react";
 import { classNames, If } from "react-extras";
-import { ChevronDown } from "@app-gov/web/vectors";
+
 import { Extrinsics } from "@app-gov/service/cennznet";
-import { TextField, Select } from "@app-gov/web/components";
+import type { ProposalCall } from "@app-gov/web/types";
+import { ChevronDown } from "@app-gov/web/vectors";
+
+import { Select, TextField } from "./";
 
 interface ProposalAdvancedProps {
 	proposalCall: ProposalCall | undefined;
@@ -128,7 +129,7 @@ const useExtrinsic = (proposalCall: ProposalCall | undefined) => {
 
 	const cennzCalls = useMemo(
 		() => selectedModule?.methods.map((method: ExtrinsicMethod) => method.name),
-		[selectedModule, proposalCall?.module]
+		[selectedModule]
 	);
 
 	const extrinsicArgs = useMemo<string[]>(() => {
@@ -141,7 +142,7 @@ const useExtrinsic = (proposalCall: ProposalCall | undefined) => {
 			.split(",")
 			.map((args: string) => args.split(":")[0])
 			.filter(Boolean);
-	}, [selectedModule, proposalCall]);
+	}, [proposalCall?.call, selectedModule?.methods]);
 
 	return { cennzModules, cennzCalls, extrinsicArgs };
 };

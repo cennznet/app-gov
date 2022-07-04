@@ -1,7 +1,7 @@
-import type { PropsWithChildren, IntrinsicElements } from "@app-gov/web/types";
-
 import { FC, ReactNode } from "react";
 import { classNames, If } from "react-extras";
+
+import type { IntrinsicElements, PropsWithChildren } from "@app-gov/web/types";
 
 interface TextFieldProps extends PropsWithChildren {
 	endAdornment?: ReactNode;
