@@ -1,11 +1,18 @@
-import type { ChangeEventHandler, MouseEventHandler } from "react";
+import type {
+	ChangeEventHandler,
+	ComponentProps,
+	FC,
+	MouseEventHandler,
+} from "react";
 
 import { useCENNZExtension, useCENNZWallet } from "@app-gov/web/providers";
 import { CENNZLogo } from "@app-gov/web/vectors";
 
 import { Button, Select } from "./";
 
-export const WalletSelect: typeof Select = (props) => {
+type SelectProps = ComponentProps<typeof Select>;
+
+export const WalletSelect: FC<SelectProps> = (props) => {
 	const {
 		onCENNZConnectClick,
 		onCENNZAccountSelect,
