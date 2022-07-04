@@ -1,6 +1,10 @@
 import type { FC } from "react";
 
-import type { ProposalDetails, ProposalInfo } from "@app-gov/node/types";
+import type {
+	ProposalCall,
+	ProposalDetails,
+	ProposalInfo,
+} from "@app-gov/node/types";
 
 import { Markdown } from "./";
 
@@ -8,13 +12,19 @@ interface ProposalDetailsDisplayProps {
 	proposalDetails: ProposalDetails;
 	proposalInfo: ProposalInfo;
 	proposalStatus: string;
+	proposalCall: ProposalCall;
 }
 
 export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	proposalDetails,
 	proposalInfo,
 	proposalStatus,
+	proposalCall,
 }) => {
+	const { method, section, args } = proposalCall || {};
+
+	const params = [...Object.values(args || {})];
+
 	return (
 		<div>
 			<div className="space-y-6">
@@ -34,6 +44,20 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 				<div>
 					<span className="italic">Sponsor</span>
 					<p>{proposalInfo?.sponsor}</p>
+				</div>
+				<div>
+					<span className="italic">Proposal Call</span>
+					<div>
+						api.tx.{section}.{method}
+						{"("}
+						{params.map((arg) => (
+							<span>
+								{arg}
+								{arg !== params[params.length - 1] && ","}
+							</span>
+						))}
+						{")"}
+					</div>
 				</div>
 			</div>
 			<div className="border-hero my-6 w-full border-b-2" />

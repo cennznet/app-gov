@@ -3,7 +3,11 @@ import type { NextPage, NextPageContext } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { If } from "react-extras";
 
-import type { ProposalInterface, ProposalVote } from "@app-gov/node/types";
+import type {
+	ProposalCall,
+	ProposalInterface,
+	ProposalVote,
+} from "@app-gov/node/types";
 import {
 	Button,
 	Header,
@@ -28,7 +32,7 @@ interface ProposalProps {
 }
 
 const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
-	const proposal = useProposal(proposalId);
+	const { proposal, proposalCall } = useProposal(proposalId);
 	const { busy, onVoteClick } = useVote(proposalId);
 
 	return (
@@ -62,6 +66,7 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 						proposalDetails={proposal?.proposalDetails}
 						proposalInfo={proposal?.proposalInfo}
 						proposalStatus={proposal?.status}
+						proposalCall={proposalCall}
 					/>
 
 					<div
@@ -115,29 +120,27 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 
 export default Proposal;
 
-const useProposal = (proposalId: string): ProposalInterface => {
+const useProposal = (proposalId: string) => {
 	const [proposal, setProposal] = useState<ProposalInterface>();
+	const [proposalCall, setProposalCall] = useState<ProposalCall>();
+
+	const { api } = useCENNZApi();
 
 	useEffect(() => {
-		if (!proposalId) return;
+		if (!api || !proposalId) return;
 
 		fetchProposal(proposalId).then(({ proposal }) => setProposal(proposal));
-	}, [proposalId]);
 
-	return proposal;
+		fetchProposalCall(api, proposalId).then(setProposalCall);
+	}, [api, proposalId]);
+
+	return { proposal, proposalCall };
 };
 
-interface ProposalCall {
-	method: string;
-	section: string;
-	args: Record<string, string>;
-}
-
-const getProposalCall = async (
-	api: Api,
-	proposalId: string
-): Promise<ProposalCall> => {
-	const extrinsicHash = await api.query.governance.proposalCalls(proposalId);
+const fetchProposalCall = async (api: Api, proposalId: string) => {
+	const extrinsicHash = (
+		await api.query.governance.proposalCalls(proposalId)
+	).toString();
 
 	const { method, section, args } = api
 		.createType("Call", extrinsicHash)
