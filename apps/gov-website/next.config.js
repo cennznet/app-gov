@@ -23,8 +23,8 @@ const nextConfig = {
 				permanent: false,
 			},
 			{
-				source: "/proposals",
-				destination: "/proposals/new",
+				source: "/proposal",
+				destination: "/proposal/new",
 				permanent: false,
 			},
 		];

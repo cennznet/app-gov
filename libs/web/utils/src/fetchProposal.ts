@@ -1,5 +1,5 @@
 export const fetchProposal = async (proposalId: string) => {
-	const response = await fetch(`/api/proposals/${proposalId}`);
+	const response = await fetch(`/api/proposal/${proposalId}`);
 
 	const data = await response.json();
 
