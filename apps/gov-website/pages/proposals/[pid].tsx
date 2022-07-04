@@ -1,4 +1,4 @@
-import type { SubmittableResult } from "@cennznet/api";
+import type { Api, SubmittableResult } from "@cennznet/api";
 import type { NextPage, NextPageContext } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { If } from "react-extras";
@@ -125,6 +125,25 @@ const useProposal = (proposalId: string): ProposalInterface => {
 	}, [proposalId]);
 
 	return proposal;
+};
+
+interface ProposalCall {
+	method: string;
+	section: string;
+	args: Record<string, string>;
+}
+
+const getProposalCall = async (
+	api: Api,
+	proposalId: string
+): Promise<ProposalCall> => {
+	const extrinsicHash = await api.query.governance.proposalCalls(proposalId);
+
+	const { method, section, args } = api
+		.createType("Call", extrinsicHash)
+		.toHuman() as unknown as ProposalCall;
+
+	return { method, section, args };
 };
 
 const useVote = (proposalId: string) => {
