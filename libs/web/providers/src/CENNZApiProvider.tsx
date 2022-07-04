@@ -1,8 +1,8 @@
-import type { PropsWithChildren } from "@app-gov/web/types";
-
-import { FC, createContext, useState, useEffect, useContext } from "react";
 import { Api } from "@cennznet/api";
 import { CENNZNetNetwork } from "@cennznet/api/types";
+import { createContext, FC, useContext, useEffect, useState } from "react";
+
+import type { PropsWithChildren } from "@app-gov/web/types";
 
 interface CENNZApiContextType {
 	api?: Api;

@@ -1,6 +1,7 @@
 import { Api } from "@cennznet/api";
 import { SubmittableExtrinsic } from "@cennznet/api/types";
 import { ISubmittableResult } from "@cennznet/types";
+
 import { hasIdentityValue, IdentityHash } from "./hashIdentityValue";
 
 export function getSetIdentityExtrinsic(

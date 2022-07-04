@@ -1,6 +1,6 @@
+import mongoose from "mongoose";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import mongoose from "mongoose";
 import { MONGODB_SERVER } from "@app-gov/service/constants";
 
 export default async function handler(

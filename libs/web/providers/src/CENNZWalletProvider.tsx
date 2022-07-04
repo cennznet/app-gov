@@ -1,19 +1,21 @@
-import type { PropsWithChildren } from "@app-gov/web/types";
 import {
-	InjectedExtension,
 	InjectedAccountWithMeta,
+	InjectedExtension,
 } from "@polkadot/extension-inject/types";
 import {
 	createContext,
+	FC,
 	useCallback,
 	useContext,
 	useEffect,
 	useState,
-	FC,
 } from "react";
 import store from "store";
-import { useCENNZExtension } from "./CENNZExtensionProvider";
+
+import type { PropsWithChildren } from "@app-gov/web/types";
+
 import { useCENNZApi } from "./CENNZApiProvider";
+import { useCENNZExtension } from "./CENNZExtensionProvider";
 
 interface CENNZWalletContextType {
 	selectedAccount?: InjectedAccountWithMeta;

@@ -1,9 +1,9 @@
-import type { NextPage, NextPageContext } from "next";
 import type { SubmittableResult } from "@cennznet/api";
-import type { ProposalVote, ProposalInterface } from "@app-gov/node/types";
-
-import { If } from "react-extras";
+import type { NextPage, NextPageContext } from "next";
 import { useCallback, useEffect, useState } from "react";
+import { If } from "react-extras";
+
+import type { ProposalInterface, ProposalVote } from "@app-gov/node/types";
 import {
 	Button,
 	Header,
@@ -11,9 +11,9 @@ import {
 	ProposalDetailsDisplay,
 	WalletSelect,
 } from "@app-gov/web/components";
+import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 import { fetchProposal } from "@app-gov/web/utils";
 import { Spinner } from "@app-gov/web/vectors";
-import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export const getServerSideProps = (context: NextPageContext) => {
 	return {

@@ -1,5 +1,5 @@
-import { OAuthUserConfig } from "next-auth/providers";
 import { CENNZNetNetwork } from "@cennznet/api/types";
+import { OAuthUserConfig } from "next-auth/providers";
 
 export const CENNZ_NETWORK = {
 	local: {

@@ -1,7 +1,8 @@
-import type { GenericEvent } from "@cennznet/types";
 import { SubmittableResult } from "@cennznet/api";
-import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import type { GenericEvent } from "@cennznet/types";
 import Emittery from "emittery";
+
+import { CENNZ_NETWORK } from "@app-gov/service/constants";
 
 interface EmitEvents {
 	txCreated: undefined;

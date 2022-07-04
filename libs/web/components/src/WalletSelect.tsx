@@ -1,7 +1,7 @@
 import type { ChangeEventHandler, MouseEventHandler } from "react";
 
 import { Button, Select } from "@app-gov/web/components";
-import { useCENNZWallet, useCENNZExtension } from "@app-gov/web/providers";
+import { useCENNZExtension, useCENNZWallet } from "@app-gov/web/providers";
 import { CENNZLogo } from "@app-gov/web/vectors";
 
 export const WalletSelect: typeof Select = (props) => {

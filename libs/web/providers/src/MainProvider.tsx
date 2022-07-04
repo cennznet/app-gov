@@ -1,5 +1,6 @@
-import { PropsWithChildren } from "@app-gov/web/types";
 import { cloneElement, FC, ReactElement, ReactNode } from "react";
+
+import { PropsWithChildren } from "@app-gov/web/types";
 
 export interface MainProviderProps extends PropsWithChildren {
 	providers: ReactElement[];
