@@ -33,8 +33,10 @@ export const WalletSelect: typeof Select = (props) => {
 			{...props}
 		>
 			{allAccounts?.map((account, index) => (
-				<option value={account} key={index}>
-					{account}
+				<option value={account.address} key={index}>
+					{`${account.meta.name} - ${account.address
+						.slice(0, 8)
+						.concat("...", account.address.slice(-8))}`}
 				</option>
 			))}
 		</Select>
@@ -45,9 +47,7 @@ const useCENNZConnect = () => {
 	const { accounts } = useCENNZExtension();
 	const { connectWallet, selectedAccount, selectAccount } = useCENNZWallet();
 
-	const allAccounts = accounts
-		?.map((account) => account?.address)
-		.filter(Boolean);
+	const allAccounts = accounts?.filter(Boolean);
 
 	const onCENNZConnectClick: MouseEventHandler<HTMLButtonElement> = () =>
 		connectWallet();
