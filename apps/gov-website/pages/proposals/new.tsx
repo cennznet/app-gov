@@ -176,8 +176,8 @@ const useFormSubmit = (proposalCall: ProposalCall) => {
 				const proposalData = new FormData(event.target as HTMLFormElement);
 
 				const { IpfsHash } = await pinProposal({
-					proposalTitle: proposalData.get("proposalTitle").toString(),
-					proposalDetails: proposalData.get("proposalDetails").toString(),
+					proposalTitle: proposalData.get("proposalTitle") as string,
+					proposalDetails: proposalData.get("proposalDetails") as string,
 				});
 
 				await api.tx.governance
