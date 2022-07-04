@@ -1,6 +1,6 @@
 import { ComponentProps, FC, useCallback, useRef, useState } from "react";
 
-import { Dialog } from "@app-gov/web/components";
+import { Dialog } from "./";
 
 interface TransactionDialogProps extends ComponentProps<typeof Dialog> {}
 

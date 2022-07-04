@@ -1,7 +1,8 @@
 import type { FC } from "react";
 
 import type { ProposalDetails, ProposalInfo } from "@app-gov/node/types";
-import { Markdown } from "@app-gov/web/components";
+
+import { Markdown } from "./";
 
 interface ProposalDetailsDisplayProps {
 	proposalDetails: ProposalDetails;
