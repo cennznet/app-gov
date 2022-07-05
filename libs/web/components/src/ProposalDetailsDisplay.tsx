@@ -1,4 +1,5 @@
-import type { FC } from "react";
+import { FC } from "react";
+import { If } from "react-extras";
 
 import type {
 	ProposalCall,
@@ -23,46 +24,61 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 }) => {
 	const { method, section, args } = proposalCall || {};
 
-	const params = [...Object.values(args || {})];
-
 	return (
 		<div>
-			<div className="space-y-6">
-				<span className="border-hero border-b-2 text-4xl">
-					{proposalDetails?.title || "Untitled"}
-				</span>
-				<div className="flex w-full space-x-20">
-					<div>
-						<span className="italic">Enactment delay</span>
-						<p>{proposalInfo?.enactmentDelay || 0} blocks</p>
+			<div className="drop-shadow-sm space-y-4">
+				<div className="space-y-6">
+					<span className="text-4xl">
+						{proposalDetails?.title || "Untitled"}
+					</span>
+					<div className="flex w-full space-x-20">
+						<div>
+							<span className="font-bold text-xl">Status</span>
+							<p>{proposalStatus}</p>
+						</div>
+						<div>
+							<span className="font-bold text-xl">Enactment delay</span>
+							<p>{proposalInfo?.enactmentDelay || 0} blocks</p>
+						</div>
 					</div>
 					<div>
-						<span className="italic">Status</span>
-						<p>{proposalStatus}</p>
+						<span className="font-bold text-xl">Sponsor</span>
+						<p>{proposalInfo?.sponsor}</p>
 					</div>
 				</div>
-				<div>
-					<span className="italic">Sponsor</span>
-					<p>{proposalInfo?.sponsor}</p>
-				</div>
-				<div>
-					<span className="italic">Proposal Call</span>
+
+				<div className="">
+					<span className="font-bold text-xl">Proposed Call</span>
 					<div>
-						api.tx.{section}.{method}
-						{"("}
-						{params.map((arg) => (
-							<span>
-								{arg}
-								{arg !== params[params.length - 1] && ","}
-							</span>
-						))}
-						{")"}
+						{section}.{method}
 					</div>
+					<If condition={!!args}>
+						<div className="px-2 border border-hero rounded border-dotted shadow-sm mt-2">
+							<table className="w-full mt-2 mb-6">
+								<tbody className="">
+									<tr className="border-b border-dashed border-hero flex mb-2 py-2">
+										<th className="text-left w-1/2">Params</th>
+										<th className="text-right w-1/2">Values</th>
+									</tr>
+									{Object.keys(args || {})?.map((key) => (
+										<tr
+											key={key}
+											className="border-b border-hero flex py-2 items-center"
+										>
+											<td className="pr-20 flex-1">{key}</td>
+											<td className="break-all text-right">"{args[key]}"</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</If>
 				</div>
-			</div>
-			<div className="border-hero my-6 w-full border-b-2" />
-			<div className="text-xl">
-				<Markdown input={proposalDetails?.description} />
+
+				<div className="text-lg space-y-2">
+					<span className="font-bold text-xl">Justification</span>
+					<Markdown input={proposalDetails?.description} />
+				</div>
 			</div>
 		</div>
 	);
