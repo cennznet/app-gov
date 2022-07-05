@@ -70,16 +70,18 @@ export const MarkdownField: FC<
 						remarkPlugins={[[RemarkGfm, { singleTilde: false }], RemarkBreaks]}
 						className="markdown h-full overflow-auto p-2"
 					>
-						{value as string}
+						{(value as string) ?? ""}
 					</ReactMarkdown>
 				</div>
 			</div>
 			<p className="markdown bg-slate-100 p-2 text-xs">
 				Supported markdown: <strong>**bold**</strong>, <em>*italic*</em>,{" "}
-				<a href="#">[link]()</a>, <code>`code`</code> and{" "}
-				<pre className="inline">
-					<code className="!p-0">```multiline code```</code>
-				</pre>
+				<a href="#">[link]()</a>, <code className="!text-xs">`code`</code> and{" "}
+				<span className="mb-4 inline whitespace-pre-wrap bg-slate-50">
+					<code className="!p-0 !text-xs !text-inherit">
+						```multiline code```
+					</code>
+				</span>
 			</p>
 		</div>
 	);
