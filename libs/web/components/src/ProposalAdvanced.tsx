@@ -133,9 +133,10 @@ const useExtrinsic = (proposalCall: ProposalCall | undefined) => {
 	);
 
 	const extrinsicArgs = useMemo<string[]>(() => {
-		const selectedCall = selectedModule?.methods.find(
-			(method: any) => method.name === proposalCall?.call
-		);
+		const selectedCall =
+			selectedModule?.methods.find(
+				(method: ExtrinsicMethod) => method.name === proposalCall?.call
+			) || selectedModule?.methods?.[0];
 		if (!selectedCall) return [];
 
 		return selectedCall.args
