@@ -45,7 +45,6 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 					id="cennzExtrinsic"
 					className="border-dark mb-4 inline-flex w-full items-center space-x-6 border-[3px] bg-white px-4 py-2"
 				>
-					<p className="mr-2 tracking-widest text-gray-600">api.tx.</p>
 					<Select
 						className="w-[12em] rounded border border-gray-200"
 						inputClassName="cursor-pointer"
