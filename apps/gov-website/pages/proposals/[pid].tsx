@@ -40,22 +40,8 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
 				<h1 className="font-display mb-6 text-center text-6xl uppercase">
-					Proposal #{proposalId}
+					{proposal?.proposalDetails?.title ?? `Proposal #${proposalId}`}
 				</h1>
-
-				<If condition={!proposal || proposal?.status?.includes("Deliberation")}>
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-						Connect your wallet
-					</h2>
-					<p className="mb-8">
-						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
-						tempor nostrud nulla eu proident ut id qui incididunt.
-					</p>
-					<div className="mb-12 min-w-0">
-						<WalletSelect required />
-					</div>
-				</If>
 
 				<ProposalDetailsDisplay
 					proposalDetails={proposal?.proposalDetails}
@@ -63,6 +49,20 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 					proposalStatus={proposal?.status}
 					proposalCall={proposalCall}
 				/>
+
+				<If condition={!proposal || proposal?.status?.includes("Deliberation")}>
+					<h2 className="font-display border-hero mt-12 border-b-2 text-4xl uppercase">
+						Connect your wallet
+					</h2>
+					<p className="mb-8">
+						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
+						tempor nostrud nulla eu proident ut id qui incididunt.
+					</p>
+					<div className="min-w-0">
+						<WalletSelect required />
+					</div>
+				</If>
 
 				<If condition={!!proposal}>
 					<div
