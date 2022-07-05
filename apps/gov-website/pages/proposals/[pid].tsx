@@ -2,6 +2,7 @@ import type { Api, SubmittableResult } from "@cennznet/api";
 import type { NextPage, NextPageContext } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { If } from "react-extras";
+
 import type {
 	ProposalCall,
 	ProposalInterface,

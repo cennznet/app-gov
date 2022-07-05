@@ -6,6 +6,7 @@ import type {
 	ProposalDetails,
 	ProposalInfo,
 } from "@app-gov/node/types";
+import { PropsWithChildren } from "@app-gov/web/types";
 
 import { Markdown } from "./";
 
@@ -27,7 +28,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	return (
 		<div>
 			<div className="drop-shadow-sm space-y-4">
-				<div className="shadow-md p-4 space-y-6 border border-hero rounded">
+				<GradientBorder gradientClassName="space-y-6">
 					<span className="text-4xl">
 						{proposalDetails ? (
 							<p>{proposalDetails?.title || "Untitled"}</p>
@@ -61,9 +62,9 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 							<Skeleton skeletonClassName="w-2/3 h-6" />
 						)}
 					</div>
-				</div>
+				</GradientBorder>
 
-				<div className="shadow-md p-4 border border-hero rounded">
+				<GradientBorder>
 					<span className="font-bold text-xl">Proposed Call</span>
 					<div>
 						{section && method ? (
@@ -95,30 +96,52 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 							</table>
 						</div>
 					</If>
-				</div>
+				</GradientBorder>
 
-				<div className="text-lg space-y-2 shadow-md p-4 border border-hero rounded">
+				<GradientBorder gradientClassName="text-lg space-y-4 group">
 					<span className="font-bold text-xl">Justification</span>
 					{proposalDetails ? (
-						<Markdown input={proposalDetails?.description || "Undefined"} />
+						<div className="group-hover:border-l-4 group-hover:pl-2 duration-300 border-gray-400">
+							<Markdown input={proposalDetails?.description || "Undefined"} />
+						</div>
 					) : (
 						<div className="space-y-2">
 							<Skeleton skeletonClassName="w-32 h-6" />
 							<Skeleton skeletonClassName="w-56 h-6" />
 						</div>
 					)}
-				</div>
+				</GradientBorder>
 			</div>
 		</div>
 	);
 };
 
-interface SkeletonInterface {
+interface SkeletonProps {
 	skeletonClassName: string;
 }
 
-const Skeleton: FC<SkeletonInterface> = ({ skeletonClassName }) => (
+const Skeleton: FC<SkeletonProps> = ({ skeletonClassName }) => (
 	<div className="flex animate-pulse">
 		<div className={classNames(skeletonClassName, "bg-gray-600/50 rounded")} />
+	</div>
+);
+
+interface GradientBorderProps extends PropsWithChildren {
+	gradientClassName?: string;
+}
+
+const GradientBorder: FC<GradientBorderProps> = ({
+	gradientClassName,
+	children,
+}) => (
+	<div className="bg-gradient-to-t hover:to-dark from-hero to-mid rounded-md pb-[2px] hover:pb-[5px] duration-300 p-[1px]">
+		<div
+			className={classNames(
+				gradientClassName,
+				"p-4 flex flex-col justify-between h-full bg-mid rounded-md shadow-md"
+			)}
+		>
+			{children}
+		</div>
 	</div>
 );
