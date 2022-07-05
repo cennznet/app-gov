@@ -27,7 +27,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	return (
 		<div>
 			<div className="drop-shadow-sm space-y-4">
-				<div className="space-y-6">
+				<div className="hover:shadow-lg hover:p-2 duration-200 space-y-6 hover:border border-hero rounded">
 					<span className="text-4xl">
 						{proposalDetails?.title || "Untitled"}
 					</span>
@@ -47,7 +47,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 					</div>
 				</div>
 
-				<div className="">
+				<div className="hover:shadow-lg hover:p-2 duration-200 hover:border border-hero rounded">
 					<span className="font-bold text-xl">Proposed Call</span>
 					<div>
 						{section}.{method}
@@ -75,7 +75,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 					</If>
 				</div>
 
-				<div className="text-lg space-y-2">
+				<div className="text-lg space-y-2 hover:shadow-lg hover:p-2 duration-200 hover:border border-hero rounded">
 					<span className="font-bold text-xl">Justification</span>
 					<Markdown input={proposalDetails?.description} />
 				</div>
