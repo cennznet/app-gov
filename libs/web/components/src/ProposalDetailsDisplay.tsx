@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { If } from "react-extras";
+import { classNames, If } from "react-extras";
 
 import type {
 	ProposalCall,
@@ -27,35 +27,57 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	return (
 		<div>
 			<div className="drop-shadow-sm space-y-4">
-				<div className="hover:shadow-lg hover:p-2 duration-200 space-y-6 hover:border border-hero rounded">
+				<div className="shadow-md p-4 space-y-6 border border-hero rounded">
 					<span className="text-4xl">
-						{proposalDetails?.title || "Untitled"}
+						{proposalDetails ? (
+							<p>{proposalDetails?.title || "Untitled"}</p>
+						) : (
+							<Skeleton skeletonClassName="w-64 h-12" />
+						)}
 					</span>
 					<div className="flex w-full space-x-20">
 						<div>
 							<span className="font-bold text-xl">Status</span>
-							<p>{proposalStatus}</p>
+							{proposalStatus ? (
+								<p>{proposalStatus}</p>
+							) : (
+								<Skeleton skeletonClassName="w-32 h-6" />
+							)}
 						</div>
 						<div>
 							<span className="font-bold text-xl">Enactment delay</span>
-							<p>{proposalInfo?.enactmentDelay || 0} blocks</p>
+							{proposalInfo ? (
+								<p>{proposalInfo?.enactmentDelay || 0} blocks</p>
+							) : (
+								<Skeleton skeletonClassName="w-32 h-6" />
+							)}
 						</div>
 					</div>
 					<div>
 						<span className="font-bold text-xl">Sponsor</span>
-						<p>{proposalInfo?.sponsor}</p>
+						{proposalInfo ? (
+							<p>{proposalInfo.sponsor}</p>
+						) : (
+							<Skeleton skeletonClassName="w-2/3 h-6" />
+						)}
 					</div>
 				</div>
 
-				<div className="hover:shadow-lg hover:p-2 duration-200 hover:border border-hero rounded">
+				<div className="shadow-md p-4 border border-hero rounded">
 					<span className="font-bold text-xl">Proposed Call</span>
 					<div>
-						{section}.{method}
+						{section && method ? (
+							<p>
+								{section}.{method}
+							</p>
+						) : (
+							<Skeleton skeletonClassName="w-32 h-6" />
+						)}
 					</div>
 					<If condition={!!args}>
 						<div className="px-2 border border-hero rounded border-dotted shadow-sm mt-2">
 							<table className="w-full mt-2 mb-6">
-								<tbody className="">
+								<tbody>
 									<tr className="border-b border-dashed border-hero flex mb-2 py-2">
 										<th className="text-left w-1/2">Params</th>
 										<th className="text-right w-1/2">Values</th>
@@ -75,11 +97,28 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 					</If>
 				</div>
 
-				<div className="text-lg space-y-2 hover:shadow-lg hover:p-2 duration-200 hover:border border-hero rounded">
+				<div className="text-lg space-y-2 shadow-md p-4 border border-hero rounded">
 					<span className="font-bold text-xl">Justification</span>
-					<Markdown input={proposalDetails?.description} />
+					{proposalDetails ? (
+						<Markdown input={proposalDetails?.description || "Undefined"} />
+					) : (
+						<div className="space-y-2">
+							<Skeleton skeletonClassName="w-32 h-6" />
+							<Skeleton skeletonClassName="w-56 h-6" />
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
 	);
 };
+
+interface SkeletonInterface {
+	skeletonClassName: string;
+}
+
+const Skeleton: FC<SkeletonInterface> = ({ skeletonClassName }) => (
+	<div className="flex animate-pulse">
+		<div className={classNames(skeletonClassName, "bg-gray-600/50 rounded")} />
+	</div>
+);

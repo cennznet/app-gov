@@ -2,7 +2,6 @@ import type { Api, SubmittableResult } from "@cennznet/api";
 import type { NextPage, NextPageContext } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { If } from "react-extras";
-
 import type {
 	ProposalCall,
 	ProposalInterface,
@@ -57,18 +56,14 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 					</div>
 				</If>
 
-				<If condition={!proposal}>
-					<Spinner className="m-auto h-8 w-8 animate-spin" />
-				</If>
+				<ProposalDetailsDisplay
+					proposalDetails={proposal?.proposalDetails}
+					proposalInfo={proposal?.proposalInfo}
+					proposalStatus={proposal?.status}
+					proposalCall={proposalCall}
+				/>
 
 				<If condition={!!proposal}>
-					<ProposalDetailsDisplay
-						proposalDetails={proposal?.proposalDetails}
-						proposalInfo={proposal?.proposalInfo}
-						proposalStatus={proposal?.status}
-						proposalCall={proposalCall}
-					/>
-
 					<div
 						className="mt-16 inline-flex w-full justify-center space-x-12"
 						role="group"
