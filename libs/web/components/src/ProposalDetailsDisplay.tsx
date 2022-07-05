@@ -28,7 +28,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	return (
 		<div>
 			<div className="drop-shadow-sm space-y-4">
-				<GradientBorder gradientClassName="space-y-6">
+				<Shadow gradientClassName="space-y-6">
 					<span className="text-4xl">
 						{proposalDetails ? (
 							<p>{proposalDetails?.title || "Untitled"}</p>
@@ -62,10 +62,10 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 							<Skeleton skeletonClassName="w-2/3 h-6" />
 						)}
 					</div>
-				</GradientBorder>
+				</Shadow>
 
 				<If condition={section !== "undefined"}>
-					<GradientBorder>
+					<Shadow>
 						<span className="font-bold text-xl">Proposed Call</span>
 						<div>
 							{section || method ? (
@@ -97,10 +97,10 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 								</table>
 							</div>
 						</If>
-					</GradientBorder>
+					</Shadow>
 				</If>
 
-				<GradientBorder gradientClassName="text-lg space-y-4 group">
+				<Shadow gradientClassName="text-lg space-y-4 group">
 					<span className="font-bold text-xl">Justification</span>
 					{proposalDetails ? (
 						<div className="group-hover:border-l-4 group-hover:pl-2 duration-300 border-gray-400">
@@ -112,7 +112,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 							<Skeleton skeletonClassName="w-56 h-6" />
 						</div>
 					)}
-				</GradientBorder>
+				</Shadow>
 			</div>
 		</div>
 	);
@@ -128,19 +128,16 @@ const Skeleton: FC<SkeletonProps> = ({ skeletonClassName }) => (
 	</div>
 );
 
-interface GradientBorderProps extends PropsWithChildren {
+interface ShadowProps extends PropsWithChildren {
 	gradientClassName?: string;
 }
 
-const GradientBorder: FC<GradientBorderProps> = ({
-	gradientClassName,
-	children,
-}) => (
-	<div className="bg-gradient-to-t hover:to-dark from-hero to-mid rounded-md pb-[2px] hover:pb-[5px] duration-300 p-[1px]">
+const Shadow: FC<ShadowProps> = ({ gradientClassName, children }) => (
+	<div className="bg-hero py-2 pr-2 translate-x-2">
 		<div
 			className={classNames(
 				gradientClassName,
-				"p-4 flex flex-col justify-between h-full bg-mid rounded-md shadow-md"
+				"p-4 flex flex-col justify-between h-full bg-mid border-4 border-dark -mt-4 -ml-2"
 			)}
 		>
 			{children}
