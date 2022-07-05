@@ -1,7 +1,7 @@
 import type { Api, SubmittableResult } from "@cennznet/api";
 import type { NextPage, NextPageContext } from "next";
 import { useCallback, useEffect, useState } from "react";
-import { If } from "react-extras";
+import { classNames, If } from "react-extras";
 
 import type {
 	ProposalCall,
@@ -39,7 +39,12 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 		<Layout>
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<h1 className="font-display mb-6 text-center text-6xl uppercase">
+				<h1
+					className={classNames(
+						!proposal?.proposalDetails?.title && "uppercase",
+						"font-display mb-6 text-center text-6xl"
+					)}
+				>
 					{proposal?.proposalDetails?.title ?? `Proposal #${proposalId}`}
 				</h1>
 
