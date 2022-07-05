@@ -28,15 +28,13 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	return (
 		<div>
 			<div className="drop-shadow-sm space-y-8">
-				<Shadow shadowClassName="text-lg space-y-4 group">
-					<Skeleton condition={!!proposalDetails} variant="large">
-						<div className="group-hover:border-l-4 group-hover:pl-2 duration-300 border-gray-400">
-							<Markdown input={proposalDetails?.description || "Undefined"} />
-						</div>
-					</Skeleton>
-				</Shadow>
+				<Skeleton condition={!!proposalDetails} variant="large">
+					<div className="border-l-4 pl-2 duration-300 border-hero p-4">
+						<Markdown input={proposalDetails?.description || "Undefined"} />
+					</div>
+				</Skeleton>
 
-				<Shadow shadowClassName="space-y-6">
+				<div className="border-4 border-hero p-4 shadow-sharp-7 shadow-hero/40 space-y-6">
 					<div className="flex w-full space-x-20">
 						<div>
 							<span className="font-bold text-xl">Status</span>
@@ -91,7 +89,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 							</If>
 						</div>
 					</If>
-				</Shadow>
+				</div>
 			</div>
 		</div>
 	);
@@ -116,20 +114,3 @@ const Skeleton: FC<SkeletonProps> = ({ children, condition, variant }) => {
 		</div>
 	);
 };
-
-interface ShadowProps extends PropsWithChildren {
-	shadowClassName?: string;
-}
-
-const Shadow: FC<ShadowProps> = ({ shadowClassName, children }) => (
-	<div className="bg-hero py-2 pr-2 translate-x-2">
-		<div
-			className={classNames(
-				shadowClassName,
-				"p-4 bg-mid border-4 border-dark -mt-4 -ml-2"
-			)}
-		>
-			{children}
-		</div>
-	</div>
-);
