@@ -134,15 +134,25 @@ const useProposal = (proposalId: string) => {
 };
 
 const fetchProposalCall = async (api: Api, proposalId: string) => {
-	const extrinsicHash = (
-		await api.query.governance.proposalCalls(proposalId)
-	).toString();
+	try {
+		const extrinsicHash = (
+			await api.query.governance.proposalCalls(proposalId)
+		).toString();
 
-	const { method, section, args } = api
-		.createType("Call", extrinsicHash)
-		.toHuman() as unknown as ProposalCall;
+		const { section, method, args } = api
+			.createType("Call", extrinsicHash)
+			.toHuman() as unknown as ProposalCall;
 
-	return { method, section, args };
+		return { section, method, args };
+	} catch (error) {
+		console.info(error.message);
+
+		return {
+			section: "undefined",
+			method: "",
+			args: {},
+		};
+	}
 };
 
 const useVote = (proposalId: string) => {

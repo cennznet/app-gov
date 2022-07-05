@@ -64,39 +64,41 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 					</div>
 				</GradientBorder>
 
-				<GradientBorder>
-					<span className="font-bold text-xl">Proposed Call</span>
-					<div>
-						{section && method ? (
-							<p>
-								{section}.{method}
-							</p>
-						) : (
-							<Skeleton skeletonClassName="w-32 h-6" />
-						)}
-					</div>
-					<If condition={!!args}>
-						<div className="px-2 border border-hero rounded border-dotted shadow-sm mt-2">
-							<table className="w-full mt-2 mb-6">
-								<tbody>
-									<tr className="border-b border-dashed border-hero flex mb-2 py-2">
-										<th className="text-left w-1/2">Params</th>
-										<th className="text-right w-1/2">Values</th>
-									</tr>
-									{Object.keys(args || {})?.map((key) => (
-										<tr
-											key={key}
-											className="border-b border-hero flex py-2 items-center"
-										>
-											<td className="pr-20 flex-1">{key}</td>
-											<td className="break-all text-right">"{args[key]}"</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
+				<If condition={section !== "undefined"}>
+					<GradientBorder>
+						<span className="font-bold text-xl">Proposed Call</span>
+						<div>
+							{section || method ? (
+								<p>
+									{section}.{method}
+								</p>
+							) : (
+								<Skeleton skeletonClassName="w-32 h-6" />
+							)}
 						</div>
-					</If>
-				</GradientBorder>
+						<If condition={!!args}>
+							<div className="px-2 border border-hero rounded border-dotted shadow-sm mt-2">
+								<table className="w-full mt-2 mb-6">
+									<tbody>
+										<tr className="border-b border-dashed border-hero flex mb-2 py-2">
+											<th className="text-left w-1/2">Params</th>
+											<th className="text-right w-1/2">Values</th>
+										</tr>
+										{Object.keys(args || {})?.map((key) => (
+											<tr
+												key={key}
+												className="border-b border-hero flex py-2 items-center"
+											>
+												<td className="pr-20 flex-1">{key}</td>
+												<td className="break-all text-right">"{args[key]}"</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						</If>
+					</GradientBorder>
+				</If>
 
 				<GradientBorder gradientClassName="text-lg space-y-4 group">
 					<span className="font-bold text-xl">Justification</span>
