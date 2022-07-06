@@ -26,10 +26,10 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	const { method, section, args } = proposalCall || {};
 
 	return (
-		<div>
-			<div className="drop-shadow-sm space-y-8">
+		<div className="text-lg">
+			<div className="space-y-8">
 				<Skeleton condition={!!proposalDetails} variant="large">
-					<div className="border-l-4 pl-2 duration-300 border-hero p-4">
+					<div className="border-l-4 duration-300 border-hero p-4 text-xl">
 						<Markdown input={proposalDetails?.description || "Undefined"} />
 					</div>
 				</Skeleton>
@@ -37,20 +37,22 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 				<div className="border-4 border-hero p-4 shadow-sharp-7 shadow-hero/40 space-y-6">
 					<div className="flex w-full space-x-20">
 						<div>
-							<span className="font-bold text-xl">Status</span>
+							<span className="font-bold text-xl uppercase">Status</span>
 							<Skeleton condition={!!proposalStatus} variant="small">
 								{proposalStatus}
 							</Skeleton>
 						</div>
 						<div>
-							<span className="font-bold text-xl">Enactment delay</span>
+							<span className="font-bold text-xl uppercase">
+								Enactment delay
+							</span>
 							<Skeleton condition={!!proposalInfo} variant="small">
 								{proposalInfo?.enactmentDelay || 0} blocks
 							</Skeleton>
 						</div>
 					</div>
 					<div>
-						<span className="font-bold text-xl">Sponsor</span>
+						<span className="font-bold text-xl uppercase">Sponsor</span>
 						<Skeleton condition={!!proposalInfo} variant="long">
 							{proposalInfo?.sponsor}
 						</Skeleton>
@@ -58,33 +60,31 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 
 					<If condition={section !== "undefined"}>
 						<div>
-							<span className="font-bold text-xl">Proposed Call</span>
+							<span className="font-bold text-xl uppercase">Proposed Call</span>
 							<div>
 								<Skeleton condition={!!section || !!method} variant="small">
 									{section}.{method}
 								</Skeleton>
 							</div>
 							<If condition={!!args}>
-								<div className="px-2 border border-hero rounded border-dotted shadow-sm mt-2">
-									<table className="w-full mt-2 mb-6">
-										<tbody>
-											<tr className="border-b border-dashed border-hero flex mb-2 py-2">
-												<th className="text-left w-1/2">Params</th>
-												<th className="text-right w-1/2">Values</th>
-											</tr>
-											{Object.keys(args || {})?.map((key) => (
-												<tr
-													key={key}
-													className="border-b border-hero flex py-2 items-center"
-												>
-													<td className="pr-20 flex-1">{key}</td>
-													<td className="break-all text-right">
-														"{args[key]}"
-													</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
+								<div className="px-2 border-2 border-hero mt-2 shadow-sharp shadow-hero/40">
+									<div className="w-full mt-2 mb-6 px-2">
+										<div className="border-b border-hero flex mb-2 py-2">
+											<span className="text-left w-1/2 font-bold">Params</span>
+											<span className="text-right w-1/2 font-bold">Values</span>
+										</div>
+										{Object.keys(args || {})?.map((key) => (
+											<div
+												key={key}
+												className="border-b border-hero border-dashed flex py-2 items-center"
+											>
+												<span className="pr-20 flex-1">{key}</span>
+												<span className="break-all text-right">
+													"{args[key]}"
+												</span>
+											</div>
+										))}
+									</div>
 								</div>
 							</If>
 						</div>
