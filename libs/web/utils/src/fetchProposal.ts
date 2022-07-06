@@ -1,6 +1,7 @@
-export const fetchProposal = async (proposalId: string) => {
-	const response = await fetch(`/api/proposals/${proposalId}`);
+import { BASE_URL } from "@app-gov/service/constants";
 
+export const fetchProposal = async (proposalId: string) => {
+	const response = await fetch(`${BASE_URL}/api/proposals/${proposalId}`);
 	const data = await response.json();
 
 	if (!response.ok)

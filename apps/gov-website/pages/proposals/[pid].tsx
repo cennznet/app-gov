@@ -1,6 +1,7 @@
 import type { Api, SubmittableResult } from "@cennznet/api";
-import type { NextPage, NextPageContext } from "next";
-import { useCallback, useEffect, useState } from "react";
+import type { UInt } from "@polkadot/types-codec";
+import type { GetStaticProps, NextPage } from "next";
+import { useCallback, useState } from "react";
 import { If } from "react-extras";
 
 import type {
@@ -8,6 +9,8 @@ import type {
 	ProposalInterface,
 	ProposalVote,
 } from "@app-gov/node/types";
+import { getApiInstance } from "@app-gov/service/cennznet";
+import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
 	Button,
 	Header,
@@ -19,20 +22,51 @@ import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 import { fetchProposal } from "@app-gov/web/utils";
 import { Spinner } from "@app-gov/web/vectors";
 
-export const getServerSideProps = (context: NextPageContext) => {
+export const getStaticPaths = async () => {
+	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
+
+	const nextProposalId = (
+		(await api.query.governance.nextProposalId()) as UInt
+	).toNumber();
+
+	const proposalIds = [];
+
+	for (let i = 0; i < nextProposalId; i++) proposalIds.push(String(i));
+
+	return {
+		paths: proposalIds.map((pid) => ({ params: { pid } })),
+		fallback: false,
+	};
+};
+
+export const getStaticProps: GetStaticProps = async (content) => {
+	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
+
+	const proposalId = content.params.pid as string;
+	const { proposal } = await fetchProposal(proposalId);
+	const proposalCall = await fetchProposalCall(api, proposalId);
+
 	return {
 		props: {
-			proposalId: context.query.pid,
+			proposalId,
+			proposal,
+			proposalCall,
 		},
+		revalidate: 600,
 	};
 };
 
 interface ProposalProps {
 	proposalId: string;
+	proposal: ProposalInterface;
+	proposalCall: ProposalCall;
 }
 
-const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
-	const { proposal, proposalCall } = useProposal(proposalId);
+const Proposal: NextPage<ProposalProps> = ({
+	proposalId,
+	proposal,
+	proposalCall,
+}) => {
 	const { busy, onVoteClick } = useVote(proposalId);
 
 	return (
@@ -115,23 +149,6 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 };
 
 export default Proposal;
-
-const useProposal = (proposalId: string) => {
-	const [proposal, setProposal] = useState<ProposalInterface>();
-	const [proposalCall, setProposalCall] = useState<ProposalCall>();
-
-	const { api } = useCENNZApi();
-
-	useEffect(() => {
-		if (!api || !proposalId) return;
-
-		fetchProposal(proposalId).then(({ proposal }) => setProposal(proposal));
-
-		fetchProposalCall(api, proposalId).then(setProposalCall);
-	}, [api, proposalId]);
-
-	return { proposal, proposalCall };
-};
 
 const fetchProposalCall = async (api: Api, proposalId: string) => {
 	try {

@@ -46,3 +46,6 @@ export const PINATA_JWT: string = process.env.NX_PINATA_JWT ?? "";
 export const PINATA_GATEWAY: string = process.env.NX_PINATA_GATEWAY ?? "";
 
 export const MONGODB_SERVER: string = process.env.MONGODB_SERVER ?? "";
+
+export const BASE_URL: string =
+	process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:4200";

@@ -1,12 +1,11 @@
 import { FC } from "react";
-import { classNames, If } from "react-extras";
+import { If } from "react-extras";
 
 import type {
 	ProposalCall,
 	ProposalDetails,
 	ProposalInfo,
 } from "@app-gov/node/types";
-import { PropsWithChildren } from "@app-gov/web/types";
 
 import { Markdown } from "./";
 
@@ -28,43 +27,33 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	return (
 		<div className="text-lg">
 			<div className="space-y-8">
-				<Skeleton condition={!!proposalDetails} variant="large">
-					<div className="border-l-4 duration-300 border-hero p-4 text-xl">
-						<Markdown input={proposalDetails?.description || "Undefined"} />
-					</div>
-				</Skeleton>
+				<div className="border-l-4 duration-300 border-hero p-4 text-xl">
+					<Markdown input={proposalDetails?.description || "Undefined"} />
+				</div>
 
 				<div className="border-4 border-hero p-4 shadow-sharp-7 shadow-hero/40 space-y-6">
 					<div className="flex w-full space-x-20">
 						<div>
 							<span className="font-bold text-xl uppercase">Status</span>
-							<Skeleton condition={!!proposalStatus} variant="small">
-								{proposalStatus}
-							</Skeleton>
+							<p>{proposalStatus}</p>
 						</div>
 						<div>
 							<span className="font-bold text-xl uppercase">
 								Enactment delay
 							</span>
-							<Skeleton condition={!!proposalInfo} variant="small">
-								{proposalInfo?.enactmentDelay || 0} blocks
-							</Skeleton>
+							<p>{proposalInfo?.enactmentDelay || 0} blocks</p>
 						</div>
 					</div>
 					<div>
 						<span className="font-bold text-xl uppercase">Sponsor</span>
-						<Skeleton condition={!!proposalInfo} variant="long">
-							{proposalInfo?.sponsor}
-						</Skeleton>
+						<p>{proposalInfo?.sponsor}</p>
 					</div>
 
 					<If condition={section !== "undefined"}>
 						<div>
 							<span className="font-bold text-xl uppercase">Proposed Call</span>
 							<div>
-								<Skeleton condition={!!section || !!method} variant="small">
-									{section}.{method}
-								</Skeleton>
+								{section}.{method}
 							</div>
 							<If condition={!!args}>
 								<div className="px-2 border-2 border-hero mt-2 shadow-sharp shadow-hero/40">
@@ -91,26 +80,6 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 					</If>
 				</div>
 			</div>
-		</div>
-	);
-};
-
-interface SkeletonProps extends PropsWithChildren {
-	condition: boolean;
-	variant: "small" | "large" | "long";
-}
-
-const Skeleton: FC<SkeletonProps> = ({ children, condition, variant }) => {
-	if (condition) return <div>{children}</div>;
-
-	return (
-		<div className="flex animate-pulse">
-			<div
-				className={classNames(
-					"bg-gray-600/50 rounded",
-					{ small: "w-32 h-4", large: "w-56 h-6", long: "w-2/3 h-4" }[variant]
-				)}
-			/>
 		</div>
 	);
 };
