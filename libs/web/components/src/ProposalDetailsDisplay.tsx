@@ -54,24 +54,22 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 								{section}.{method}
 							</div>
 							<If condition={!!args}>
-								<div className="">
-									<div className="w-full mt-2 mb-6">
-										<div className="border-b border-hero flex mb-2 py-2">
-											<span className="text-left w-1/2 font-bold">Params</span>
-											<span className="text-right w-1/2 font-bold">Values</span>
-										</div>
-										{Object.keys(args || {})?.map((key) => (
-											<div
-												key={key}
-												className="border-b border-hero border-dashed flex py-2 items-center"
-											>
-												<span className="pr-20 flex-1">{key}</span>
-												<span className="break-all text-right">
-													"{args[key]}"
-												</span>
-											</div>
-										))}
+								<div className="w-full mt-2 mb-6">
+									<div className="border-b border-hero flex mb-2 py-2">
+										<span className="text-left w-1/2 font-bold">Params</span>
+										<span className="text-right w-1/2 font-bold">Values</span>
 									</div>
+									{Object.keys(args || {})?.map((key) => (
+										<div
+											key={key}
+											className="border-b border-hero border-dashed flex py-2 items-center"
+										>
+											<span className="pr-20 flex-1">{key}</span>
+											<span className="break-all text-right">
+												"{args[key]}"
+											</span>
+										</div>
+									))}
 								</div>
 							</If>
 						</div>
