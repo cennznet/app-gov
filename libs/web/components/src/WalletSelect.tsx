@@ -39,11 +39,12 @@ export const WalletSelect: FC<SelectProps> = (props) => {
 			}
 			{...props}
 		>
-			{allAccounts?.map((account, index) => (
-				<option value={account} key={index}>
-					{account}
-				</option>
-			))}
+			{!!selectedAccount &&
+				allAccounts?.map((account, index) => (
+					<option value={account} key={index}>
+						{account}
+					</option>
+				))}
 		</Select>
 	);
 };
