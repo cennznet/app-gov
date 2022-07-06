@@ -2,10 +2,10 @@ import type { Api, SubmittableResult } from "@cennznet/api";
 import type { UInt } from "@polkadot/types-codec";
 import mongoose from "mongoose";
 import type { GetStaticProps, NextPage } from "next";
-import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { If } from "react-extras";
 
+import { Proposal as ProposalModel } from "@app-gov/node/models";
 import type {
 	ProposalCall,
 	ProposalInterface,
@@ -49,12 +49,11 @@ export const getStaticProps: GetStaticProps = async (content) => {
 	};
 
 	await connectMongoose();
-	const Proposal = mongoose.model("Proposal");
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 
 	const proposalId = content.params.pid as string;
 	const proposalCall = await fetchProposalCall(api, proposalId);
-	const proposal = JSON.stringify(await Proposal.findOne({ proposalId }));
+	const proposal = JSON.stringify(await ProposalModel.findOne({ proposalId }));
 
 	return {
 		props: {
