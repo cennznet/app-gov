@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { FormEvent, useCallback, useEffect } from "react";
+import { FormEvent, FormEventHandler, useCallback, useEffect } from "react";
 import { Choose, If } from "react-extras";
 
 import { fetchRequiredRegistrars } from "@app-gov/node/utils";
@@ -59,8 +59,8 @@ const Connect: NextPage<StaticProps> = ({
 	const { submitForm, formState, resetFormState } = useIdentityConnectForm();
 	const { open, openDialog, closeDialog } = useTransactionDialog();
 
-	const onFormSubmit = useCallback(
-		(event: FormEvent) => {
+	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+		(event) => {
 			event.preventDefault();
 			openDialog();
 			submitForm(new FormData(event.target as HTMLFormElement));

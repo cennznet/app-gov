@@ -1,4 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
+import { FormEventHandler, useCallback } from "react";
 import { If } from "react-extras";
 
 import {
@@ -39,11 +40,18 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 	const { value: functionCall, onChange: onFunctionCallChange } =
 		useControlledCheckbox(true);
 
+	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+		(event) => {
+			event.preventDefault();
+		},
+		[]
+	);
+
 	return (
 		<Layout>
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<form>
+				<form onSubmit={onFormSubmit}>
 					<h1 className="font-display mb-8 text-center text-7xl uppercase">
 						Submit a Proposal
 					</h1>
