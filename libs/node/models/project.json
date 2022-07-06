@@ -1,23 +1,23 @@
 {
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/node/constants/src",
+  "sourceRoot": "libs/node/models/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/node/constants",
-        "main": "libs/node/constants/src/index.ts",
-        "tsConfig": "libs/node/constants/tsconfig.lib.json",
-        "assets": ["libs/node/constants/*.md"]
+        "outputPath": "dist/libs/node/models",
+        "main": "libs/node/models/src/index.ts",
+        "tsConfig": "libs/node/models/tsconfig.lib.json",
+        "assets": ["libs/node/models/*.md"]
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/node/constants/**/*.ts"]
+        "lintFilePatterns": ["libs/node/models/**/*.ts"]
       }
     }
   },
