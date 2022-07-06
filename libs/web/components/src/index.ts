@@ -9,3 +9,4 @@ export * from "./TransactionDialog";
 export * from "./Dialog";
 export * from "./MarkdownField";
 export * from "./FunctionCallFieldSet";
+export * from "./Markdown";

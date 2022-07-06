@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC, useCallback, useState } from "react";
 import { classNames } from "react-extras";
-import ReactMarkdown from "react-markdown";
-import RemarkBreaks from "remark-breaks";
-import RemarkGfm from "remark-gfm";
 
 import { IntrinsicElements } from "@app-gov/web/types";
+
+import { Markdown } from "./";
 
 interface MarkdownFieldProps {}
 
@@ -65,13 +64,9 @@ export const MarkdownField: FC<
 						preview && "!pointer-events-auto !opacity-100"
 					)}
 				>
-					<ReactMarkdown
-						allowedElements={["p", "strong", "em", "a", "code", "pre"]}
-						remarkPlugins={[[RemarkGfm, { singleTilde: false }], RemarkBreaks]}
-						className="markdown h-full overflow-auto p-2"
-					>
+					<Markdown className="overflow-auto p-2">
 						{(value as string) ?? ""}
-					</ReactMarkdown>
+					</Markdown>
 				</div>
 			</div>
 			<p className="markdown bg-slate-100 p-2 text-xs">
