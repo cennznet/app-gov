@@ -82,7 +82,7 @@ const Proposal: NextPage<ProposalProps> = ({
 		<Layout>
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<h1 className="font-display mb-6 text-center text-6xl uppercase">
+				<h1 className="font-display text-hero mb-6 text-center text-6xl uppercase">
 					Proposal #{proposalId}
 				</h1>
 
