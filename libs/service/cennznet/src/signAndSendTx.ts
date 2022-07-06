@@ -21,15 +21,10 @@ export const signAndSendTx = async (
 		return Promise.reject(error);
 	};
 
-	if (address) {
-		await extrinsic
-			.signAndSend(address, { signer: signer as Signer }, onResult)
-			.catch(onCatch);
-
-		return tx;
-	}
-
-	await extrinsic.signAndSend(signer as KeyringPair, onResult).catch(onCatch);
+	(address
+		? extrinsic.signAndSend(address, { signer: signer as Signer }, onResult)
+		: extrinsic.signAndSend(signer as KeyringPair, onResult)
+	).catch(onCatch);
 	return tx;
 };
 
