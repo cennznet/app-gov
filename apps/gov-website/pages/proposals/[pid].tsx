@@ -1,18 +1,15 @@
-import type { Api, SubmittableResult } from "@cennznet/api";
+import type { SubmittableResult } from "@cennznet/api";
 import type { UInt } from "@polkadot/types-codec";
-import mongoose from "mongoose";
 import type { GetStaticProps, NextPage } from "next";
 import { useCallback, useState } from "react";
 import { If } from "react-extras";
 
-import { Proposal as ProposalModel } from "@app-gov/node/models";
 import type {
 	ProposalCall,
 	ProposalInterface,
 	ProposalVote,
 } from "@app-gov/node/types";
-import { getApiInstance } from "@app-gov/service/cennznet";
-import { MONGODB_SERVER } from "@app-gov/service/constants";
+import { fetchProposal, getApiInstance } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
 	Button,
@@ -22,6 +19,7 @@ import {
 	WalletSelect,
 } from "@app-gov/web/components";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
+import { ReferendumStats } from "@app-gov/web/types";
 import { Spinner } from "@app-gov/web/vectors";
 
 export const getStaticPaths = async () => {
@@ -42,39 +40,26 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (content) => {
-	const connectMongoose = async () => {
-		if (mongoose.connection.readyState >= 1) return;
-
-		await mongoose.connect(MONGODB_SERVER);
-	};
-
-	await connectMongoose();
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 
-	const proposalId = content.params.pid as string;
-	const proposalCall = await fetchProposalCall(api, proposalId);
-	const proposal = JSON.stringify(await ProposalModel.findOne({ proposalId }));
-
 	return {
-		props: {
-			proposalId,
-			proposal: JSON.parse(proposal),
-			proposalCall,
-		},
+		props: await fetchProposal(api, content.params.pid as string),
 		revalidate: 600,
 	};
 };
 
 interface ProposalProps {
 	proposalId: string;
-	proposal: ProposalInterface;
 	proposalCall: ProposalCall;
+	proposal: ProposalInterface;
+	referendum?: ReferendumStats;
 }
 
 const Proposal: NextPage<ProposalProps> = ({
 	proposalId,
-	proposal,
 	proposalCall,
+	proposal,
+	referendum,
 }) => {
 	const { busy, onVoteClick } = useVote(proposalId);
 
@@ -91,6 +76,7 @@ const Proposal: NextPage<ProposalProps> = ({
 					proposalInfo={proposal?.proposalInfo}
 					proposalStatus={proposal?.status}
 					proposalCall={proposalCall}
+					referendum={referendum}
 				/>
 
 				<If condition={!proposal || proposal?.status?.includes("Deliberation")}>
@@ -159,28 +145,6 @@ const Proposal: NextPage<ProposalProps> = ({
 };
 
 export default Proposal;
-
-const fetchProposalCall = async (api: Api, proposalId: string) => {
-	try {
-		const extrinsicHash = (
-			await api.query.governance.proposalCalls(proposalId)
-		).toString();
-
-		const { section, method, args } = api
-			.createType("Call", extrinsicHash)
-			.toHuman() as unknown as ProposalCall;
-
-		return { section, method, args };
-	} catch (error) {
-		console.info(error.message);
-
-		return {
-			section: "undefined",
-			method: "",
-			args: {},
-		};
-	}
-};
 
 const useVote = (proposalId: string) => {
 	const { api } = useCENNZApi();

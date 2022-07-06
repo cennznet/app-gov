@@ -29,3 +29,8 @@ export interface ProposalCall {
 	call?: string;
 	values?: Record<string, string>;
 }
+
+export interface ReferendumStats {
+	vetoThreshold: number;
+	vetoPercentage: string;
+}
