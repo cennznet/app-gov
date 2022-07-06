@@ -6,6 +6,7 @@ import type {
 	ProposalDetails,
 	ProposalInfo,
 } from "@app-gov/node/types";
+import { ReferendumStats } from "@app-gov/web/types";
 
 import { Markdown } from "./";
 
@@ -14,6 +15,7 @@ interface ProposalDetailsDisplayProps {
 	proposalInfo: ProposalInfo;
 	proposalStatus: string;
 	proposalCall: ProposalCall;
+	referendum: ReferendumStats;
 }
 
 export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
@@ -21,6 +23,7 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	proposalInfo,
 	proposalStatus,
 	proposalCall,
+	referendum,
 }) => {
 	const { method, section, args } = proposalCall || {};
 
@@ -49,9 +52,21 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 
 					<If condition={section !== "undefined"}>
 						<div>
-							<span className="font-bold uppercase">Proposed Call</span>
-							<div>
-								{section}.{method}
+							<div className="flex space-x-36">
+								<div>
+									<span className="font-bold uppercase">Proposed Call</span>
+									<div>
+										{section}.{method}
+									</div>
+								</div>
+								<If condition={!!referendum}>
+									<div>
+										<span className="font-bold uppercase">Veto Sum</span>
+										<div>
+											{referendum.vetoPercentage} / {referendum.vetoThreshold} %
+										</div>
+									</div>
+								</If>
 							</div>
 							<If condition={!!args}>
 								<div className="w-full mt-2 mb-6">
