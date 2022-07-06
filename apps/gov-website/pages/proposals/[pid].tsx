@@ -42,9 +42,13 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (content) => {
-	if (mongoose.connection.readyState < 1)
+	const connectMongoose = async () => {
+		if (mongoose.connection.readyState >= 1) return;
+
 		await mongoose.connect(MONGODB_SERVER);
-	
+	};
+
+	await connectMongoose();
 	const Proposal = mongoose.model("Proposal");
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 
