@@ -4,6 +4,7 @@
   "projects": {
     "gov-website": "apps/gov-website",
     "node-constants": "libs/node/constants",
+    "node-models": "libs/node/models",
     "node-types": "libs/node/types",
     "node-utils": "libs/node/utils",
     "service-cennznet": "libs/service/cennznet",
@@ -14,7 +15,6 @@
     "web-hooks": "libs/web/hooks",
     "web-providers": "libs/web/providers",
     "web-types": "libs/web/types",
-    "web-utils": "libs/web/utils",
     "web-vectors": "libs/web/vectors"
   }
 }

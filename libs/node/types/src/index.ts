@@ -27,3 +27,9 @@ export interface ProposalInterface {
 export type ProposalStatus =
 	| ProposalStatusInfo["type"]
 	| "ReferendumDeliberation";
+
+export interface ProposalCall {
+	method: string;
+	section: string;
+	args: Record<string, string>;
+}

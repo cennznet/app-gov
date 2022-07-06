@@ -24,6 +24,7 @@ module.exports = {
 			boxShadow: {
 				"sharp": "4px 4px 0px 0px",
 				"sharp-2": "2px 2px 0px 0px",
+				"sharp-7": "7px 7px 0px 0px",
 			},
 		},
 	},

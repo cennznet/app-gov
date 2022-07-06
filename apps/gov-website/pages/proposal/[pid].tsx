@@ -1,9 +1,19 @@
-import type { SubmittableResult } from "@cennznet/api";
-import type { NextPage, NextPageContext } from "next";
-import { useCallback, useEffect, useState } from "react";
+import type { Api, SubmittableResult } from "@cennznet/api";
+import type { UInt } from "@polkadot/types-codec";
+import mongoose from "mongoose";
+import type { GetStaticProps, NextPage } from "next";
+import { useCallback, useState } from "react";
 import { If } from "react-extras";
 
-import type { ProposalInterface, ProposalVote } from "@app-gov/node/types";
+import { Proposal as ProposalModel } from "@app-gov/node/models";
+import type {
+	ProposalCall,
+	ProposalInterface,
+	ProposalVote,
+} from "@app-gov/node/types";
+import { getApiInstance } from "@app-gov/service/cennznet";
+import { MONGODB_SERVER } from "@app-gov/service/constants";
+import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
 	Button,
 	Header,
@@ -12,23 +22,60 @@ import {
 	WalletSelect,
 } from "@app-gov/web/components";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
-import { fetchProposal } from "@app-gov/web/utils";
 import { Spinner } from "@app-gov/web/vectors";
 
-export const getServerSideProps = (context: NextPageContext) => {
+export const getStaticPaths = async () => {
+	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
+
+	const nextProposalId = (
+		(await api.query.governance.nextProposalId()) as UInt
+	).toNumber();
+
+	const proposalIds = [];
+
+	for (let i = 0; i < nextProposalId; i++) proposalIds.push(String(i));
+
+	return {
+		paths: proposalIds.map((pid) => ({ params: { pid } })),
+		fallback: false,
+	};
+};
+
+export const getStaticProps: GetStaticProps = async (content) => {
+	const connectMongoose = async () => {
+		if (mongoose.connection.readyState >= 1) return;
+
+		await mongoose.connect(MONGODB_SERVER);
+	};
+
+	await connectMongoose();
+	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
+
+	const proposalId = content.params.pid as string;
+	const proposalCall = await fetchProposalCall(api, proposalId);
+	const proposal = JSON.stringify(await ProposalModel.findOne({ proposalId }));
+
 	return {
 		props: {
-			proposalId: context.query.pid,
+			proposalId,
+			proposal: JSON.parse(proposal),
+			proposalCall,
 		},
+		revalidate: 600,
 	};
 };
 
 interface ProposalProps {
 	proposalId: string;
+	proposal: ProposalInterface;
+	proposalCall: ProposalCall;
 }
 
-const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
-	const proposal = useProposal(proposalId);
+const Proposal: NextPage<ProposalProps> = ({
+	proposalId,
+	proposal,
+	proposalCall,
+}) => {
 	const { busy, onVoteClick } = useVote(proposalId);
 
 	return (
@@ -39,8 +86,15 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 					Proposal #{proposalId}
 				</h1>
 
+				<ProposalDetailsDisplay
+					proposalDetails={proposal?.proposalDetails}
+					proposalInfo={proposal?.proposalInfo}
+					proposalStatus={proposal?.status}
+					proposalCall={proposalCall}
+				/>
+
 				<If condition={!proposal || proposal?.status?.includes("Deliberation")}>
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+					<h2 className="font-display border-hero mt-12 border-b-2 text-4xl uppercase">
 						Connect your wallet
 					</h2>
 					<p className="mb-8">
@@ -48,22 +102,12 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
 					</p>
-					<div className="mb-12 min-w-0">
+					<div className="min-w-0">
 						<WalletSelect required />
 					</div>
 				</If>
 
-				<If condition={!proposal}>
-					<Spinner className="m-auto h-8 w-8 animate-spin" />
-				</If>
-
 				<If condition={!!proposal}>
-					<ProposalDetailsDisplay
-						proposalDetails={proposal?.proposalDetails}
-						proposalInfo={proposal?.proposalInfo}
-						proposalStatus={proposal?.status}
-					/>
-
 					<div
 						className="mt-16 inline-flex w-full justify-center space-x-12"
 						role="group"
@@ -71,11 +115,12 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 						<If condition={proposal?.status === "Deliberation"}>
 							{["pass", "reject"].map((vote: ProposalVote, index) => (
 								<Button
+									key={index}
 									size="medium"
 									disabled={busy[vote]}
 									className="w-1/4 text-center"
+									variant={vote === "pass" ? "white" : "hero"}
 									onClick={() => onVoteClick("proposal", vote)}
-									key={index}
 								>
 									<div className="flex items-center justify-center">
 										<If condition={busy[vote]}>
@@ -115,16 +160,26 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 
 export default Proposal;
 
-const useProposal = (proposalId: string): ProposalInterface => {
-	const [proposal, setProposal] = useState<ProposalInterface>();
+const fetchProposalCall = async (api: Api, proposalId: string) => {
+	try {
+		const extrinsicHash = (
+			await api.query.governance.proposalCalls(proposalId)
+		).toString();
 
-	useEffect(() => {
-		if (!proposalId) return;
+		const { section, method, args } = api
+			.createType("Call", extrinsicHash)
+			.toHuman() as unknown as ProposalCall;
 
-		fetchProposal(proposalId).then(({ proposal }) => setProposal(proposal));
-	}, [proposalId]);
+		return { section, method, args };
+	} catch (error) {
+		console.info(error.message);
 
-	return proposal;
+		return {
+			section: "undefined",
+			method: "",
+			args: {},
+		};
+	}
 };
 
 const useVote = (proposalId: string) => {
