@@ -156,7 +156,10 @@ const useProposal = () => {
 const getProposalExtrinsic = (
 	api: Api,
 	{ module: cennzModule, call, values }: ProposalCall
-) => api.tx[cennzModule][call](...Object.values(values));
+) => {
+	const extrinsic = api.tx[cennzModule][call](...Object.values(values || []));
+	return api.createType("Call", extrinsic).toHex();
+};
 
 const useFormSubmit = (proposalCall: ProposalCall) => {
 	const [busy, setBusy] = useState<boolean>(false);
@@ -176,8 +179,8 @@ const useFormSubmit = (proposalCall: ProposalCall) => {
 				const proposalData = new FormData(event.target as HTMLFormElement);
 
 				const { IpfsHash } = await pinProposal({
-					proposalTitle: proposalData.get("proposalTitle").toString(),
-					proposalDetails: proposalData.get("proposalDetails").toString(),
+					proposalTitle: proposalData.get("proposalTitle") as string,
+					proposalDetails: proposalData.get("proposalDetails") as string,
 				});
 
 				await api.tx.governance
