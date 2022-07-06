@@ -1,6 +1,7 @@
 import type { Api, SubmittableResult } from "@cennznet/api";
 import type { UInt } from "@polkadot/types-codec";
 import type { GetStaticProps, NextPage } from "next";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { If } from "react-extras";
 
@@ -35,7 +36,7 @@ export const getStaticPaths = async () => {
 
 	return {
 		paths: proposalIds.map((pid) => ({ params: { pid } })),
-		fallback: false,
+		fallback: true,
 	};
 };
 
@@ -67,81 +68,92 @@ const Proposal: NextPage<ProposalProps> = ({
 	proposal,
 	proposalCall,
 }) => {
+	const router = useRouter();
 	const { busy, onVoteClick } = useVote(proposalId);
 
 	return (
 		<Layout>
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<h1 className="font-display mb-6 text-center text-6xl uppercase">
-					Proposal #{proposalId}
-				</h1>
-
-				<ProposalDetailsDisplay
-					proposalDetails={proposal?.proposalDetails}
-					proposalInfo={proposal?.proposalInfo}
-					proposalStatus={proposal?.status}
-					proposalCall={proposalCall}
-				/>
-
-				<If condition={!proposal || proposal?.status?.includes("Deliberation")}>
-					<h2 className="font-display border-hero mt-12 border-b-2 text-4xl uppercase">
-						Connect your wallet
-					</h2>
-					<p className="mb-8">
-						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
-						tempor nostrud nulla eu proident ut id qui incididunt.
-					</p>
-					<div className="min-w-0">
-						<WalletSelect required />
-					</div>
+				<If condition={router?.isFallback}>
+					<h1 className="font-display mb-6 text-center text-6xl uppercase">
+						No proposal found
+					</h1>
 				</If>
 
-				<If condition={!!proposal}>
-					<div
-						className="mt-16 inline-flex w-full justify-center space-x-12"
-						role="group"
+				<If condition={!router?.isFallback}>
+					<h1 className="font-display mb-6 text-center text-6xl uppercase">
+						Proposal #{proposalId}
+					</h1>
+
+					<ProposalDetailsDisplay
+						proposalDetails={proposal?.proposalDetails}
+						proposalInfo={proposal?.proposalInfo}
+						proposalStatus={proposal?.status}
+						proposalCall={proposalCall}
+					/>
+
+					<If
+						condition={!proposal || proposal?.status?.includes("Deliberation")}
 					>
-						<If condition={proposal?.status === "Deliberation"}>
-							{["pass", "reject"].map((vote: ProposalVote, index) => (
+						<h2 className="font-display border-hero mt-12 border-b-2 text-4xl uppercase">
+							Connect your wallet
+						</h2>
+						<p className="mb-8">
+							Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+							labore dolor mollit commodo do anim incididunt sunt id pariatur
+							elit tempor nostrud nulla eu proident ut id qui incididunt.
+						</p>
+						<div className="min-w-0">
+							<WalletSelect required />
+						</div>
+					</If>
+
+					<If condition={!!proposal}>
+						<div
+							className="mt-16 inline-flex w-full justify-center space-x-12"
+							role="group"
+						>
+							<If condition={proposal?.status === "Deliberation"}>
+								{["pass", "reject"].map((vote: ProposalVote, index) => (
+									<Button
+										size="medium"
+										disabled={busy[vote]}
+										className="w-1/4 text-center"
+										onClick={() => onVoteClick("proposal", vote)}
+										key={index}
+									>
+										<div className="flex items-center justify-center">
+											<If condition={busy[vote]}>
+												<span className="mr-2">
+													<Spinner />
+												</span>
+											</If>
+											<span>{busy[vote] ? "Processing..." : vote}</span>
+										</div>
+									</Button>
+								))}
+							</If>
+
+							<If condition={proposal?.status === "ReferendumDeliberation"}>
 								<Button
 									size="medium"
-									disabled={busy[vote]}
+									disabled={busy.veto}
 									className="w-1/4 text-center"
-									onClick={() => onVoteClick("proposal", vote)}
-									key={index}
+									onClick={() => onVoteClick("referendum", "veto")}
 								>
 									<div className="flex items-center justify-center">
-										<If condition={busy[vote]}>
+										<If condition={busy.veto}>
 											<span className="mr-2">
 												<Spinner />
 											</span>
 										</If>
-										<span>{busy[vote] ? "Processing..." : vote}</span>
+										<span>{busy.veto ? "Processing..." : "Veto"}</span>
 									</div>
 								</Button>
-							))}
-						</If>
-
-						<If condition={proposal?.status === "ReferendumDeliberation"}>
-							<Button
-								size="medium"
-								disabled={busy.veto}
-								className="w-1/4 text-center"
-								onClick={() => onVoteClick("referendum", "veto")}
-							>
-								<div className="flex items-center justify-center">
-									<If condition={busy.veto}>
-										<span className="mr-2">
-											<Spinner />
-										</span>
-									</If>
-									<span>{busy.veto ? "Processing..." : "Veto"}</span>
-								</div>
-							</Button>
-						</If>
-					</div>
+							</If>
+						</div>
+					</If>
 				</If>
 			</div>
 		</Layout>
