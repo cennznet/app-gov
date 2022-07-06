@@ -22,7 +22,7 @@ export const Select: FC<IntrinsicElements["select"] & SelectProps> = ({
 		<div
 			className={classNames(
 				className,
-				"border-hero relative flex w-full items-center justify-between border-[3px] bg-white"
+				"border-hero relative flex w-full items-center justify-between border-2 bg-white"
 			)}
 		>
 			<If condition={!defaultValue && !!placeholder}>

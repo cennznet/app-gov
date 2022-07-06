@@ -25,7 +25,7 @@ export const MarkdownField: FC<
 		<div
 			className={classNames(
 				className,
-				"border-hero flex min-h-[400px] w-full  flex-col border-[3px] bg-white"
+				"border-hero flex min-h-[400px] w-full  flex-col border-2 bg-white"
 			)}
 		>
 			<div className="flex border-b border-b-slate-200 bg-white p-2 text-slate-600">
