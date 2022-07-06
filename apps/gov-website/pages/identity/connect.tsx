@@ -140,7 +140,7 @@ const Connect: NextPage<StaticProps> = ({
 												className="hover:text-hero mr-2 cursor-pointer transition-colors"
 												onClick={clearTwitterUsername}
 											>
-												<X />
+												<X className="h-4 w-4" />
 											</div>
 										</If>
 										<Button
@@ -169,7 +169,7 @@ const Connect: NextPage<StaticProps> = ({
 												className="hover:text-hero mr-2 cursor-pointer transition-colors"
 												onClick={clearDiscordUsername}
 											>
-												<X />
+												<X className="h-4 w-4" />
 											</div>
 										</If>
 										<Button
