@@ -33,3 +33,11 @@ export interface ProposalCall {
 	section: string;
 	args: Record<string, string>;
 }
+
+export interface ReferendumInterface {
+	discordMessageId: string;
+	proposalId: number;
+	vetoSum: number;
+	state: "Created" | "Updated" | "DiscordSent" | "Done";
+	status: "Pending" | "Failed" | "Skipped" | "Aborted";
+}
