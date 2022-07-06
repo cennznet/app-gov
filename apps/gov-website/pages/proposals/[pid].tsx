@@ -117,11 +117,12 @@ const Proposal: NextPage<ProposalProps> = ({
 							<If condition={proposal?.status === "Deliberation"}>
 								{["pass", "reject"].map((vote: ProposalVote, index) => (
 									<Button
+										key={index}
 										size="medium"
 										disabled={busy[vote]}
 										className="w-1/4 text-center"
+										variant={vote === "pass" ? "white" : "hero"}
 										onClick={() => onVoteClick("proposal", vote)}
-										key={index}
 									>
 										<div className="flex items-center justify-center">
 											<If condition={busy[vote]}>

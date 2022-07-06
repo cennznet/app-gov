@@ -27,37 +27,35 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	return (
 		<div className="text-lg">
 			<div className="space-y-8">
-				<div className="border-l-4 duration-300 border-hero p-4 text-xl">
+				<div className="text-xl">
 					<Markdown input={proposalDetails?.description || "Undefined"} />
 				</div>
 
-				<div className="border-4 border-hero p-4 shadow-sharp-7 shadow-hero/40 space-y-6">
+				<div className="border-4 border-hero p-4 shadow-sharp-7 shadow-hero/40 space-y-6 bg-white">
 					<div className="flex w-full space-x-20">
 						<div>
-							<span className="font-bold text-xl uppercase">Status</span>
+							<span className="font-bold uppercase">Status</span>
 							<p>{proposalStatus}</p>
 						</div>
 						<div>
-							<span className="font-bold text-xl uppercase">
-								Enactment delay
-							</span>
+							<span className="font-bold uppercase">Enactment delay</span>
 							<p>{proposalInfo?.enactmentDelay || 0} blocks</p>
 						</div>
 					</div>
 					<div>
-						<span className="font-bold text-xl uppercase">Sponsor</span>
+						<span className="font-bold uppercase">Sponsor</span>
 						<p>{proposalInfo?.sponsor}</p>
 					</div>
 
 					<If condition={section !== "undefined"}>
 						<div>
-							<span className="font-bold text-xl uppercase">Proposed Call</span>
+							<span className="font-bold uppercase">Proposed Call</span>
 							<div>
 								{section}.{method}
 							</div>
 							<If condition={!!args}>
-								<div className="px-2 border-2 border-hero mt-2 shadow-sharp shadow-hero/40">
-									<div className="w-full mt-2 mb-6 px-2">
+								<div className="">
+									<div className="w-full mt-2 mb-6">
 										<div className="border-b border-hero flex mb-2 py-2">
 											<span className="text-left w-1/2 font-bold">Params</span>
 											<span className="text-right w-1/2 font-bold">Values</span>
