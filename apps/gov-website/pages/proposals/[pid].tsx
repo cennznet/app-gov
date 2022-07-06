@@ -1,5 +1,6 @@
 import type { Api, SubmittableResult } from "@cennznet/api";
 import type { UInt } from "@polkadot/types-codec";
+import mongoose from "mongoose";
 import type { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
@@ -11,6 +12,7 @@ import type {
 	ProposalVote,
 } from "@app-gov/node/types";
 import { getApiInstance } from "@app-gov/service/cennznet";
+import { MONGODB_SERVER } from "@app-gov/service/constants";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
 	Button,
@@ -20,7 +22,6 @@ import {
 	WalletSelect,
 } from "@app-gov/web/components";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
-import { fetchProposal } from "@app-gov/web/utils";
 import { Spinner } from "@app-gov/web/vectors";
 
 export const getStaticPaths = async () => {
@@ -41,16 +42,18 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (content) => {
+	await mongoose.connect(MONGODB_SERVER);
+	const Proposal = mongoose.model("Proposal");
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 
 	const proposalId = content.params.pid as string;
-	const { proposal } = await fetchProposal(proposalId);
 	const proposalCall = await fetchProposalCall(api, proposalId);
+	const proposal = JSON.stringify(await Proposal.findOne({ proposalId }));
 
 	return {
 		props: {
 			proposalId,
-			proposal,
+			proposal: JSON.parse(proposal),
 			proposalCall,
 		},
 		revalidate: 600,
