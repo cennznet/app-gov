@@ -20,7 +20,7 @@ export const TextField: FC<IntrinsicElements["input"] & TextFieldProps> = ({
 		<div
 			className={classNames(
 				className,
-				"border-dark flex w-full items-center justify-between border-[3px] bg-white"
+				"border-hero flex w-full items-center justify-between border-[3px] bg-white"
 			)}
 		>
 			<input
@@ -49,7 +49,7 @@ export const TextArea: FC<IntrinsicElements["textarea"] & TextFieldProps> = ({
 		<div
 			className={classNames(
 				className,
-				"border-dark flex w-full items-center justify-between border-[3px] bg-white"
+				"border-hero flex w-full items-center justify-between border-[3px] bg-white"
 			)}
 		>
 			<textarea
