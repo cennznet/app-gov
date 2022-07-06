@@ -1,6 +1,5 @@
 export * from "./signAndSendTx";
 export * from "./Transaction";
-export { default as Extrinsics } from "./extrinsics.json";
 export * from "./getSetIdentityExtrinsic";
 export * from "./getApiInstance";
 export * from "./fetchIdentityRegistrars";
@@ -9,3 +8,4 @@ export * from "./getRequestJudgementExtrinsic";
 export * from "./fetchIdentityOf";
 export * from "./hashIdentityValue";
 export * from "./getProvideJudgementExtrinsic";
+export * from "./extractCallableExtrinsics";

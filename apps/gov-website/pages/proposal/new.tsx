@@ -3,7 +3,10 @@ import type { NextPage } from "next";
 import { FormEventHandler, useCallback, useState } from "react";
 import { If } from "react-extras";
 
-import { PINATA_GATEWAY } from "@app-gov/service/constants";
+import {
+	extractCallableExtrinsics,
+	getApiInstance,
+} from "@app-gov/service/cennznet";
 import { pinProposal } from "@app-gov/service/pinata";
 import {
 	Button,
@@ -19,16 +22,22 @@ import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 import type { ProposalCall } from "@app-gov/web/types";
 import { Spinner } from "@app-gov/web/vectors";
 
-const NewProposal: NextPage = () => {
-	const { value: proposalTitle, onChange: onProposalTitleChange } =
-		useControlledInput<string, HTMLInputElement>("");
-	const { value: proposalDelay, onChange: onProposalDelayChange } =
-		useControlledInput<string, HTMLInputElement>("");
+interface StaticProps {
+	extrinsics: Awaited<ReturnType<typeof extractCallableExtrinsics>>;
+}
 
-	const { proposalCall, updateProposalCall } = useProposal();
+export const getStaticProps: GetStaticProps<StaticProps> = async (context) => {
+	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
+	const extrinsics = await extractCallableExtrinsics(api);
 
-	const { busy, onFormSubmit } = useFormSubmit(proposalCall);
+	return {
+		props: {
+			extrinsics,
+		},
+	};
+};
 
+const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 	return (
 		<Layout>
 			<Header />
