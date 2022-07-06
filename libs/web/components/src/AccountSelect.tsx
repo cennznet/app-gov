@@ -12,7 +12,7 @@ import { Button, Select } from "./";
 
 type SelectProps = ComponentProps<typeof Select>;
 
-export const WalletSelect: FC<SelectProps> = (props) => {
+export const AccountSelect: FC<SelectProps> = (props) => {
 	const {
 		onCENNZConnectClick,
 		onCENNZAccountSelect,
@@ -39,13 +39,14 @@ export const WalletSelect: FC<SelectProps> = (props) => {
 			}
 			{...props}
 		>
-			{!!selectedAccount && allAccounts?.map((account, index) => (
-				<option value={account.address} key={index}>
-					{`${account.meta.name} - ${account.address
-						.slice(0, 8)
-						.concat("...", account.address.slice(-8))}`}
-				</option>
-			))}
+			{!!selectedAccount &&
+				allAccounts?.map((account, index) => (
+					<option value={account.address} key={index}>
+						{`${account.meta.name} - ${account.address
+							.slice(0, 8)
+							.concat("...", account.address.slice(-8))}`}
+					</option>
+				))}
 		</Select>
 	);
 };

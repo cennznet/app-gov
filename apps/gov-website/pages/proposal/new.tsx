@@ -8,13 +8,13 @@ import {
 } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
+	AccountSelect,
 	Button,
 	FunctionCallFieldSet,
 	Header,
 	Layout,
 	MarkdownField,
 	Select,
-	WalletSelect,
 } from "@app-gov/web/components";
 import { useControlledCheckbox, useControlledInput } from "@app-gov/web/hooks";
 
@@ -145,7 +145,7 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 					</h2>
 
 					<fieldset className="mb-6">
-						<WalletSelect required name="address" />
+						<AccountSelect required name="address" />
 					</fieldset>
 
 					<fieldset className="mt-16 text-center">

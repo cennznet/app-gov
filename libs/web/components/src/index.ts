@@ -3,7 +3,7 @@ export * from "./Header";
 export * from "./Layout";
 export * from "./Select";
 export * from "./TextField";
-export * from "./WalletSelect";
+export * from "./AccountSelect";
 export * from "./ProposalDetailsDisplay";
 export * from "./TransactionDialog";
 export * from "./Dialog";

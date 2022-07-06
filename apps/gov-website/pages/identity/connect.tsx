@@ -6,13 +6,13 @@ import { fetchRequiredRegistrars } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
+	AccountSelect,
 	Button,
 	Header,
 	Layout,
 	TextField,
 	TransactionDialog,
 	useTransactionDialog,
-	WalletSelect,
 } from "@app-gov/web/components";
 import { useIdentityConnectForm, useSocialSignIn } from "@app-gov/web/hooks";
 import {
@@ -113,7 +113,7 @@ const Connect: NextPage<StaticProps> = ({
 						tempor nostrud nulla eu proident ut id qui incididunt.
 					</p>
 					<fieldset className="mb-12 min-w-0">
-						<WalletSelect required name="address" />
+						<AccountSelect required name="address" />
 					</fieldset>
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
