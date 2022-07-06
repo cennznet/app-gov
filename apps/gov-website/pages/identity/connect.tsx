@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { FormEvent, FormEventHandler, useCallback, useEffect } from "react";
+import { FormEventHandler, useCallback, useEffect } from "react";
 import { Choose, If } from "react-extras";
 
 import { fetchRequiredRegistrars } from "@app-gov/node/utils";
