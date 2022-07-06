@@ -115,7 +115,7 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 
 					<If condition={functionCall}>
 						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-							Call Details
+							Function Call
 						</h2>
 
 						<fieldset className="mb-6 grid grid-cols-2 gap-4">
@@ -141,17 +141,23 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 					</If>
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-						Signing Details
+						Sign and Submit
 					</h2>
 
 					<fieldset className="mb-6">
+						<label
+							className="mb-1 block text-lg font-bold"
+							htmlFor="enacmentDelay"
+						>
+							Signing Account
+						</label>
 						<AccountSelect required name="address" />
 					</fieldset>
 
 					<fieldset className="mt-16 text-center">
 						<Button type="submit" className="w-1/3 text-center">
 							<div className="flex items-center justify-center">
-								<span>Sign and Submit</span>
+								<span>Proceed</span>
 							</div>
 						</Button>
 						<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
