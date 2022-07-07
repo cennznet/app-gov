@@ -98,18 +98,20 @@ const Connect: NextPage<StaticProps> = ({
 					</h1>
 
 					<p className="mb-8 text-lg">
-						To become a Citizen or Councillor, we need you to verify your
-						identity. This involves connecting your wallet, and two social
-						channels (Twitter and Discord). Get started below!
+						The Identity Module ensures an authentic governance and voting
+						experience. It does this by requiring every voting wallet to be
+						connected to 2 social accounts.
 					</p>
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 						Connect your wallet
 					</h2>
 					<p className="mb-8">
-						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
-						tempor nostrud nulla eu proident ut id qui incididunt.
+						Connect your voting wallet here. This is the wallet that will be
+						checked against the staking requirement. If you have multiple
+						staking wallets, it is best to set a stash wallet for all your
+						staked funds and connect this to the Identity Module to maximise
+						your voting power.
 					</p>
 					<fieldset className="mb-12 min-w-0">
 						<AccountSelect required name="address" />
@@ -119,9 +121,12 @@ const Connect: NextPage<StaticProps> = ({
 						Connect your social channels
 					</h2>
 					<p className="mb-8">
-						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
-						tempor nostrud nulla eu proident ut id qui incididunt.
+						If your wallet is yet to be associated with a social account, you
+						will be able to sign in to Twitter and Discord below. This will
+						establish that you are the owner of the social accounts and
+						therefore a real individual. After seeing both the ‘Verified
+						Twitter’ and ‘Verified Discord’ icons, sign and submit the
+						transaction to send this information to the blockchain.
 					</p>
 					<fieldset className="mb-12">
 						<div className="grid grid-cols-2 items-center gap-4">
