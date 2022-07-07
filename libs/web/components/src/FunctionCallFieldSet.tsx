@@ -148,7 +148,7 @@ const Args: FC<Omit<IntrinsicElements["ul"], "children">> = (props) => {
 						className="font-mono"
 						required
 						startAdornment={
-							<span className="block w-24 border-r border-slate-200 font-mono">
+							<span className="block w-36 border-r border-slate-200 font-mono">
 								{arg.name}
 							</span>
 						}
