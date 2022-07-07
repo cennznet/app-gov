@@ -91,13 +91,13 @@ const Connect: NextPage<StaticProps> = ({
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
+			<div className="prose w-full max-w-3xl flex-1 self-center px-8 pb-12">
 				<form onSubmit={onFormSubmit}>
 					<h1 className="font-display text-hero mb-8 text-center text-7xl uppercase">
 						Set your identity
 					</h1>
 
-					<p className="mb-8 text-lg">
+					<p className="-mb-8 text-lg">
 						The Identity Module ensures an authentic governance and voting
 						experience. It does this by requiring every voting wallet to be
 						connected to 2 social accounts.
