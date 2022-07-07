@@ -91,13 +91,13 @@ const Connect: NextPage<StaticProps> = ({
 	return (
 		<Layout>
 			<Header />
-			<div className="prose w-full max-w-3xl flex-1 self-center px-8 pb-12">
+			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
 				<form onSubmit={onFormSubmit}>
 					<h1 className="font-display text-hero mb-8 text-center text-7xl uppercase">
 						Set your identity
 					</h1>
 
-					<p className="-mb-8 text-lg">
+					<p className="prose mb-8 text-lg">
 						The Identity Module ensures an authentic governance and voting
 						experience. It does this by requiring every voting wallet to be
 						connected to 2 social accounts.
@@ -106,12 +106,9 @@ const Connect: NextPage<StaticProps> = ({
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 						Connect your wallet
 					</h2>
-					<p className="mb-8">
+					<p className="prose mb-8">
 						Connect your voting wallet here. This is the wallet that will be
-						checked against the staking requirement. If you have multiple
-						staking wallets, it is best to set a stash wallet for all your
-						staked funds and connect this to the Identity Module to maximise
-						your voting power.
+						checked against the staking requirement.
 					</p>
 					<fieldset className="mb-12 min-w-0">
 						<AccountSelect required name="address" />
@@ -120,7 +117,7 @@ const Connect: NextPage<StaticProps> = ({
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 						Connect your social channels
 					</h2>
-					<p className="mb-8">
+					<p className="prose mb-8">
 						If your wallet is yet to be associated with a social account, you
 						will be able to sign in to Twitter and Discord below. This will
 						establish that you are the owner of the social accounts and
