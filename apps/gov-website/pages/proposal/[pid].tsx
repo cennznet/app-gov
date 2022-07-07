@@ -15,11 +15,11 @@ import { getApiInstance } from "@app-gov/service/cennznet";
 import { MONGODB_SERVER } from "@app-gov/service/constants";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
+	AccountSelect,
 	Button,
 	Header,
 	Layout,
 	ProposalDetailsDisplay,
-	WalletSelect,
 } from "@app-gov/web/components";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 import { Spinner } from "@app-gov/web/vectors";
@@ -82,7 +82,7 @@ const Proposal: NextPage<ProposalProps> = ({
 		<Layout>
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<h1 className="font-display mb-6 text-center text-6xl uppercase">
+				<h1 className="font-display text-hero mb-6 text-center text-6xl uppercase">
 					Proposal #{proposalId}
 				</h1>
 
@@ -103,7 +103,7 @@ const Proposal: NextPage<ProposalProps> = ({
 						tempor nostrud nulla eu proident ut id qui incididunt.
 					</p>
 					<div className="min-w-0">
-						<WalletSelect required />
+						<AccountSelect required />
 					</div>
 				</If>
 

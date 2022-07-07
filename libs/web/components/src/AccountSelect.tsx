@@ -1,11 +1,18 @@
-import type { ChangeEventHandler, MouseEventHandler } from "react";
+import type {
+	ChangeEventHandler,
+	ComponentProps,
+	FC,
+	MouseEventHandler,
+} from "react";
 
 import { useCENNZExtension, useCENNZWallet } from "@app-gov/web/providers";
 import { CENNZLogo } from "@app-gov/web/vectors";
 
 import { Button, Select } from "./";
 
-export const WalletSelect: typeof Select = (props) => {
+type SelectProps = ComponentProps<typeof Select>;
+
+export const AccountSelect: FC<SelectProps> = (props) => {
 	const {
 		onCENNZConnectClick,
 		onCENNZAccountSelect,
@@ -32,13 +39,14 @@ export const WalletSelect: typeof Select = (props) => {
 			}
 			{...props}
 		>
-			{allAccounts?.map((account, index) => (
-				<option value={account.address} key={index}>
-					{`${account.meta.name} - ${account.address
-						.slice(0, 8)
-						.concat("...", account.address.slice(-8))}`}
-				</option>
-			))}
+			{!!selectedAccount &&
+				allAccounts?.map((account, index) => (
+					<option value={account.address} key={index}>
+						{`${account.meta.name} - ${account.address
+							.slice(0, 8)
+							.concat("...", account.address.slice(-8))}`}
+					</option>
+				))}
 		</Select>
 	);
 };

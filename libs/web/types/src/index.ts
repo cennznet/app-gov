@@ -22,6 +22,7 @@ export interface IntrinsicElements {
 	a: AnchorHTMLAttributes<HTMLAnchorElement>;
 	select: InputHTMLAttributes<HTMLSelectElement>;
 	textarea: TextareaHTMLAttributes<HTMLTextAreaElement>;
+	ul: HTMLAttributes<HTMLUListElement>;
 }
 
 export interface ProposalCall {
