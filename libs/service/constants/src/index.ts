@@ -5,8 +5,9 @@ export const CENNZ_NETWORK = {
 	local: {
 		ChainSlug: "local" as CENNZNetNetwork,
 		ChainName: "Local Testnet",
-		ExplorerUrl: "https://localhost",
+		ExplorerUrl: "http://localhost",
 	},
+
 	rata: {
 		ChainSlug: "rata" as CENNZNetNetwork,
 		ChainName: "Rata Testnet",
@@ -45,4 +46,4 @@ export const TWITTER_CLIENT: Pick<
 export const PINATA_JWT: string = process.env.NX_PINATA_JWT ?? "";
 export const PINATA_GATEWAY: string = process.env.NX_PINATA_GATEWAY ?? "";
 
-export const MONGODB_SERVER: string = process.env.MONGODB_SERVER ?? "";
+export const MONGODB_SERVER: string = process.env.MONGODB_URI ?? "";
