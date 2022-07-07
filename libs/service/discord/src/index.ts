@@ -1,1 +1,1 @@
-export * from "./lib/service-discord";
+export * from "./getDiscordBot";
