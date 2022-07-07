@@ -7,7 +7,7 @@ interface ControlledInputHook<T, E> {
 
 export const useControlledInput = <
 	T,
-	E extends HTMLInputElement | HTMLTextAreaElement
+	E extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 >(
 	defaultValue: T
 ): ControlledInputHook<T, E> => {
@@ -15,6 +15,18 @@ export const useControlledInput = <
 
 	const onChange = (event: ChangeEvent<E>) =>
 		setValue(event.target.value as unknown as T);
+
+	return {
+		value,
+		onChange,
+	};
+};
+
+export const useControlledCheckbox = (defaultValue: boolean) => {
+	const [value, setValue] = useState<boolean>(defaultValue);
+
+	const onChange = (event: ChangeEvent<HTMLInputElement>) =>
+		setValue(event.target.checked);
 
 	return {
 		value,

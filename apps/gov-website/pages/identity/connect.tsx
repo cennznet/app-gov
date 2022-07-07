@@ -1,18 +1,18 @@
 import type { GetStaticProps, NextPage } from "next";
-import { FormEvent, useCallback, useEffect } from "react";
+import { FormEventHandler, useCallback, useEffect } from "react";
 import { Choose, If } from "react-extras";
 
 import { fetchRequiredRegistrars } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
+	AccountSelect,
 	Button,
 	Header,
 	Layout,
 	TextField,
 	TransactionDialog,
 	useTransactionDialog,
-	WalletSelect,
 } from "@app-gov/web/components";
 import { useIdentityConnectForm, useSocialSignIn } from "@app-gov/web/hooks";
 import {
@@ -59,8 +59,8 @@ const Connect: NextPage<StaticProps> = ({
 	const { submitForm, formState, resetFormState } = useIdentityConnectForm();
 	const { open, openDialog, closeDialog } = useTransactionDialog();
 
-	const onFormSubmit = useCallback(
-		(event: FormEvent) => {
+	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+		(event) => {
 			event.preventDefault();
 			openDialog();
 			submitForm(new FormData(event.target as HTMLFormElement));
@@ -94,7 +94,7 @@ const Connect: NextPage<StaticProps> = ({
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
 				<form onSubmit={onFormSubmit}>
-					<h1 className="font-display mb-8 text-center text-7xl uppercase">
+					<h1 className="font-display text-hero mb-8 text-center text-7xl uppercase">
 						Set your identity
 					</h1>
 
@@ -113,7 +113,7 @@ const Connect: NextPage<StaticProps> = ({
 						tempor nostrud nulla eu proident ut id qui incididunt.
 					</p>
 					<fieldset className="mb-12 min-w-0">
-						<WalletSelect required name="address" />
+						<AccountSelect required name="address" />
 					</fieldset>
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
@@ -140,7 +140,7 @@ const Connect: NextPage<StaticProps> = ({
 												className="hover:text-hero mr-2 cursor-pointer transition-colors"
 												onClick={clearTwitterUsername}
 											>
-												<X />
+												<X className="h-4 w-4" />
 											</div>
 										</If>
 										<Button
@@ -169,7 +169,7 @@ const Connect: NextPage<StaticProps> = ({
 												className="hover:text-hero mr-2 cursor-pointer transition-colors"
 												onClick={clearDiscordUsername}
 											>
-												<X />
+												<X className="h-4 w-4" />
 											</div>
 										</If>
 										<Button

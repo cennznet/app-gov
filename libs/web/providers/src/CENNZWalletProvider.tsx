@@ -40,23 +40,18 @@ export const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({
 	const [wallet, setWallet] = useState<InjectedExtension>();
 	const [cennzAccount, setCENNZAccount] = useState<InjectedAccountWithMeta>();
 
-	const connectWallet = useCallback(
-		async (callback: any) => {
-			if (!api) return;
+	const connectWallet = useCallback(async () => {
+		if (!api) return;
 
-			const extension = await getInstalledExtension?.();
+		const extension = await getInstalledExtension?.();
 
-			if (!extension) {
-				callback?.();
-				return promptInstallExtension?.();
-			}
+		if (!extension) {
+			return promptInstallExtension?.();
+		}
 
-			callback?.();
-			setWallet(extension);
-			store.set("CENNZNET-EXTENSION", extension);
-		},
-		[api, getInstalledExtension, promptInstallExtension]
-	);
+		setWallet(extension);
+		store.set("CENNZNET-EXTENSION", extension);
+	}, [api, getInstalledExtension, promptInstallExtension]);
 
 	const disconnectWallet = useCallback(() => {
 		store.remove("CENNZNET-EXTENSION");
