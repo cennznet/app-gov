@@ -47,3 +47,9 @@ export const PINATA_JWT: string = process.env.NX_PINATA_JWT ?? "";
 export const PINATA_GATEWAY: string = process.env.NX_PINATA_GATEWAY ?? "";
 
 export const MONGODB_SERVER: string = process.env.MONGODB_URI ?? "";
+
+export const DISCORD_BOT = {
+	Token: process.env.DISCORD_BOT_TOKEN ?? "",
+	ServerId: process.env.DISCORD_SERVER_ID ?? "",
+	IdentityRoleId: process.env.DISCORD_IDENTITY_ROLE_ID ?? "",
+};
