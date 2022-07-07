@@ -4,6 +4,7 @@ export * from "./Layout";
 export * from "./Markdown";
 export * from "./ProposalAdvanced";
 export * from "./Select";
+export * from "./StepProgress";
 export * from "./TextField";
 export * from "./WalletSelect";
 export * from "./ProposalDetailsField";
