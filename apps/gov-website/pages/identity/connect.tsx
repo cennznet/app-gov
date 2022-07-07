@@ -1,6 +1,9 @@
+import { AnyTuple } from "@cennznet/types";
+import type { Option } from "@polkadot/types-codec";
+import type { IdentityInfo } from "@polkadot/types/interfaces";
 import type { GetStaticProps, NextPage } from "next";
-import { FormEventHandler, useCallback, useEffect } from "react";
-import { Choose, If } from "react-extras";
+import { FormEventHandler, useCallback, useEffect, useState } from "react";
+import { Choose, classNames, If } from "react-extras";
 
 import { fetchRequiredRegistrars } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
@@ -16,6 +19,7 @@ import {
 	useTransactionDialog,
 } from "@app-gov/web/components";
 import { useIdentityConnectForm, useSocialSignIn } from "@app-gov/web/hooks";
+import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 import {
 	DiscordLogo,
 	ExclamationCircle,
@@ -88,6 +92,8 @@ const Connect: NextPage<StaticProps> = ({
 		onDismissClick();
 	}, [onDismissClick, formState?.status]);
 
+	const identityCheck = useIdentityCheck();
+
 	return (
 		<Layout>
 			<Header />
@@ -110,8 +116,25 @@ const Connect: NextPage<StaticProps> = ({
 						Connect your voting wallet here. This is the wallet that will be
 						checked against the staking requirement.
 					</p>
-					<fieldset className="mb-12 min-w-0">
+					<fieldset
+						className={classNames(
+							"mb-12 min-w-0",
+							identityCheck && "space-y-4"
+						)}
+					>
 						<AccountSelect required name="address" />
+						<p>
+							<If condition={identityCheck?.identitySet}>
+								This account already has a registered Identity. Connecting your
+								social channels will overwrite the previously registered
+								channels.
+							</If>
+							<If condition={identityCheck?.judgementProvided}>
+								This account already has judgements provided on its Identity.
+								Connecting your social channels will remove the previous
+								judgements.
+							</If>
+						</p>
 					</fieldset>
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
@@ -133,7 +156,7 @@ const Connect: NextPage<StaticProps> = ({
 								name="twitterUsername"
 								value={twitterUsername}
 								onInput={onNoop}
-								required
+								// required
 								endAdornment={
 									<div className="flex items-center">
 										<If condition={!!twitterUsername}>
@@ -162,7 +185,7 @@ const Connect: NextPage<StaticProps> = ({
 								name="discordUsername"
 								value={discordUsername}
 								onChange={onNoop}
-								required
+								// required
 								endAdornment={
 									<div className="flex items-center">
 										<If condition={!!discordUsername}>
@@ -294,3 +317,37 @@ const Connect: NextPage<StaticProps> = ({
 };
 
 export default Connect;
+
+const useIdentityCheck = () => {
+	const { api } = useCENNZApi();
+	const { selectedAccount } = useCENNZWallet();
+	const [identityCheck, setIdentityCheck] = useState<{
+		identitySet?: boolean;
+		judgementProvided?: boolean;
+	}>();
+
+	useEffect(() => {
+		if (!api || !selectedAccount?.address) return;
+
+		const checkIdentity = async () => {
+			const identity = (await api.query.identity.identityOf(
+				selectedAccount.address
+			)) as Option<IdentityInfo>;
+
+			if (!identity.isSome) return setIdentityCheck(undefined);
+
+			const prevIdentity = identity.toJSON() as unknown as {
+				judgements: AnyTuple[];
+			};
+
+			if (prevIdentity?.judgements.length)
+				return setIdentityCheck({ judgementProvided: true });
+
+			setIdentityCheck({ identitySet: true });
+		};
+
+		checkIdentity();
+	}, [selectedAccount?.address, api]);
+
+	return identityCheck;
+};
