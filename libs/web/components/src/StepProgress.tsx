@@ -4,79 +4,77 @@ import { Choose, classNames, If } from "react-extras";
 import { PropsWithChildren } from "@app-gov/web/types";
 import { CheckCircle, Spinner } from "@app-gov/web/vectors";
 
-interface StepProgressProps {
+interface StepProgressProps extends PropsWithChildren {
 	steps: string[];
 	stepIndex: number;
 }
 
-export const StepProgress: FC<StepProgressProps> = ({ steps, stepIndex }) => (
-	<div className="m-auto flex items-center justify-center bg-white p-4">
-		{steps.map((step, index) => (
-			<div key={step} className="flex">
-				<Choose>
-					<Choose.When condition={index < stepIndex}>
-						<div>
-							<IconWrapper>
-								<CheckCircle className="text-hero h-12 w-12" />
-								<StepLine hero />
-							</IconWrapper>
-
-							<StepText variant="large">{step}</StepText>
-						</div>
-					</Choose.When>
-
-					<Choose.When condition={index === stepIndex}>
-						<div>
-							<IconWrapper>
-								<If condition={index === steps.length - 1}>
+export const StepProgress: FC<StepProgressProps> = ({
+	steps,
+	stepIndex,
+	children,
+}) => (
+	<div className="space-y-8">
+		<div className="m-auto flex items-center justify-center p-4">
+			{steps.map((step, index) => (
+				<div key={step} className="flex">
+					<Choose>
+						<Choose.When condition={index < stepIndex}>
+							<div>
+								<IconWrapper>
 									<CheckCircle className="text-hero h-12 w-12" />
-								</If>
-
-								<If condition={index < steps.length - 1}>
-									<Spinner className="text-hero mx-1 h-10 w-10 animate-spin" />
 									<StepLine hero />
-								</If>
-							</IconWrapper>
+								</IconWrapper>
 
-							<StepText variant="small">{step}</StepText>
-						</div>
-					</Choose.When>
+								<StepText>{step}</StepText>
+							</div>
+						</Choose.When>
 
-					<Choose.When condition={index > stepIndex}>
-						<div>
-							<IconWrapper>
-								<div
-									className={classNames(
-										"mx-1 h-10 w-10 rounded-3xl border-4",
-										index === stepIndex + 1 && "border-hero"
-									)}
-								/>
+						<Choose.When condition={index === stepIndex}>
+							<div>
+								<IconWrapper>
+									<If condition={index === steps.length - 1}>
+										<CheckCircle className="text-hero h-12 w-12" />
+									</If>
 
-								<If condition={index < steps.length - 1}>
-									<StepLine />
-								</If>
-							</IconWrapper>
+									<If condition={index < steps.length - 1}>
+										<Spinner className="text-hero mx-1 h-10 w-10 animate-spin" />
+										<StepLine hero />
+									</If>
+								</IconWrapper>
 
-							<StepText variant="small">{step}</StepText>
-						</div>
-					</Choose.When>
-				</Choose>
-			</div>
-		))}
+								<StepText>{step}</StepText>
+							</div>
+						</Choose.When>
+
+						<Choose.When condition={index > stepIndex}>
+							<div>
+								<IconWrapper>
+									<div
+										className={classNames(
+											"mx-1 h-10 w-10 rounded-3xl border-4",
+											index === stepIndex + 1 && "border-hero"
+										)}
+									/>
+
+									<If condition={index < steps.length - 1}>
+										<StepLine />
+									</If>
+								</IconWrapper>
+
+								<StepText>{step}</StepText>
+							</div>
+						</Choose.When>
+					</Choose>
+				</div>
+			))}
+		</div>
+		<div>{children}</div>
 	</div>
 );
 
-interface StepTextProps extends PropsWithChildren {
-	variant: string;
-}
-
-const StepText: FC<StepTextProps> = ({ children, variant }) => (
-	<div
-		className={classNames(
-			"text-md mx-1 flex w-10 justify-center",
-			{ small: "w-10", large: "w-12" }[variant]
-		)}
-	>
+const StepText: FC<PropsWithChildren> = ({ children }) => (
+	<div className={classNames("text-md mx-1 flex w-10 justify-center")}>
 		{children}
 	</div>
 );
