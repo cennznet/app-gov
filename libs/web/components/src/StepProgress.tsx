@@ -10,14 +10,14 @@ interface StepProgressProps {
 }
 
 export const StepProgress: FC<StepProgressProps> = ({ steps, stepIndex }) => (
-	<div className="flex items-center bg-white m-auto justify-center p-4">
+	<div className="m-auto flex items-center justify-center bg-white p-4">
 		{steps.map((step, index) => (
 			<div key={step} className="flex">
 				<Choose>
 					<Choose.When condition={index < stepIndex}>
 						<div>
 							<IconWrapper>
-								<CheckCircle className="h-12 w-12 text-hero" />
+								<CheckCircle className="text-hero h-12 w-12" />
 								<StepLine hero />
 							</IconWrapper>
 
@@ -29,11 +29,11 @@ export const StepProgress: FC<StepProgressProps> = ({ steps, stepIndex }) => (
 						<div>
 							<IconWrapper>
 								<If condition={index === steps.length - 1}>
-									<CheckCircle className="h-12 w-12 text-hero" />
+									<CheckCircle className="text-hero h-12 w-12" />
 								</If>
 
 								<If condition={index < steps.length - 1}>
-									<Spinner className="h-10 w-10 text-hero mx-1 animate-spin" />
+									<Spinner className="text-hero mx-1 h-10 w-10 animate-spin" />
 									<StepLine hero />
 								</If>
 							</IconWrapper>
@@ -47,7 +47,7 @@ export const StepProgress: FC<StepProgressProps> = ({ steps, stepIndex }) => (
 							<IconWrapper>
 								<div
 									className={classNames(
-										"h-10 w-10 border-4 rounded-3xl mx-1",
+										"mx-1 h-10 w-10 rounded-3xl border-4",
 										index === stepIndex + 1 && "border-hero"
 									)}
 								/>
@@ -73,7 +73,7 @@ interface StepTextProps extends PropsWithChildren {
 const StepText: FC<StepTextProps> = ({ children, variant }) => (
 	<div
 		className={classNames(
-			"flex justify-center w-10 mx-1 text-md",
+			"text-md mx-1 flex w-10 justify-center",
 			{ small: "w-10", large: "w-12" }[variant]
 		)}
 	>
@@ -82,13 +82,13 @@ const StepText: FC<StepTextProps> = ({ children, variant }) => (
 );
 
 const IconWrapper: FC<PropsWithChildren> = ({ children }) => (
-	<div className="flex items-center h-16">{children}</div>
+	<div className="flex h-16 items-center">{children}</div>
 );
 
 const StepLine: FC<{ hero?: boolean }> = ({ hero }) => (
 	<span
 		className={classNames(
-			"w-32 h-0 border-2 rounded-xl",
+			"h-0 w-32 rounded-xl border-2",
 			hero && "border-hero"
 		)}
 	/>
