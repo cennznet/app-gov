@@ -63,7 +63,8 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 									<div>
 										<span className="font-bold uppercase">Veto Sum</span>
 										<div>
-											{referendum.vetoPercentage} / {referendum.vetoThreshold} %
+											{referendum?.vetoPercentage} / {referendum?.vetoThreshold}{" "}
+											%
 										</div>
 									</div>
 								</If>

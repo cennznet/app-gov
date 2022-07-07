@@ -14,12 +14,13 @@ export const fetchProposal = async (api: Api, proposalId: string) => {
 	const proposal = await Proposal.findOne({ proposalId });
 
 	const proposalStringified = JSON.stringify(proposal);
+	const referendum = await fetchReferendum(api, proposal, proposalId);
 
 	return {
 		proposalId,
 		proposalCall,
 		proposal: JSON.parse(proposalStringified),
-		referendum: await fetchReferendum(api, proposal, proposalId),
+		referendum: referendum ?? {},
 	};
 };
 
