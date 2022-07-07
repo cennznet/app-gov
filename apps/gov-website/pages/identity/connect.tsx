@@ -215,7 +215,7 @@ const Connect: NextPage<StaticProps> = ({
 						steps={["Confirming", "Submitting", "Processing", "Success!"]}
 						stepIndex={
 							formState?.status === "Ok"
-								? 4
+								? 3
 								: ["Await", "Submit", "Process"].indexOf(formState?.step)
 						}
 					>
