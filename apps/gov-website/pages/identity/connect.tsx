@@ -17,10 +17,8 @@ import {
 } from "@app-gov/web/components";
 import { useIdentityConnectForm, useSocialSignIn } from "@app-gov/web/hooks";
 import {
-	CheckCircle,
 	DiscordLogo,
 	ExclamationCircle,
-	Spinner,
 	TwitterLogo,
 	X,
 } from "@app-gov/web/vectors";
@@ -30,7 +28,7 @@ interface StaticProps {
 	discordRegistrarIndex: number;
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async (context) => {
+export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 	const { twitter, discord } = await fetchRequiredRegistrars(api);
 
@@ -212,7 +210,7 @@ const Connect: NextPage<StaticProps> = ({
 			<TransactionDialog open={open} onClose={onDialogClose}>
 				<If condition={formState?.status !== "NotOk"}>
 					<StepProgress
-						steps={["Confirming", "Submitting", "Judging", "Success!"]}
+						steps={["Confirming", "Submitting", "Processing", "Success!"]}
 						stepIndex={
 							formState?.status === "Ok"
 								? 4
