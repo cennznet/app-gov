@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { Choose, classNames, If } from "react-extras";
 
+import { PropsWithChildren } from "@app-gov/web/types";
 import { CheckCircle, Spinner } from "@app-gov/web/vectors";
 
 interface StepProgressProps {
@@ -15,49 +16,48 @@ export const StepProgress: FC<StepProgressProps> = ({ steps, stepIndex }) => (
 				<Choose>
 					<Choose.When condition={index < stepIndex}>
 						<div>
-							<div className={styles.iconWrapper}>
+							<IconWrapper>
 								<CheckCircle className="h-12 w-12 text-hero" />
-								<span className={styles.line("hero")} />
-							</div>
-							<div className={styles.textWrapper("large")}>
-								<span>{step}</span>
-							</div>
+								<StepLine hero />
+							</IconWrapper>
+
+							<StepText variant="large">{step}</StepText>
 						</div>
 					</Choose.When>
 
 					<Choose.When condition={index === stepIndex}>
 						<div>
-							<div className={styles.iconWrapper}>
+							<IconWrapper>
 								<If condition={index === steps.length - 1}>
 									<CheckCircle className="h-12 w-12 text-hero" />
 								</If>
+
 								<If condition={index < steps.length - 1}>
 									<Spinner className="h-10 w-10 text-hero mx-1 animate-spin" />
-									<span className={styles.line("hero")} />
+									<StepLine hero />
 								</If>
-							</div>
-							<div className={styles.textWrapper("small")}>
-								<span>{step}</span>
-							</div>
+							</IconWrapper>
+
+							<StepText variant="small">{step}</StepText>
 						</div>
 					</Choose.When>
 
 					<Choose.When condition={index > stepIndex}>
 						<div>
-							<div className={styles.iconWrapper}>
+							<IconWrapper>
 								<div
 									className={classNames(
 										"h-10 w-10 border-4 rounded-3xl mx-1",
 										index === stepIndex + 1 && "border-hero"
 									)}
 								/>
+
 								<If condition={index < steps.length - 1}>
-									<span className={styles.line()} />
+									<StepLine />
 								</If>
-							</div>
-							<div className={styles.textWrapper("small")}>
-								<span>{step}</span>
-							</div>
+							</IconWrapper>
+
+							<StepText variant="small">{step}</StepText>
 						</div>
 					</Choose.When>
 				</Choose>
@@ -66,18 +66,30 @@ export const StepProgress: FC<StepProgressProps> = ({ steps, stepIndex }) => (
 	</div>
 );
 
-const styles = {
-	iconWrapper: "flex items-center h-16",
+interface StepTextProps extends PropsWithChildren {
+	variant: string;
+}
 
-	textWrapper: (variant: string) =>
-		classNames(
+const StepText: FC<StepTextProps> = ({ children, variant }) => (
+	<div
+		className={classNames(
 			"flex justify-center w-10 mx-1 text-md",
 			{ small: "w-10", large: "w-12" }[variant]
-		),
+		)}
+	>
+		{children}
+	</div>
+);
 
-	line: (variant?: string) =>
-		classNames(
+const IconWrapper: FC<PropsWithChildren> = ({ children }) => (
+	<div className="flex items-center h-16">{children}</div>
+);
+
+const StepLine: FC<{ hero?: boolean }> = ({ hero }) => (
+	<span
+		className={classNames(
 			"w-32 h-0 border-2 rounded-xl",
-			{ hero: "border-hero" }[variant || ""]
-		),
-};
+			hero && "border-hero"
+		)}
+	/>
+);
