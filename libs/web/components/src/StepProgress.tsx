@@ -53,7 +53,9 @@ export const StepProgress: FC<StepProgressProps> = ({
 									<div
 										className={classNames(
 											"mx-1 h-10 w-10 rounded-3xl border-4",
-											index === stepIndex + 1 && "border-hero"
+											index === stepIndex + 1
+												? "border-hero"
+												: "border-gray-400"
 										)}
 									/>
 
@@ -62,7 +64,7 @@ export const StepProgress: FC<StepProgressProps> = ({
 									</If>
 								</IconWrapper>
 
-								<StepText>{step}</StepText>
+								<StepText waiting={index > stepIndex + 1}>{step}</StepText>
 							</div>
 						</Choose.When>
 					</Choose>
@@ -73,21 +75,30 @@ export const StepProgress: FC<StepProgressProps> = ({
 	</div>
 );
 
-const StepText: FC<PropsWithChildren> = ({ children }) => (
-	<div className={classNames("text-md mx-1 flex w-10 justify-center")}>
+interface StepTextProps extends PropsWithChildren {
+	waiting?: boolean;
+}
+
+const StepText: FC<StepTextProps> = ({ waiting, children }) => (
+	<div
+		className={classNames(
+			"text-md mx-1 flex w-10 justify-center",
+			waiting && "text-gray-500"
+		)}
+	>
 		{children}
 	</div>
-);
-
-const IconWrapper: FC<PropsWithChildren> = ({ children }) => (
-	<div className="flex h-16 items-center">{children}</div>
 );
 
 const StepLine: FC<{ hero?: boolean }> = ({ hero }) => (
 	<span
 		className={classNames(
 			"h-0 w-32 rounded-xl border-2",
-			hero && "border-hero"
+			hero ? "border-hero" : "border-gray-400"
 		)}
 	/>
+);
+
+const IconWrapper: FC<PropsWithChildren> = ({ children }) => (
+	<div className="flex h-16 items-center">{children}</div>
 );
