@@ -79,7 +79,8 @@ export default withMethodGuard(
 				signAndSendPromise(discordExtrinsic, discordRegistrar.signer),
 			]);
 
-			assignIdentityRole(discordUsername);
+			// 4. Assign user with a special role
+			assignDiscordRole(discordUsername);
 
 			return res.json({ ok: true });
 		} catch (error) {
@@ -89,7 +90,7 @@ export default withMethodGuard(
 	["POST"]
 );
 
-const assignIdentityRole = (discordUsername: string) => {
+const assignDiscordRole = (discordUsername: string) => {
 	const [username, discriminator] = discordUsername.split("#");
 
 	bot.on("ready", async () => {
