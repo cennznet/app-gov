@@ -1,3 +1,4 @@
+import Discord from "discord.js";
 import { getToken } from "next-auth/jwt";
 
 import { NEXTAUTH_SECRET } from "@app-gov/node/constants";
@@ -10,6 +11,19 @@ import {
 	signAndSendPromise,
 } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import { DISCORD_BOT } from "@app-gov/service/constants";
+
+const bot = new Discord.Client({
+	partials: ["CHANNEL"],
+	intents: [
+		Discord.Intents.FLAGS.GUILDS,
+		Discord.Intents.FLAGS.GUILD_MESSAGES,
+		Discord.Intents.FLAGS.GUILD_MEMBERS,
+		Discord.Intents.FLAGS.DIRECT_MESSAGES,
+	],
+});
+
+bot.login(DISCORD_BOT.Token);
 
 export default withMethodGuard(
 	async function identityConnectRoute(req, res) {
@@ -65,8 +79,7 @@ export default withMethodGuard(
 				signAndSendPromise(discordExtrinsic, discordRegistrar.signer),
 			]);
 
-			// 4. Assign user with a special role in Discord
-			// TODO
+			assignIdentityRole(discordUsername);
 
 			return res.json({ ok: true });
 		} catch (error) {
@@ -75,3 +88,35 @@ export default withMethodGuard(
 	},
 	["POST"]
 );
+
+const assignIdentityRole = (discordUsername: string) => {
+	const [username, discriminator] = discordUsername.split("#");
+
+	bot.on("ready", async () => {
+		const guildCache = bot.guilds.cache.get(DISCORD_BOT.ServerId);
+		if (!guildCache) throw { message: "DISCORD_SERVER_NOT_FOUND" };
+		await guildCache.members.fetch();
+
+		const user = guildCache.members.cache.find((user) => {
+			return (
+				user.user.username === username &&
+				user.user.discriminator === discriminator
+			);
+		});
+		if (!user) throw { message: "DISCORD_USER_NOT_FOUND" };
+
+		const identityRole = guildCache.roles.cache.find(
+			(role) => role.id === DISCORD_BOT.IdentityRoleId
+		);
+		if (!identityRole) throw { message: "DISCORD_IDENTITY_ROLE_NOT_FOUND" };
+
+		await user.roles.add(identityRole);
+		// Send a message to the user letting them know the verification has been successful
+		await user.send(
+			`***Congratulations on completing the steps for verifying your identity.*** \n\n` +
+				`Thank you for supporting CENNZnet and helping to build the blockchain for the Metaverse!\n` +
+				`You have been assigned the ${identityRole.name} role and can now participate in private channels\n` +
+				`Please note that for your safety, we will never ask for private keys, seed phrases or send links via DM.`
+		);
+	});
+};
