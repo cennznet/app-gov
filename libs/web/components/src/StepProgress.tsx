@@ -48,7 +48,7 @@ export const StepProgress: FC<StepProgressProps> = ({ steps, stepIndex }) => (
 								<div
 									className={classNames(
 										"h-10 w-10 border-4 rounded-3xl mx-1",
-										index < steps.length - 1 && "border-hero"
+										index === stepIndex + 1 && "border-hero"
 									)}
 								/>
 								<If condition={index < steps.length - 1}>
