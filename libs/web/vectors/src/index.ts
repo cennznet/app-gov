@@ -3,6 +3,7 @@ export {
 	ReactComponent as CENNZNetLogo,
 	default as CENNZNetLogoSrc,
 } from "./cennznet.svg";
+export { default as BackdropSrc } from "./backdrop.svg";
 export { ReactComponent as ChevronDown } from "./chevron-down.svg";
 export { ReactComponent as X } from "./x.svg";
 export { ReactComponent as DiscordLogo } from "./discord.svg";
