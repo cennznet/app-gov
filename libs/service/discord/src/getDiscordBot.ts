@@ -1,16 +1,16 @@
-import Discord from "discord.js";
+import { Client as DiscordClient, Intents } from "discord.js";
 
-const bot = new Discord.Client({
+const bot = new DiscordClient({
 	partials: ["CHANNEL"],
 	intents: [
-		Discord.Intents.FLAGS.GUILDS,
-		Discord.Intents.FLAGS.GUILD_MESSAGES,
-		Discord.Intents.FLAGS.GUILD_MEMBERS,
-		Discord.Intents.FLAGS.DIRECT_MESSAGES,
+		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_MESSAGES,
+		Intents.FLAGS.GUILD_MEMBERS,
+		Intents.FLAGS.DIRECT_MESSAGES,
 	],
 });
 
-export const getDiscordBot = (token: string) =>
+export const getDiscordBot = (token: string): Promise<DiscordClient> =>
 	new Promise((resolve, reject) => {
 		try {
 			bot.login(token);
