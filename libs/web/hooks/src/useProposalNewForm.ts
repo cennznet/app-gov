@@ -15,6 +15,20 @@ export interface ProposalFormState {
 	statusMessage?: string;
 }
 
+interface ProposalFormInputs {
+	"justification": string;
+	"enactmentDelay": string;
+	"callSection": string;
+	"callMethod": string;
+	"callArgs[]": string;
+	"sponsor": string;
+}
+
+type ProposalFormData = Map<
+	keyof ProposalFormInputs,
+	ProposalFormInputs[keyof ProposalFormInputs]
+>;
+
 interface PropsalData extends Record<string, unknown> {
 	sponsor: string;
 	enactmentDelay: number;
@@ -35,47 +49,52 @@ export const useProposalNewForm = () => {
 			setFormState((current) => ({ ...current, step: "Await" }));
 
 			try {
-				const proposalData = processFormData(api, data);
-				const { hash, url } = await pinProposalData(proposalData);
-				const { sponsor, functionCall, enactmentDelay } = proposalData;
-				const extrinsic = getSubmitProposalExtrinsic(
+				const proposalData = transformFormData(
 					api,
-					functionCall,
-					url,
-					enactmentDelay
-				);
-				const tx = await signAndSendTx(extrinsic, wallet.signer, sponsor);
-
-				tx.on("txCancelled", () =>
-					setFormState((current) => ({
-						...current,
-						status: "Cancelled",
-					}))
+					data as unknown as ProposalFormData
 				);
 
-				tx.on("txHashed", () => {
-					setFormState((current) => ({ ...current, step: "Submit" }));
-				});
+				console.log({ proposalData });
+				// const { hash, url } = await pinProposalData(proposalData);
+				// const { sponsor, functionCall, enactmentDelay } = proposalData;
+				// const extrinsic = getSubmitProposalExtrinsic(
+				// 	api,
+				// 	functionCall,
+				// 	url,
+				// 	enactmentDelay
+				// );
+				// const tx = await signAndSendTx(extrinsic, wallet.signer, sponsor);
 
-				tx.on("txFailed", (error) => {
-					const { code = "UNKNOWN", message = "" } = tx.decodeError(error);
+				// tx.on("txCancelled", () =>
+				// 	setFormState((current) => ({
+				// 		...current,
+				// 		status: "Cancelled",
+				// 	}))
+				// );
 
-					setFormState((current) => ({
-						...current,
-						status: "NotOk",
-						message: `[CENNZ/${code}] ${message}`,
-					}));
-				});
+				// tx.on("txHashed", () => {
+				// 	setFormState((current) => ({ ...current, step: "Submit" }));
+				// });
 
-				tx.on("txSuccessful", async (result) => {
-					setFormState((current) => ({ ...current, step: "Process" }));
-					const event = tx.findEvent(result, "governance", "submitProposal");
-					console.log(event);
+				// tx.on("txFailed", (error) => {
+				// 	const { code = "UNKNOWN", message = "" } = tx.decodeError(error);
 
-					setFormState(
-						(current) => ({ ...current, status: "Ok" } as ProposalFormState)
-					);
-				});
+				// 	setFormState((current) => ({
+				// 		...current,
+				// 		status: "NotOk",
+				// 		message: `[CENNZ/${code}] ${message}`,
+				// 	}));
+				// });
+
+				// tx.on("txSuccessful", async (result) => {
+				// 	setFormState((current) => ({ ...current, step: "Process" }));
+				// 	const event = tx.findEvent(result, "governance", "submitProposal");
+				// 	console.log(event);
+
+				// 	setFormState(
+				// 		(current) => ({ ...current, status: "Ok" } as ProposalFormState)
+				// 	);
+				// });
 			} catch (error) {
 				console.info(error);
 				setFormState(
@@ -98,33 +117,33 @@ export const useProposalNewForm = () => {
 	return { submitForm, formState, resetFormState };
 };
 
-const processFormData = (api: Api, formData: FormData): PropsalData => {
+const transformFormData = (
+	api: Api,
+	formData: ProposalFormData
+): PropsalData => {
 	const blocksInHour =
 		(60 * 60) / ((api.consts.babe.expectedBlockTime.toJSON() as number) / 1000);
 	return Array.from(formData).reduce(
 		(data, [key, value]) => {
 			switch (key) {
-				case "address":
-					data.sponsor = value.toString();
+				case "sponsor":
+				case "justification":
+					data[key] = value.toString();
 					break;
-				case "enactmentDelayInHours":
+				case "enactmentDelay":
 					data.enactmentDelay = Number(value) * blocksInHour;
 					break;
 
-				case "functionSection":
+				case "callSection":
 					data.functionCall[0] = value.toString();
 					break;
 
-				case "functionMethod":
+				case "callMethod":
 					data.functionCall[1] = value.toString();
 					break;
 
-				case "functionArgs[]":
+				case "callArgs[]":
 					data.functionCall.push(value as string);
-					break;
-
-				case "justification":
-					data.justification = value.toString();
 					break;
 			}
 

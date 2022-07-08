@@ -1,6 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { FormEventHandler, useCallback, useEffect } from "react";
-import { If } from "react-extras";
+import { ChangeEventHandler, useCallback, useEffect } from "react";
 
 import {
 	extractCallableExtrinsics,
@@ -8,29 +7,20 @@ import {
 } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
-	AccountSelect,
-	Button,
 	FunctionCallFieldSet,
 	Header,
 	Layout,
-	MarkdownField,
-	Select,
-	useTransactionDialog,
+	ProposalNewForm,
 } from "@app-gov/web/components";
-import {
-	useControlledCheckbox,
-	useControlledInput,
-	useProposalNewForm,
-} from "@app-gov/web/hooks";
+import { useProposalNewForm } from "@app-gov/web/hooks";
 
-interface StaticProps {
+interface NewProposalProps {
 	extrinsics: Awaited<ReturnType<typeof extractCallableExtrinsics>>;
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+export const getStaticProps: GetStaticProps<NewProposalProps> = async () => {
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 	const extrinsics = await extractCallableExtrinsics(api);
-
 	return {
 		props: {
 			extrinsics,
@@ -38,43 +28,20 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 	};
 };
 
-const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
-	const {
-		value: justification,
-		onChange: onJustificationChange,
-		resetValue: resetJustificationValue,
-	} = useControlledInput<string, HTMLTextAreaElement>("");
+const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
+	const { submitForm } = useProposalNewForm();
 
-	const {
-		value: functionCall,
-		onChange: onFunctionCallChange,
-		resetValue: resetFunctionCallValue,
-	} = useControlledCheckbox(true);
-
-	const { submitForm, formState, resetFormState } = useProposalNewForm();
-	const { open, openDialog, closeDialog } = useTransactionDialog();
-
-	console.log(formState);
-
-	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+	const onFormSubmit: ChangeEventHandler<HTMLFormElement> = useCallback(
 		(event) => {
 			event.preventDefault();
-			openDialog();
-			submitForm(new FormData(event.target as HTMLFormElement));
+			submitForm(new FormData(event.target));
 		},
-		[openDialog, submitForm]
+		[submitForm]
 	);
 
-	const onDismissClick = useCallback(() => {
-		closeDialog();
-		setTimeout(() => {
-			resetFormState();
-		}, 200);
-	}, [closeDialog, resetFormState]);
-
 	useEffect(() => {
-		window["onDismissClick"] = onDismissClick;
-	}, [onDismissClick]);
+		window.resetForm = () => setFormKey(Date.now());
+	}, []);
 
 	return (
 		<Layout>
@@ -90,111 +57,9 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 					commodo do anim incididunt sunt id pariatur elit tempor nostrud nulla
 					eu proident ut id qui incididunt.
 				</p>
-				<form onSubmit={onFormSubmit} key={formState.key}>
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-						Proposal Details
-					</h2>
-
-					<fieldset className="mb-6">
-						<label
-							className="mb-1 block text-lg font-bold"
-							htmlFor="justification"
-						>
-							Justification
-						</label>
-						<MarkdownField
-							required
-							id="justification"
-							name="justification"
-							value={justification}
-							onChange={onJustificationChange}
-						/>
-					</fieldset>
-
-					<fieldset className="mb-6">
-						<label
-							className="mb-1 block text-lg font-bold"
-							htmlFor="enactmentDelayInHours"
-						>
-							Enactment Delay
-						</label>
-						<Select
-							className="w-1/2"
-							id="enactmentDelayInHours"
-							name="enactmentDelayInHours"
-						>
-							<option value={24}>24 hours</option>
-							<option value={12}>12 hours</option>
-							<option value={6}>6 hours</option>
-							<option value={1}>1 hour</option>
-						</Select>
-					</fieldset>
-
-					<fieldset className="mb-6">
-						<label
-							htmlFor="functionCall"
-							className="flex cursor-pointer items-center"
-						>
-							<input
-								type="checkbox"
-								checked={functionCall}
-								onChange={onFunctionCallChange}
-								className="mr-1 inline-block"
-								id="functionCall"
-							/>
-							This proposal require a function call
-						</label>
-					</fieldset>
-
-					<If condition={functionCall}>
-						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-							Function Call
-						</h2>
-
-						<fieldset className="mb-6 grid grid-cols-2 gap-4">
-							<FunctionCallFieldSet.Provider extrinsics={extrinsics}>
-								<div className="cols-span-1">
-									<label className="mb-1 block text-lg font-bold">
-										Section
-									</label>
-									<FunctionCallFieldSet.Section name="functionSection" />
-								</div>
-								<div className="cols-span-2">
-									<label className="mb-1 block text-lg font-bold">Method</label>
-									<FunctionCallFieldSet.Method name="functionMethod" />
-								</div>
-								<div className="col-span-full">
-									<label className="mb-1 block text-lg font-bold">
-										Arguments
-									</label>
-									<FunctionCallFieldSet.Args name="functionArgs[]" />
-								</div>
-							</FunctionCallFieldSet.Provider>
-						</fieldset>
-					</If>
-
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-						Signing Wallet
-					</h2>
-
-					<fieldset className="mb-6">
-						<p className="mb-4">
-							Ex consequat occaecat id nulla voluptate anim eu velit et laboris
-							reprehenderit ut dolor magna ut minim voluptate labore non
-							adipisicing
-						</p>
-						<AccountSelect required name="address" />
-					</fieldset>
-
-					<fieldset className="mt-16 text-center">
-						<Button type="submit" className="w-1/3 text-center">
-							<div className="flex items-center justify-center">
-								<span>Sign and Submit</span>
-							</div>
-						</Button>
-						<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
-					</fieldset>
-				</form>
+				<FunctionCallFieldSet.Provider extrinsics={extrinsics}>
+					<ProposalNewForm onSubmit={onFormSubmit} />
+				</FunctionCallFieldSet.Provider>
 			</div>
 		</Layout>
 	);

@@ -1,9 +1,8 @@
-import { ChangeEvent, ChangeEventHandler, useCallback, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, useState } from "react";
 
 interface ControlledInputHook<T, E> {
 	value: T;
 	onChange: ChangeEventHandler<E>;
-	resetValue: (value?: T) => void;
 }
 
 export const useControlledInput = <
@@ -17,38 +16,20 @@ export const useControlledInput = <
 	const onChange = (event: ChangeEvent<E>) =>
 		setValue(event.target.value as unknown as T);
 
-	const resetValue = useCallback(
-		(value = defaultValue) => {
-			setValue(value);
-		},
-		[defaultValue]
-	);
-
 	return {
 		value,
 		onChange,
-		resetValue,
 	};
 };
 
-export const useControlledCheckbox = (
-	defaultValue: boolean
-): ControlledInputHook<boolean, HTMLInputElement> => {
-	const [value, setValue] = useState<boolean>(defaultValue);
+export const useControlledCheckbox = (defaultChecked: boolean) => {
+	const [checked, setCheked] = useState<boolean>(defaultChecked);
 
 	const onChange = (event: ChangeEvent<HTMLInputElement>) =>
-		setValue(event.target.checked);
-
-	const resetValue = useCallback(
-		(value = defaultValue) => {
-			setValue(value);
-		},
-		[defaultValue]
-	);
+		setCheked(event.target.checked);
 
 	return {
-		value,
+		checked,
 		onChange,
-		resetValue,
 	};
 };
