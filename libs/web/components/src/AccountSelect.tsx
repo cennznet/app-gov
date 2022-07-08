@@ -23,7 +23,7 @@ export const AccountSelect: FC<SelectProps> = (props) => {
 	return (
 		<Select
 			placeholder="Connect CENNZnet Wallet"
-			inputClassName="!py-4"
+			inputClassName="!py-3"
 			defaultValue={selectedAccount}
 			onChange={onCENNZAccountSelect}
 			endAdornment={

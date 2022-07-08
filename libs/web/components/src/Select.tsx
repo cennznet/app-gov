@@ -40,7 +40,7 @@ export const Select: FC<IntrinsicElements["select"] & SelectProps> = ({
 				defaultValue={defaultValue}
 				className={classNames(
 					inputClassName,
-					"mr-2 min-w-0 flex-1 cursor-pointer border border-white bg-white px-2 py-2 outline-none",
+					"mr-2 min-w-0 flex-1 cursor-pointer border-none bg-white px-2 py-2 outline-none",
 					!!defaultValue || !placeholder ? "opacity" : "opacity-0"
 				)}
 			>
