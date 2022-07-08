@@ -21,6 +21,7 @@
       "@app-gov/node/utils": ["libs/node/utils/src/index.ts"],
       "@app-gov/service/cennznet": ["libs/service/cennznet/src/index.ts"],
       "@app-gov/service/constants": ["libs/service/constants/src/index.ts"],
+      "@app-gov/service/discord": ["libs/service/discord/src/index.ts"],
       "@app-gov/service/pinata": ["libs/service/pinata/src/index.ts"],
       "@app-gov/web/bitmaps": ["libs/web/bitmaps/src/index.ts"],
       "@app-gov/web/components": ["libs/web/components/src/index.ts"],
