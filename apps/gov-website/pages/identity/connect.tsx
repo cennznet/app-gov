@@ -29,7 +29,7 @@ interface StaticProps {
 	discordRegistrarIndex: number;
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async (context) => {
+export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 	const { twitter, discord } = await fetchRequiredRegistrars(api);
 
