@@ -156,7 +156,7 @@ const Connect: NextPage<StaticProps> = ({
 								name="twitterUsername"
 								value={twitterUsername}
 								onInput={onNoop}
-								// required
+								required
 								endAdornment={
 									<div className="flex items-center">
 										<If condition={!!twitterUsername}>
@@ -185,7 +185,7 @@ const Connect: NextPage<StaticProps> = ({
 								name="discordUsername"
 								value={discordUsername}
 								onChange={onNoop}
-								// required
+								required
 								endAdornment={
 									<div className="flex items-center">
 										<If condition={!!discordUsername}>
