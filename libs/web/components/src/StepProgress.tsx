@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { Choose, classNames, If } from "react-extras";
 
 import { PropsWithChildren } from "@app-gov/web/types";
-import { CheckCircle, Spinner } from "@app-gov/web/vectors";
+import { CheckCircleFilled, Spinner } from "@app-gov/web/vectors";
 
 interface StepProgressProps extends PropsWithChildren {
 	steps: string[];
@@ -22,8 +22,8 @@ export const StepProgress: FC<StepProgressProps> = ({
 						<Choose.When condition={index < stepIndex}>
 							<div>
 								<IconWrapper>
-									<CheckCircle className="text-hero h-12 w-12" />
-									<StepLine hero />
+									<CheckCircleFilled className="text-hero h-12 w-12" />
+									<StepLine active />
 								</IconWrapper>
 
 								<StepText>{step}</StepText>
@@ -34,12 +34,12 @@ export const StepProgress: FC<StepProgressProps> = ({
 							<div>
 								<IconWrapper>
 									<If condition={index === steps.length - 1}>
-										<CheckCircle className="text-hero h-12 w-12" />
+										<CheckCircleFilled className="text-hero h-12 w-12" />
 									</If>
 
 									<If condition={index < steps.length - 1}>
 										<Spinner className="text-hero mx-1 h-10 w-10 animate-spin" />
-										<StepLine hero />
+										<StepLine active />
 									</If>
 								</IconWrapper>
 
@@ -53,9 +53,7 @@ export const StepProgress: FC<StepProgressProps> = ({
 									<div
 										className={classNames(
 											"mx-1 h-10 w-10 rounded-3xl border-4",
-											index === stepIndex + 1
-												? "border-hero"
-												: "border-gray-400"
+											index === stepIndex + 1 ? "border-hero" : "border-hero/40"
 										)}
 									/>
 
@@ -90,11 +88,11 @@ const StepText: FC<StepTextProps> = ({ waiting, children }) => (
 	</div>
 );
 
-const StepLine: FC<{ hero?: boolean }> = ({ hero }) => (
+const StepLine: FC<{ active?: boolean }> = ({ active }) => (
 	<span
 		className={classNames(
 			"h-0 w-32 rounded-xl border-2",
-			hero ? "border-hero" : "border-gray-400"
+			active ? "border-hero" : "border-hero/40"
 		)}
 	/>
 );
