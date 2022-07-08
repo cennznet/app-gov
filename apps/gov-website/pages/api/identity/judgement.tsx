@@ -83,7 +83,7 @@ const assignDiscordRole = async (discordUsername: string) => {
 	const [username, discriminator] = discordUsername.split("#");
 
 	const discordBot = await getDiscordBot(DISCORD_BOT.Token);
-	
+
 	const guildCache = discordBot.guilds.cache.get(DISCORD_BOT.ServerId);
 	if (!guildCache) throw { message: "DISCORD_SERVER_NOT_FOUND" };
 	await guildCache.members.fetch();

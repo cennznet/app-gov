@@ -50,26 +50,26 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
+			<div className="w-full max-w-2xl lg:max-w-3xl flex-1 self-center px-8 pb-12">
 				<form onSubmit={onFormSubmit}>
-					<h1 className="font-display text-hero mb-8 text-center text-7xl uppercase">
+					<h1 className="font-display text-hero md:mb-6 mb-4 lg:mb-8 text-center text-6xl uppercase">
 						Submit a Proposal
 					</h1>
 
-					<p className="mb-8 text-lg">
+					<p className="prose mb-8 text-base">
 						To submit a proposal you must be a CENNZnet Councillor. Lorem
 						laborum dolor minim mollit eu reprehenderit culpa dolore labore
 						dolor mollit commodo do anim incididunt sunt id pariatur elit tempor
 						nostrud nulla eu proident ut id qui incididunt.
 					</p>
 
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+					<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 						Proposal Details
 					</h2>
 
 					<fieldset className="mb-6">
 						<label
-							className="mb-1 block text-lg font-bold"
+							className="mb-1 block text-base font-bold"
 							htmlFor="justification"
 						>
 							Justification
@@ -84,7 +84,7 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 
 					<fieldset className="mb-6">
 						<label
-							className="mb-1 block text-lg font-bold"
+							className="mb-1 block text-base font-bold"
 							htmlFor="enacmentDelay"
 						>
 							Enactment Delay
@@ -114,24 +114,24 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 					</fieldset>
 
 					<If condition={functionCall}>
-						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+						<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 							Function Call
 						</h2>
 
 						<fieldset className="mb-6 grid grid-cols-2 gap-4">
 							<FunctionCallFieldSet.Provider extrinsics={extrinsics}>
 								<div className="cols-span-1">
-									<label className="mb-1 block text-lg font-bold">
+									<label className="mb-1 block text-base font-bold">
 										Section
 									</label>
 									<FunctionCallFieldSet.Section />
 								</div>
 								<div className="cols-span-2">
-									<label className="mb-1 block text-lg font-bold">Method</label>
+									<label className="mb-1 block text-base font-bold">Method</label>
 									<FunctionCallFieldSet.Method />
 								</div>
 								<div className="col-span-full">
-									<label className="mb-1 block text-lg font-bold">
+									<label className="mb-1 block text-base font-bold">
 										Arguments
 									</label>
 									<FunctionCallFieldSet.Args />
@@ -140,13 +140,13 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 						</fieldset>
 					</If>
 
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+					<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 						Sign and Submit
 					</h2>
 
 					<fieldset className="mb-6">
 						<label
-							className="mb-1 block text-lg font-bold"
+							className="mb-1 block text-base font-bold"
 							htmlFor="enacmentDelay"
 						>
 							Signing Account
@@ -156,7 +156,7 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 
 					<fieldset className="mt-16 text-center">
 						<Button type="submit" className="w-1/3 text-center">
-							<div className="flex items-center justify-center">
+							<div className="flex items-center text-base justify-center">
 								<span>Proceed</span>
 							</div>
 						</Button>

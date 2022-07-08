@@ -92,22 +92,22 @@ const Connect: NextPage<StaticProps> = ({
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
+			<div className="w-full max-w-2xl lg:max-w-3xl flex-1 self-center px-8 pb-12">
 				<form onSubmit={onFormSubmit}>
-					<h1 className="font-display text-hero mb-8 text-center text-7xl uppercase">
+					<h1 className="font-display text-hero md:mb-6 mb-4 lg:mb-8 text-center text-6xl uppercase">
 						Set your identity
 					</h1>
 
-					<p className="mb-8 text-lg">
+					<p className="prose mb-8 text-base">
 						To become a Citizen or Councillor, we need you to verify your
 						identity. This involves connecting your wallet, and two social
 						channels (Twitter and Discord). Get started below!
 					</p>
 
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+					<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 						Connect your wallet
 					</h2>
-					<p className="mb-8">
+					<p className="prose mb-8">
 						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
@@ -116,10 +116,10 @@ const Connect: NextPage<StaticProps> = ({
 						<AccountSelect required name="address" />
 					</fieldset>
 
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+					<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 						Connect your social channels
 					</h2>
-					<p className="mb-8">
+					<p className="prose mb-8">
 						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
@@ -189,7 +189,7 @@ const Connect: NextPage<StaticProps> = ({
 					<fieldset className="mt-16 text-center">
 						<Button type="submit" className="w-1/3 text-center" disabled={open}>
 							<div className="flex items-center justify-center">
-								<span>Sign and Submit</span>
+								<span className="text-base">Sign and Submit</span>
 							</div>
 						</Button>
 						<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
