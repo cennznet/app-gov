@@ -210,84 +210,88 @@ const Connect: NextPage<StaticProps> = ({
 			</div>
 
 			<TransactionDialog open={open} onClose={onDialogClose}>
-				<If condition={formState?.status !== "NotOk"}>
-					<StepProgress
-						steps={["Confirming", "Submitting", "Processing", "Success!"]}
-						stepIndex={
-							formState?.status === "Ok"
-								? 3
-								: ["Await", "Submit", "Process"].indexOf(formState?.step)
-						}
-					>
-						<Choose>
-							<Choose.When condition={formState?.step === "Await"}>
-								<p className="text-center">
-									Please sign the transaction when prompted...
-								</p>
-							</Choose.When>
+				<Choose>
+					<Choose.When condition={formState?.status !== "NotOk"}>
+						<StepProgress
+							steps={["Confirming", "Submitting", "Processing", "Success!"]}
+							stepIndex={
+								formState?.status === "Ok"
+									? 3
+									: ["Await", "Submit", "Process"].indexOf(formState?.step)
+							}
+						>
+							<Choose>
+								<Choose.When condition={formState?.step === "Await"}>
+									<p className="text-center">
+										Please sign the transaction when prompted...
+									</p>
+								</Choose.When>
 
-							<Choose.When
-								condition={formState?.step && formState?.step !== "Await"}
-							>
-								<p className="text-center">
-									Please wait until this process completes...
-								</p>
-							</Choose.When>
+								<Choose.When condition={formState?.status === "Ok"}>
+									<p className="text-center">
+										Your identity has been successfully set. Visit Discord to
+										view the Governance channels with your new role!
+									</p>
+									<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
+										<div className="mb-4">
+											<a
+												href="https://discord.gg/zbwXQZCcwr"
+												target="_blank"
+												rel="noreferrer"
+											>
+												<Button
+													startAdornment={<DiscordLogo className="h-4" />}
+												>
+													Join Our Discord
+												</Button>
+											</a>
+										</div>
 
-							<Choose.When condition={formState?.status === "Ok"}>
-								<p className="text-center">
-									Your identity has been successfully set. Visit Discord to view
-									the Governance channels with your new role!
-								</p>
-								<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
-									<div className="mb-4">
-										<a
-											href="https://discord.gg/zbwXQZCcwr"
-											target="_blank"
-											rel="noreferrer"
-										>
-											<Button startAdornment={<DiscordLogo className="h-4" />}>
-												Join Our Discord
+										<div>
+											<Button
+												onClick={onDismissClick}
+												variant="white"
+												className="w-28"
+											>
+												Dismiss
 											</Button>
-										</a>
+										</div>
 									</div>
+								</Choose.When>
 
-									<div>
-										<Button
-											onClick={onDismissClick}
-											variant="white"
-											className="w-28"
-										>
-											Dismiss
-										</Button>
-									</div>
-								</div>
-							</Choose.When>
-						</Choose>
-					</StepProgress>
-				</If>
+								<Choose.When
+									condition={formState?.step && formState?.step !== "Await"}
+								>
+									<p className="text-center">
+										Please wait until this process completes...
+									</p>
+								</Choose.When>
+							</Choose>
+						</StepProgress>
+					</Choose.When>
 
-				<If condition={formState?.status === "NotOk"}>
-					<ExclamationCircle className="text-hero mb-2 h-12 w-12  flex-shrink-0" />
-					<div className="font-display text-hero mb-4 text-2xl uppercase">
-						Ah, Error!
-					</div>
-					<p className="text-center">
-						Something went wrong while processing your request.
-					</p>
-
-					<If condition={!!formState?.statusMessage}>
-						<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
-							{formState?.statusMessage}
+					<Choose.When condition={formState?.status === "NotOk"}>
+						<ExclamationCircle className="text-hero mb-2 h-12 w-12  flex-shrink-0" />
+						<div className="font-display text-hero mb-4 text-2xl uppercase">
+							Ah, Error!
+						</div>
+						<p className="text-center">
+							Something went wrong while processing your request.
 						</p>
-					</If>
 
-					<div className="mt-8 flex">
-						<Button onClick={onDismissClick} className="w-28">
-							Dismiss
-						</Button>
-					</div>
-				</If>
+						<If condition={!!formState?.statusMessage}>
+							<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
+								{formState?.statusMessage}
+							</p>
+						</If>
+
+						<div className="mt-8 flex">
+							<Button onClick={onDismissClick} className="w-28">
+								Dismiss
+							</Button>
+						</div>
+					</Choose.When>
+				</Choose>
 			</TransactionDialog>
 		</Layout>
 	);
