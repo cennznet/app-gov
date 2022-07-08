@@ -9,6 +9,7 @@
     "node-utils": "libs/node/utils",
     "service-cennznet": "libs/service/cennznet",
     "service-constants": "libs/service/constants",
+    "service-discord": "libs/service/discord",
     "service-pinata": "libs/service/pinata",
     "web-bitmaps": "libs/web/bitmaps",
     "web-components": "libs/web/components",
