@@ -91,9 +91,9 @@ const Connect: NextPage<StaticProps> = ({
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-2xl lg:max-w-3xl flex-1 self-center px-8 pb-12">
+			<div className="w-full max-w-2xl flex-1 self-center px-8 pb-12 lg:max-w-3xl">
 				<form onSubmit={onFormSubmit}>
-					<h1 className="font-display text-hero md:mb-6 mb-4 lg:mb-8 text-center text-6xl uppercase">
+					<h1 className="font-display text-hero mb-4 text-center text-6xl uppercase md:mb-6 lg:mb-8">
 						Set your identity
 					</h1>
 
@@ -230,7 +230,7 @@ const Connect: NextPage<StaticProps> = ({
 								</Choose.When>
 
 								<Choose.When condition={formState?.status === "Ok"}>
-									<p className="text-center">
+									<p className="prose m-auto w-4/5 text-center md:w-full">
 										Your identity has been successfully set. Visit Discord to
 										view the Governance channels with your new role!
 									</p>
@@ -243,6 +243,7 @@ const Connect: NextPage<StaticProps> = ({
 											>
 												<Button
 													startAdornment={<DiscordLogo className="h-4" />}
+													size="small"
 												>
 													Join Our Discord
 												</Button>
@@ -254,6 +255,7 @@ const Connect: NextPage<StaticProps> = ({
 												onClick={onDismissClick}
 												variant="white"
 												className="w-28"
+												size="small"
 											>
 												Dismiss
 											</Button>

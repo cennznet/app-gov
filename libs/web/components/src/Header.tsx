@@ -10,7 +10,7 @@ export const Header: FC<IntrinsicElements["div"] & HeaderProps> = ({
 	...props
 }) => {
 	return (
-		<header {...props} className="py-12 md:px-16 px-12 lg:px-20">
+		<header {...props} className="py-12 px-12 md:px-16 lg:px-20">
 			<div className="flex items-center">
 				<img
 					src={CENNZNetLogoSrc}

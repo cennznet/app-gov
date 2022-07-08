@@ -50,9 +50,9 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-2xl lg:max-w-3xl flex-1 self-center px-8 pb-12">
+			<div className="w-full max-w-2xl flex-1 self-center px-8 pb-12 lg:max-w-3xl">
 				<form onSubmit={onFormSubmit}>
-					<h1 className="font-display text-hero md:mb-6 mb-4 lg:mb-8 text-center text-6xl uppercase">
+					<h1 className="font-display text-hero mb-4 text-center text-6xl uppercase md:mb-6 lg:mb-8">
 						Submit a Proposal
 					</h1>
 
@@ -127,7 +127,9 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 									<FunctionCallFieldSet.Section />
 								</div>
 								<div className="cols-span-2">
-									<label className="mb-1 block text-base font-bold">Method</label>
+									<label className="mb-1 block text-base font-bold">
+										Method
+									</label>
 									<FunctionCallFieldSet.Method />
 								</div>
 								<div className="col-span-full">
@@ -156,7 +158,7 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 
 					<fieldset className="mt-16 text-center">
 						<Button type="submit" className="w-1/3 text-center">
-							<div className="flex items-center text-base justify-center">
+							<div className="flex items-center justify-center text-base">
 								<span>Proceed</span>
 							</div>
 						</Button>
