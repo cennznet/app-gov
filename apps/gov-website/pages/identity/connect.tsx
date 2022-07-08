@@ -108,7 +108,9 @@ const Connect: NextPage<StaticProps> = ({
 					</h2>
 					<p className="prose mb-8">
 						Connect your voting wallet here. This is the wallet that will be
-						checked against the staking requirement.
+						checked against the staking requirement. If you have a controller
+						wallet with a stash account that is actively staking, you may
+						connect your controller wallet.
 					</p>
 					<fieldset className="mb-12 min-w-0">
 						<AccountSelect required name="address" />
