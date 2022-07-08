@@ -10,16 +10,15 @@ import {
 	Button,
 	Header,
 	Layout,
+	StepProgress,
 	TextField,
 	TransactionDialog,
 	useTransactionDialog,
 } from "@app-gov/web/components";
 import { useIdentityConnectForm, useSocialSignIn } from "@app-gov/web/hooks";
 import {
-	CheckCircle,
 	DiscordLogo,
 	ExclamationCircle,
-	Spinner,
 	TwitterLogo,
 	X,
 } from "@app-gov/web/vectors";
@@ -29,7 +28,7 @@ interface StaticProps {
 	discordRegistrarIndex: number;
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async (context) => {
+export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 	const { twitter, discord } = await fetchRequiredRegistrars(api);
 
@@ -99,18 +98,19 @@ const Connect: NextPage<StaticProps> = ({
 					</h1>
 
 					<p className="prose mb-8 text-base">
-						To become a Citizen or Councillor, we need you to verify your
-						identity. This involves connecting your wallet, and two social
-						channels (Twitter and Discord). Get started below!
+						The Identity Module ensures an authentic governance and voting
+						experience. It does this by requiring every voting wallet to be
+						connected to 2 social accounts.
 					</p>
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 						Connect your wallet
 					</h2>
 					<p className="prose mb-8">
-						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
-						tempor nostrud nulla eu proident ut id qui incididunt.
+						Connect your voting wallet here. This is the wallet that will be
+						checked against the staking requirement. If you have a controller
+						wallet with a stash account that is actively staking, you may
+						connect your controller wallet.
 					</p>
 					<fieldset className="mb-12 min-w-0">
 						<AccountSelect required name="address" />
@@ -120,9 +120,12 @@ const Connect: NextPage<StaticProps> = ({
 						Connect your social channels
 					</h2>
 					<p className="prose mb-8">
-						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
-						tempor nostrud nulla eu proident ut id qui incididunt.
+						If your wallet is yet to be associated with a social account, you
+						will be able to sign in to Twitter and Discord below. This will
+						establish that you are the owner of the social accounts and
+						therefore a real individual. After seeing both the ‘Verified
+						Twitter’ and ‘Verified Discord’ icons, sign and submit the
+						transaction to send this information to the blockchain.
 					</p>
 					<fieldset className="mb-12">
 						<div className="grid grid-cols-2 items-center gap-4">
@@ -210,32 +213,63 @@ const Connect: NextPage<StaticProps> = ({
 
 			<TransactionDialog open={open} onClose={onDialogClose}>
 				<Choose>
-					<Choose.When condition={formState?.status === "Ok"}>
-						<CheckCircle className="text-hero mb-2 h-12 w-12  flex-shrink-0" />
-						<div className="font-display text-hero mb-4 text-2xl uppercase">
-							Success!
-						</div>
-						<p className="text-center">
-							Your identity has been set successfully, [and maybe some message
-							about a role has been granted, visit Discord].
-						</p>
-						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
-							<div className="mb-4">
-								<Button startAdornment={<DiscordLogo className="h-4" />}>
-									Join Our Discord
-								</Button>
-							</div>
+					<Choose.When condition={formState?.status !== "NotOk"}>
+						<StepProgress
+							steps={["Confirming", "Submitting", "Processing", "Success!"]}
+							stepIndex={
+								formState?.status === "Ok"
+									? 3
+									: ["Await", "Submit", "Process"].indexOf(formState?.step)
+							}
+						>
+							<Choose>
+								<Choose.When condition={formState?.step === "Await"}>
+									<p className="text-center">
+										Please sign the transaction when prompted...
+									</p>
+								</Choose.When>
 
-							<div>
-								<Button
-									onClick={onDismissClick}
-									variant="white"
-									className="w-28"
+								<Choose.When condition={formState?.status === "Ok"}>
+									<p className="text-center">
+										Your identity has been successfully set. Visit Discord to
+										view the Governance channels with your new role!
+									</p>
+									<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
+										<div className="mb-4">
+											<a
+												href="https://discord.gg/zbwXQZCcwr"
+												target="_blank"
+												rel="noreferrer"
+											>
+												<Button
+													startAdornment={<DiscordLogo className="h-4" />}
+												>
+													Join Our Discord
+												</Button>
+											</a>
+										</div>
+
+										<div>
+											<Button
+												onClick={onDismissClick}
+												variant="white"
+												className="w-28"
+											>
+												Dismiss
+											</Button>
+										</div>
+									</div>
+								</Choose.When>
+
+								<Choose.When
+									condition={formState?.step && formState?.step !== "Await"}
 								>
-									Dismiss
-								</Button>
-							</div>
-						</div>
+									<p className="text-center">
+										Please wait until this process completes...
+									</p>
+								</Choose.When>
+							</Choose>
+						</StepProgress>
 					</Choose.When>
 
 					<Choose.When condition={formState?.status === "NotOk"}>
@@ -258,33 +292,6 @@ const Connect: NextPage<StaticProps> = ({
 								Dismiss
 							</Button>
 						</div>
-					</Choose.When>
-					<Choose.When condition={formState?.step === "Await"}>
-						<Spinner className="text-hero mb-2 h-8 w-8 flex-shrink-0 animate-spin" />
-						<div className="font-display text-hero mb-4 text-2xl uppercase">
-							Confirm with Signature [1/3]
-						</div>
-						<p className="text-center">
-							Please sign the transaction when prompted...
-						</p>
-					</Choose.When>
-					<Choose.When condition={formState?.step === "Submit"}>
-						<Spinner className="text-hero mb-2 h-8 w-8 flex-shrink-0  animate-spin" />
-						<div className="font-display text-hero mb-4 text-2xl uppercase">
-							Submitting Request [2/3]
-						</div>
-						<p className="text-center">
-							Please wait until this proccess completes...
-						</p>
-					</Choose.When>
-					<Choose.When condition={formState?.step === "Process"}>
-						<Spinner className="text-hero mb-2 h-8 w-8 flex-shrink-0  animate-spin" />
-						<div className="font-display text-hero mb-4 text-2xl uppercase">
-							Providing Judgement [3/3]
-						</div>
-						<p className="text-center">
-							Please wait until this proccess completes...
-						</p>
 					</Choose.When>
 				</Choose>
 			</TransactionDialog>
