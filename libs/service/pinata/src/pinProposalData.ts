@@ -31,14 +31,8 @@ export const pinProposalData = async (
 
 	if (!response.ok)
 		throw {
-			code: data?.error?.reason ?? response.status,
+			code: `PINATA/${data?.error?.reason ?? response.status}`,
 			message: data?.error?.details ?? response.statusText,
-		};
-
-	if (!data.IpfsHash)
-		throw {
-			code: `UNKNOWN`,
-			message: "IpfsHash is not defined",
 		};
 
 	return { hash: data.IpfsHash, url: `${PINATA_GATEWAY}/${data.IpfsHash}` };
