@@ -74,10 +74,6 @@ export const signAndSend = async (
 					statusCallbacks?.onHashed?.((hash = txHash.toString()));
 				}
 
-				if (!status.isInBlock && !status.isFinalized) return;
-
-				if (status.isInBlock) statusCallbacks?.onInBlock?.(result);
-
 				if (dispatchError && !dispatchError.isModule) {
 					return reject({
 						code: "CENNZ/UNKNOWN",
@@ -97,6 +93,7 @@ export const signAndSend = async (
 					});
 				}
 
+				if (status.isInBlock) return statusCallbacks?.onInBlock?.(result);
 				if (status.isFinalized) return resolve(result);
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
