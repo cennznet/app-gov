@@ -3,13 +3,12 @@ import { useCallback, useState } from "react";
 
 import {
 	getSubmitProposalExtrinsic,
-	signAndSendTx,
+	signAndSend,
 } from "@app-gov/service/cennznet";
 import { pinProposalData } from "@app-gov/service/pinata";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface ProposalFormState {
-	key: number;
 	step?: "Await" | "Submit" | "Process";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
@@ -39,14 +38,23 @@ interface PropsalData extends Record<string, unknown> {
 export const useProposalNewForm = () => {
 	const { api } = useCENNZApi();
 	const { wallet } = useCENNZWallet();
-	const [formState, setFormState] = useState<ProposalFormState>({
-		key: Date.now(),
-	});
+	const [formState, setFormState] = useState<ProposalFormState>({});
+
+	const setFormStep = (step: ProposalFormState["step"]) => {
+		setFormState({ step });
+	};
+
+	const setFormStatus = (
+		status: ProposalFormState["status"],
+		statusMessage?: ProposalFormState["statusMessage"]
+	) => {
+		setFormState((current) => ({ ...current, status, statusMessage }));
+	};
 
 	const submitForm = useCallback(
 		async (data: FormData) => {
 			if (!api || !wallet) return;
-			setFormState((current) => ({ ...current, step: "Await" }));
+			setFormStep("Await");
 
 			try {
 				const proposalData = transformFormData(
@@ -54,56 +62,29 @@ export const useProposalNewForm = () => {
 					data as unknown as ProposalFormData
 				);
 
-				console.log({ proposalData });
-				// const { hash, url } = await pinProposalData(proposalData);
-				// const { sponsor, functionCall, enactmentDelay } = proposalData;
-				// const extrinsic = getSubmitProposalExtrinsic(
-				// 	api,
-				// 	functionCall,
-				// 	url,
-				// 	enactmentDelay
-				// );
-				// const tx = await signAndSendTx(extrinsic, wallet.signer, sponsor);
+				const { hash, url } = await pinProposalData(proposalData);
+				const { sponsor, functionCall, enactmentDelay } = proposalData;
+				const extrinsic = getSubmitProposalExtrinsic(
+					api,
+					functionCall,
+					url,
+					enactmentDelay
+				);
 
-				// tx.on("txCancelled", () =>
-				// 	setFormState((current) => ({
-				// 		...current,
-				// 		status: "Cancelled",
-				// 	}))
-				// );
+				await signAndSend([extrinsic, sponsor, { signer: wallet.signer }], {
+					onHashed() {
+						setFormStep("Submit");
+					},
 
-				// tx.on("txHashed", () => {
-				// 	setFormState((current) => ({ ...current, step: "Submit" }));
-				// });
-
-				// tx.on("txFailed", (error) => {
-				// 	const { code = "UNKNOWN", message = "" } = tx.decodeError(error);
-
-				// 	setFormState((current) => ({
-				// 		...current,
-				// 		status: "NotOk",
-				// 		message: `[CENNZ/${code}] ${message}`,
-				// 	}));
-				// });
-
-				// tx.on("txSuccessful", async (result) => {
-				// 	setFormState((current) => ({ ...current, step: "Process" }));
-				// 	const event = tx.findEvent(result, "governance", "submitProposal");
-				// 	console.log(event);
-
-				// 	setFormState(
-				// 		(current) => ({ ...current, status: "Ok" } as ProposalFormState)
-				// 	);
-				// });
-			} catch (error) {
-				console.info(error);
-				setFormState(
-					(current) =>
-						({
-							...current,
-							status: "NotOk",
-							message: (error as Error)?.message,
-						} as ProposalFormState)
+					onCancelled() {
+						setFormStatus("Cancelled");
+					},
+				});
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			} catch (error: any) {
+				setFormStatus(
+					"NotOk",
+					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
 				);
 			}
 		},
@@ -111,7 +92,7 @@ export const useProposalNewForm = () => {
 	);
 
 	const resetFormState = useCallback(() => {
-		setFormState({ key: Date.now() });
+		setFormState({});
 	}, []);
 
 	return { submitForm, formState, resetFormState };

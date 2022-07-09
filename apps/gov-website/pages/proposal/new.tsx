@@ -29,7 +29,7 @@ export const getStaticProps: GetStaticProps<NewProposalProps> = async () => {
 };
 
 const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
-	const { submitForm } = useProposalNewForm();
+	const { submitForm, formState } = useProposalNewForm();
 
 	const onFormSubmit: ChangeEventHandler<HTMLFormElement> = useCallback(
 		(event) => {
@@ -38,6 +38,8 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 		},
 		[submitForm]
 	);
+
+	console.log(formState);
 
 	useEffect(() => {
 		window.resetForm = () => setFormKey(Date.now());
