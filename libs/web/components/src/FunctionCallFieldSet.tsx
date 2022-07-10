@@ -94,7 +94,6 @@ const Section: FC<Omit<SelectProps, "children">> = (props) => {
 	const onChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
 		(event) => {
 			if (!setSelectedSection) return;
-			console.log(event.target.value);
 			setSelectedSection(event.target.value);
 		},
 		[setSelectedSection]
@@ -133,7 +132,14 @@ const Method: FC<Omit<SelectProps, "children">> = (props) => {
 	);
 };
 
-const Args: FC<Omit<IntrinsicElements["ul"], "children">> = (props) => {
+interface ArgsProps {
+	name?: string;
+}
+
+const Args: FC<Omit<IntrinsicElements["ul"], "children"> & ArgsProps> = ({
+	name,
+	...props
+}) => {
 	const { argList, selectedSection, selectedMethod } = useContext(Context);
 
 	return (
@@ -147,6 +153,7 @@ const Args: FC<Omit<IntrinsicElements["ul"], "children">> = (props) => {
 						placeholder={`\`${arg.type}\``}
 						className="font-mono"
 						required
+						name={name}
 						startAdornment={
 							<span className="block w-36 border-r border-slate-200 font-mono">
 								{arg.name}

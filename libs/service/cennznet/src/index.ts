@@ -9,3 +9,5 @@ export * from "./fetchIdentityOf";
 export * from "./hashIdentityValue";
 export * from "./getProvideJudgementExtrinsic";
 export * from "./extractCallableExtrinsics";
+export * from "./getSubmitProposalExtrinsic";
+export * from "./findProposalId";

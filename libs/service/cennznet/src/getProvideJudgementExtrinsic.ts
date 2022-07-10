@@ -1,6 +1,5 @@
 import { Api } from "@cennznet/api";
 import { SubmittableExtrinsic } from "@cennznet/api/types";
-import { ISubmittableResult } from "@cennznet/types";
 
 type Judgement =
 	| "Unknown"
@@ -15,6 +14,6 @@ export const getProvideJudgementExtrinsic = (
 	target: string,
 	registrarIndex: number,
 	judgment: Judgement
-): SubmittableExtrinsic<"promise", ISubmittableResult> => {
+): SubmittableExtrinsic<"promise"> => {
 	return api.tx.identity.provideJudgement(registrarIndex, target, judgment);
 };
