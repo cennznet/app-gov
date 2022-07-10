@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { ChangeEventHandler, useCallback, useEffect } from "react";
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
 
 import {
 	extractCallableExtrinsics,
@@ -11,6 +11,8 @@ import {
 	Header,
 	Layout,
 	ProposalNewForm,
+	ProposalNewFormDialog,
+	useTransactionDialog,
 } from "@app-gov/web/components";
 import { useProposalNewForm } from "@app-gov/web/hooks";
 
@@ -30,20 +32,30 @@ export const getStaticProps: GetStaticProps<NewProposalProps> = async () => {
 
 const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 	const { submitForm, formState } = useProposalNewForm();
+	const [formKey, setFormKey] = useState<string>(`PrposalNewForm${Date.now()}`);
+	const { open, openDialog, closeDialog } = useTransactionDialog();
+
+	const resetForm = () => setFormKey(`PrposalNewForm${Date.now()}`);
 
 	const onFormSubmit: ChangeEventHandler<HTMLFormElement> = useCallback(
 		(event) => {
 			event.preventDefault();
+			openDialog();
 			submitForm(new FormData(event.target));
 		},
-		[submitForm]
+		[openDialog, submitForm]
 	);
 
-	console.log(formState);
+	const onDialogDismiss = useCallback(() => {
+		closeDialog();
 
-	useEffect(() => {
-		window.resetForm = () => setFormKey(Date.now());
-	}, []);
+		setTimeout(resetForm, 200);
+	}, [closeDialog]);
+
+	const onDialogClose = useCallback(() => {
+		if (formState?.status === "Cancelled") return;
+		onDialogDismiss();
+	}, [formState?.status, onDialogDismiss]);
 
 	return (
 		<Layout>
@@ -60,8 +72,15 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 					eu proident ut id qui incididunt.
 				</p>
 				<FunctionCallFieldSet.Provider extrinsics={extrinsics}>
-					<ProposalNewForm onSubmit={onFormSubmit} />
+					<ProposalNewForm onSubmit={onFormSubmit} key={formKey} />
 				</FunctionCallFieldSet.Provider>
+
+				<ProposalNewFormDialog
+					open={open}
+					formState={formState}
+					onClose={onDialogClose}
+					onDismiss={onDialogDismiss}
+				/>
 			</div>
 		</Layout>
 	);

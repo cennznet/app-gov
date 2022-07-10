@@ -2,7 +2,7 @@ import { ComponentProps, FC, useCallback, useRef, useState } from "react";
 
 import { Dialog } from "./";
 
-interface TransactionDialogProps extends ComponentProps<typeof Dialog> {}
+export interface TransactionDialogProps extends ComponentProps<typeof Dialog> {}
 
 export const TransactionDialog: FC<TransactionDialogProps> = ({
 	children,

@@ -1,5 +1,4 @@
 import { Api } from "@cennznet/api";
-import { stringToHex } from "@polkadot/util";
 import { useCallback, useState } from "react";
 
 import {
@@ -13,13 +12,13 @@ import {
 } from "@app-gov/service/pinata";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
-export interface ProposalFormState {
+export interface ProposalNewFormState {
 	step?: "Await" | "Submit" | "Process";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
 
-interface ProposalFormInputs {
+interface ProposalNewFormInputs {
 	"justification": string;
 	"enactmentDelay": string;
 	"callSection": string;
@@ -29,8 +28,8 @@ interface ProposalFormInputs {
 }
 
 type ProposalFormData = Map<
-	keyof ProposalFormInputs,
-	ProposalFormInputs[keyof ProposalFormInputs]
+	keyof ProposalNewFormInputs,
+	ProposalNewFormInputs[keyof ProposalNewFormInputs]
 >;
 
 interface PropsalData extends Record<string, unknown> {
@@ -44,15 +43,15 @@ interface PropsalData extends Record<string, unknown> {
 export const useProposalNewForm = () => {
 	const { api } = useCENNZApi();
 	const { wallet } = useCENNZWallet();
-	const [formState, setFormState] = useState<ProposalFormState>({});
+	const [formState, setFormState] = useState<ProposalNewFormState>({});
 
-	const setFormStep = (step: ProposalFormState["step"]) => {
+	const setFormStep = (step: ProposalNewFormState["step"]) => {
 		setFormState({ step });
 	};
 
 	const setFormStatus = (
-		status: ProposalFormState["status"],
-		statusMessage?: ProposalFormState["statusMessage"]
+		status: ProposalNewFormState["status"],
+		statusMessage?: ProposalNewFormState["statusMessage"]
 	) => {
 		setFormState((current) => ({ ...current, status, statusMessage }));
 	};
