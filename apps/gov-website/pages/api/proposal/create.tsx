@@ -14,7 +14,8 @@ export default withMethodGuard(
 		if (proposalId !== onChainProposalId)
 			return res.status(400).end(`Proposal ID is invalid`);
 
-		// TODO: Create an instance of database here
+		// TODO: Wait for the relayer to create the proposal then return
+		// or if it takes longer than 10 seconds, return regardless
 
 		return res.json({ ok: true });
 	},
