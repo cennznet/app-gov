@@ -23,10 +23,10 @@ export const useControlledInput = <
 };
 
 export const useControlledCheckbox = (defaultChecked: boolean) => {
-	const [checked, setCheked] = useState<boolean>(defaultChecked);
+	const [checked, setChecked] = useState<boolean>(defaultChecked);
 
 	const onChange = (event: ChangeEvent<HTMLInputElement>) =>
-		setCheked(event.target.checked);
+		setChecked(event.target.checked);
 
 	return {
 		checked,
