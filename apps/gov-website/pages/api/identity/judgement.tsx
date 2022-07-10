@@ -12,8 +12,6 @@ import {
 import { CENNZ_NETWORK, DISCORD_BOT } from "@app-gov/service/constants";
 import { getDiscordBot } from "@app-gov/service/discord";
 
-getDiscordBot(DISCORD_BOT.Token);
-
 export default withMethodGuard(
 	async function identityConnectRoute(req, res) {
 		const { address, twitterUsername, discordUsername } = req.body;

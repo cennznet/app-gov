@@ -8,7 +8,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface IdentityFormState {
-	step: "Await" | "Submit" | "Process";
+	step: "Idle" | "Await" | "Submit" | "Process";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
@@ -16,7 +16,11 @@ export interface IdentityFormState {
 export const useIdentityConnectForm = () => {
 	const { api } = useCENNZApi();
 	const { wallet } = useCENNZWallet();
-	const [formState, setFormState] = useState<IdentityFormState>();
+	
+	const [formState, setFormState] = useState<IdentityFormState>({
+		step: "Idle",
+	});
+
 	const submitForm = useCallback(
 		async (data: FormData) => {
 			if (!api || !wallet) return;
@@ -119,7 +123,8 @@ export const useIdentityConnectForm = () => {
 	);
 
 	const resetFormState = useCallback(() => {
-		setFormState(undefined);
+		setFormState({ step: "Idle" });
 	}, []);
+
 	return { submitForm, formState, resetFormState };
 };
