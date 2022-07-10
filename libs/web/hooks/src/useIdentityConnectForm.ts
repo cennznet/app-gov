@@ -16,7 +16,7 @@ export interface IdentityFormState {
 export const useIdentityConnectForm = () => {
 	const { api } = useCENNZApi();
 	const { wallet } = useCENNZWallet();
-	
+
 	const [formState, setFormState] = useState<IdentityFormState>({
 		step: "Idle",
 	});

@@ -81,8 +81,8 @@ const Proposal: NextPage<ProposalProps> = ({
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<h1 className="font-display text-hero mb-6 text-center text-6xl uppercase">
+			<div className="w-full max-w-2xl flex-1 self-center px-8 pb-12 lg:max-w-3xl">
+				<h1 className="font-display text-hero mb-4 text-center text-6xl uppercase md:mb-6 lg:mb-8">
 					Proposal #{proposalId}
 				</h1>
 
@@ -94,10 +94,10 @@ const Proposal: NextPage<ProposalProps> = ({
 				/>
 
 				<If condition={!proposal || proposal?.status?.includes("Deliberation")}>
-					<h2 className="font-display border-hero mt-12 border-b-2 text-4xl uppercase">
+					<h2 className="font-display border-hero mt-12 border-b-2 text-2xl uppercase">
 						Connect your wallet
 					</h2>
-					<p className="mb-8">
+					<p className="prose mb-8">
 						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
