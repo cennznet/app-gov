@@ -2,10 +2,14 @@ import { Api } from "@cennznet/api";
 import { useCallback, useState } from "react";
 
 import {
+	findProposalId,
 	getSubmitProposalExtrinsic,
 	signAndSend,
 } from "@app-gov/service/cennznet";
-import { pinProposalData } from "@app-gov/service/pinata";
+import {
+	pinProposalData,
+	updateProposalPinName,
+} from "@app-gov/service/pinata";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface ProposalFormState {
@@ -33,6 +37,7 @@ interface PropsalData extends Record<string, unknown> {
 	enactmentDelay: number;
 	justification: string;
 	functionCall: [string, string, string, ...string[]];
+	createdAt: number;
 }
 
 export const useProposalNewForm = () => {
@@ -56,21 +61,23 @@ export const useProposalNewForm = () => {
 			if (!api || !wallet) return;
 			setFormStep("Await");
 
-			try {
-				const proposalData = transformFormData(
-					api,
-					data as unknown as ProposalFormData
-				);
+			const proposalData = transformFormData(
+				api,
+				data as unknown as ProposalFormData
+			);
+			const { sponsor, functionCall, enactmentDelay } = proposalData;
 
-				const { hash, url } = await pinProposalData(proposalData);
-				const { sponsor, functionCall, enactmentDelay } = proposalData;
+			try {
+				// 1. Pin the proposalData to Pinata as IPFS JSON
+				const { pinHash, pinUrl } = await pinProposalData(proposalData);
+
+				// 2. Send governance.submitProposal extrinsinc
 				const extrinsic = getSubmitProposalExtrinsic(
 					api,
 					functionCall,
-					url,
+					pinUrl,
 					enactmentDelay
 				);
-
 				await signAndSend([extrinsic, sponsor, { signer: wallet.signer }], {
 					onHashed() {
 						setFormStep("Submit");
@@ -80,8 +87,47 @@ export const useProposalNewForm = () => {
 						setFormStatus("Cancelled");
 					},
 				});
+
+				// 3. Update the pin name with proper `proposalId`
+				const proposalId = await findProposalId(api, {
+					sponsor,
+					justificationUri: pinUrl,
+				});
+
+				if (!proposalId)
+					throw {
+						code: "APP/NOT_FOUND",
+						message: "Recently created proposal id is `undefined`",
+					};
+				await updateProposalPinName(pinHash, proposalId);
+
+				// 4. Post a request to API to process the proposal data
+				setFormStep("Process");
+				const response = await fetch("/api/proposal/create", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						sponsor,
+						proposalId,
+						justificationUri: pinUrl,
+					}),
+				});
+
+				if (!response.ok) {
+					throw {
+						code: `APP/${response.status}`,
+						message: response.statusText,
+						details: await response.text(),
+					};
+				}
+
+				setFormStatus("Ok");
+
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
+				console.info(error);
 				setFormStatus(
 					"NotOk",
 					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
@@ -135,6 +181,7 @@ const transformFormData = (
 			enactmentDelay: undefined,
 			justification: undefined,
 			functionCall: [undefined, undefined],
+			createdAt: Date.now(),
 		} as unknown as PropsalData
 	);
 };

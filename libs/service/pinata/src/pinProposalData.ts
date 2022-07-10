@@ -6,7 +6,7 @@ import {
 
 export const pinProposalData = async (
 	proposalData: Record<string, unknown>
-): Promise<{ hash: string; url: string }> => {
+): Promise<{ pinHash: string; pinUrl: string }> => {
 	const response = await fetch(
 		"https://api.pinata.cloud/pinning/pinJSONToIPFS",
 		{
@@ -35,5 +35,36 @@ export const pinProposalData = async (
 			message: data?.error?.details ?? response.statusText,
 		};
 
-	return { hash: data.IpfsHash, url: `${PINATA_GATEWAY}/${data.IpfsHash}` };
+	return {
+		pinHash: data.IpfsHash,
+		pinUrl: `${PINATA_GATEWAY}/${data.IpfsHash}`,
+	};
+};
+
+export const updateProposalPinName = async (
+	pinHash: string,
+	proposalId: number
+): Promise<void> => {
+	const response = await fetch(
+		"https://api.pinata.cloud/pinning/hashMetadata",
+		{
+			method: "PUT",
+			headers: {
+				"Authorization": `Bearer ${PINATA_JWT}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				ipfsPinHash: pinHash,
+				name: `[${CENNZ_NETWORK.ChainSlug}] Proposal #${proposalId}`,
+			}),
+		}
+	);
+
+	if (!response.ok) {
+		const data = await response.json();
+		throw {
+			code: `PINATA/${data?.error?.reason ?? response.status}`,
+			message: data?.error?.details ?? response.statusText,
+		};
+	}
 };
