@@ -24,6 +24,7 @@ import {
 	DiscordLogo,
 	ExclamationCircle,
 	TwitterLogo,
+	WarningIcon,
 	X,
 } from "@app-gov/web/vectors";
 
@@ -123,18 +124,23 @@ const Connect: NextPage<StaticProps> = ({
 						)}
 					>
 						<AccountSelect required name="address" />
-						<p>
-							<If condition={identityCheck?.identitySet}>
-								This account already has a registered Identity. Connecting your
-								social channels will overwrite the previously registered
-								channels.
-							</If>
-							<If condition={identityCheck?.judgementProvided}>
-								This account already has judgements provided on its Identity.
-								Connecting your social channels will remove the previous
-								judgements.
-							</If>
-						</p>
+						<If condition={!!identityCheck}>
+							<div className="text-hero float-left inline p-[0.1875rem] pb-0">
+								<WarningIcon className="h-6 w-6" />
+							</div>
+							<p className="prose text-sm leading-7">
+								<If condition={identityCheck?.identitySet}>
+									This account already has a registered identity. Connecting
+									your social channels will overwrite the previously registered
+									channels.
+								</If>
+								<If condition={identityCheck?.judgementProvided}>
+									This account already has judgements provided on its identity.
+									Connecting your social channels will remove the previous
+									judgements.
+								</If>
+							</p>
+						</If>
 					</fieldset>
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
