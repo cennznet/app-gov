@@ -1,4 +1,5 @@
 import { Api } from "@cennznet/api";
+import { stringToHex } from "@polkadot/util";
 import { useCallback, useState } from "react";
 
 import {
@@ -74,9 +75,11 @@ export const useProposalNewForm = () => {
 				// 2. Send governance.submitProposal extrinsinc
 				const extrinsic = getSubmitProposalExtrinsic(
 					api,
-					functionCall,
 					pinUrl,
-					enactmentDelay
+					enactmentDelay,
+					functionCall.length
+						? functionCall
+						: ["system", "remark", `Proposal enacted`]
 				);
 				await signAndSend([extrinsic, sponsor, { signer: wallet.signer }], {
 					onHashed() {
@@ -180,7 +183,7 @@ const transformFormData = (
 			sponsor: undefined,
 			enactmentDelay: undefined,
 			justification: undefined,
-			functionCall: [undefined, undefined],
+			functionCall: [],
 			createdAt: Date.now(),
 		} as unknown as PropsalData
 	);

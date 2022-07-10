@@ -3,15 +3,15 @@ import { SubmittableExtrinsic } from "@cennznet/api/types";
 
 export const getSubmitProposalExtrinsic = (
 	api: Api,
-	functionCall: [string, string, ...string[]],
 	justificationUrl: string,
-	enactmentDelay: number
+	enactmentDelay: number,
+	functionCall: [string, string, ...string[]]
 ): SubmittableExtrinsic<"promise"> => {
 	const [section, method, ...args] = functionCall;
-	const call = api.createType("Call", api.tx[section][method](...args)).toHex();
+	const call = api.createType("Call", api.tx[section][method](...args));
 
 	return api.tx.governance.submitProposal(
-		call,
+		call.toHex(),
 		justificationUrl,
 		enactmentDelay
 	);
