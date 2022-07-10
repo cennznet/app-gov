@@ -34,8 +34,8 @@ export const Button: FC<IntrinsicElements["button"] & ButtonProps> = ({
 				}[variant],
 
 				{
-					small: "px-2 py-1 text-sm",
-					medium: "px-2 py-1 text-lg",
+					small: "px-2 py-1 text-xs",
+					medium: "px-2 py-1",
 				}[size],
 
 				active && `bg-light !text-hero translate-y-0 translate-x-0 shadow-none`
