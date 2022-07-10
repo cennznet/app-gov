@@ -9,5 +9,7 @@ export { ReactComponent as X } from "./x.svg";
 export { ReactComponent as DiscordLogo } from "./discord.svg";
 export { ReactComponent as Spinner } from "./spinner.svg";
 export { ReactComponent as TwitterLogo } from "./twitter.svg";
+export { ReactComponent as WarningIcon } from "./warning.svg";
 export { ReactComponent as CheckCircle } from "./check-circle.svg";
+export { ReactComponent as CheckCircleFilled } from "./check-circle-filled.svg";
 export { ReactComponent as ExclamationCircle } from "./exclamation-circle.svg";

@@ -12,8 +12,6 @@ import {
 import { CENNZ_NETWORK, DISCORD_BOT } from "@app-gov/service/constants";
 import { getDiscordBot } from "@app-gov/service/discord";
 
-getDiscordBot(DISCORD_BOT.Token);
-
 export default withMethodGuard(
 	async function identityConnectRoute(req, res) {
 		const { address, twitterUsername, discordUsername } = req.body;
@@ -83,7 +81,7 @@ const assignDiscordRole = async (discordUsername: string) => {
 	const [username, discriminator] = discordUsername.split("#");
 
 	const discordBot = await getDiscordBot(DISCORD_BOT.Token);
-	
+
 	const guildCache = discordBot.guilds.cache.get(DISCORD_BOT.ServerId);
 	if (!guildCache) throw { message: "DISCORD_SERVER_NOT_FOUND" };
 	await guildCache.members.fetch();
