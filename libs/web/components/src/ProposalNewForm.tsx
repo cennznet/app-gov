@@ -19,7 +19,7 @@ export const ProposalNewForm: FC<
 > = (props) => {
 	const copyInput = useControlledInput<string, HTMLTextAreaElement>("");
 	const delayInput = useControlledInput<string, HTMLSelectElement>("24");
-	const callToggle = useControlledCheckbox(true);
+	const callToggle = useControlledCheckbox(false);
 	const ref = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
