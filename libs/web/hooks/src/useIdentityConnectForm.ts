@@ -8,7 +8,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface IdentityFormState {
-	step: "Await" | "Submit" | "Process" | "Idle";
+	step: "Idle" | "Await" | "Submit" | "Process";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
