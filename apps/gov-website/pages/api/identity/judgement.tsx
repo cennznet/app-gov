@@ -71,6 +71,9 @@ export default withMethodGuard(
 
 			return res.json({ ok: true });
 		} catch (error) {
+			if (error?.message === "DISCORD_USER_NOT_FOUND")
+				return res.json({ ok: true, message: error.message });
+
 			return res.status(500).json({ message: error?.message });
 		}
 	},

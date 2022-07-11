@@ -11,6 +11,7 @@ export interface IdentityFormState {
 	step: "Idle" | "Await" | "Submit" | "Process" | "Success";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
+	cennzDiscordMember?: boolean;
 }
 
 export const useIdentityConnectForm = () => {
@@ -104,7 +105,11 @@ export const useIdentityConnectForm = () => {
 						);
 					}
 
-					setFormState({ step: "Success", status: "Ok" });
+					setFormState({
+						step: "Success",
+						status: "Ok",
+						cennzDiscordMember: result?.message !== "DISCORD_USER_NOT_FOUND",
+					});
 				});
 			} catch (error: unknown) {
 				console.info(error);

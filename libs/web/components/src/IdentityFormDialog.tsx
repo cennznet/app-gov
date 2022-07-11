@@ -29,8 +29,11 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="prose text-center">
-							Your identity has been successfully set. Visit Discord to view the
-							Governance channels with your new role!
+							Your identity has been successfully set.&nbsp;
+							<If condition={!!formState?.cennzDiscordMember}>
+								Visit Discord to view the Governance channels with your new
+								role!
+							</If>
 						</p>
 						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
 							<div className="mb-4">
