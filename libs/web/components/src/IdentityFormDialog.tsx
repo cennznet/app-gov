@@ -1,23 +1,18 @@
 import { FC, MouseEventHandler } from "react";
 import { Choose, If } from "react-extras";
 
-import { StepProgress } from "@app-gov/web/components";
-import { ProposalNewFormState } from "@app-gov/web/hooks";
-import {
-	CheckCircle,
-	DiscordLogo,
-	ExclamationCircle,
-	Spinner,
-} from "@app-gov/web/vectors";
+import { Button, StepProgress } from "@app-gov/web/components";
+import { IdentityFormState } from "@app-gov/web/hooks";
+import { DiscordLogo } from "@app-gov/web/vectors";
 
-import { Button, TransactionDialog, TransactionDialogProps } from "./";
+import { TransactionDialog, TransactionDialogProps } from "./";
 
-interface ProposalNewFormDialogProps extends TransactionDialogProps {
-	formState: ProposalNewFormState;
+interface IdentityFormDialogProps extends TransactionDialogProps {
+	formState: IdentityFormState;
 	onDismiss: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
+export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 	formState,
 	onDismiss,
 	...props
@@ -27,26 +22,32 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 			<StepProgress
 				steps={["Confirming", "Submitting", "Processing", "Success!"]}
 				stepIndex={["Await", "Submit", "Process", "Success"].indexOf(
-					formState.step
+					formState?.step
 				)}
 				error={formState?.status === "NotOk"}
 			>
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="text-center">
-							Your proposal has been submitted successfully, [and maybe some
-							message to view the proposal on Discord].
+							Your identity has been successfully set. Visit Discord to view the
+							Governance channels with your new role!
 						</p>
 						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
 							<div className="mb-4">
-								<Button startAdornment={<DiscordLogo className="h-4" />}>
-									View proposal on Discord
-								</Button>
+								<a
+									href="https://discord.gg/zbwXQZCcwr"
+									target="_blank"
+									rel="noreferrer"
+								>
+									<Button startAdornment={<DiscordLogo className="h-4" />}>
+										Join Our Discord
+									</Button>
+								</a>
 							</div>
 
 							<div>
-								<Button onClick={onDismiss} variant="white">
-									Submit another
+								<Button onClick={onDismiss} variant="white" className="w-28">
+									Dismiss
 								</Button>
 							</div>
 						</div>
@@ -78,11 +79,11 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 
 					<Choose.When
 						condition={
-							formState?.step === "Submit" || formState?.step === "Process"
+							formState?.step !== "Idle" && formState?.status !== "NotOk"
 						}
 					>
 						<p className="text-center">
-							Please wait until this proccess completes...
+							Please wait until this process completes...
 						</p>
 					</Choose.When>
 				</Choose>
