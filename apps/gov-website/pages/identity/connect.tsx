@@ -49,7 +49,7 @@ const Connect: NextPage<StaticProps> = ({
 				twitterRegistrarIndex={twitterRegistrarIndex}
 				discordRegistrarIndex={discordRegistrarIndex}
 			>
-				<ConnectComponent />
+				<ConnectPage />
 			</IdentityFieldSet.Provider>
 		</Layout>
 	);
@@ -57,7 +57,7 @@ const Connect: NextPage<StaticProps> = ({
 
 export default Connect;
 
-const ConnectComponent: FC = () => {
+const ConnectPage: FC = () => {
 	const { submitForm, formState, resetFormState } = useIdentityConnectForm();
 	const { open, openDialog, closeDialog } = useTransactionDialog();
 	const { clearTwitterUsername, clearDiscordUsername } = useContext(
