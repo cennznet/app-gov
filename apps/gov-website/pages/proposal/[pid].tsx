@@ -79,10 +79,10 @@ const Proposal: NextPage<ProposalProps> = ({
 	const { busy, onVoteClick } = useVote(proposalId);
 
 	return (
-		<Layout>
+		<Layout.PageWrapper>
 			<Header />
-			<div className="page-wrapper">
-				<h1 className="page-heading">Proposal #{proposalId}</h1>
+			<Layout.PageContent>
+				<Layout.PageHeader>Proposal #{proposalId}</Layout.PageHeader>
 
 				<ProposalDetailsDisplay
 					proposalDetails={proposal?.proposalDetails}
@@ -151,8 +151,8 @@ const Proposal: NextPage<ProposalProps> = ({
 						</If>
 					</div>
 				</If>
-			</div>
-		</Layout>
+			</Layout.PageContent>
+		</Layout.PageWrapper>
 	);
 };
 

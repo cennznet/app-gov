@@ -96,11 +96,11 @@ const Connect: NextPage<StaticProps> = ({
 	const identityCheck = useIdentityCheck();
 
 	return (
-		<Layout>
+		<Layout.PageWrapper>
 			<Header />
-			<div className="page-wrapper">
+			<Layout.PageContent>
 				<form onSubmit={onFormSubmit}>
-					<h1 className="page-heading">Set your identity</h1>
+					<Layout.PageHeader>Set your identity</Layout.PageHeader>
 
 					<p className="prose mb-8 text-base">
 						The Identity Module ensures an authentic governance and voting
@@ -238,7 +238,7 @@ const Connect: NextPage<StaticProps> = ({
 						value={discordRegistrarIndex}
 					/>
 				</form>
-			</div>
+			</Layout.PageContent>
 
 			<TransactionDialog open={open} onClose={onDialogClose}>
 				<Choose>
@@ -326,7 +326,7 @@ const Connect: NextPage<StaticProps> = ({
 					</Choose.When>
 				</Choose>
 			</TransactionDialog>
-		</Layout>
+		</Layout.PageWrapper>
 	);
 };
 

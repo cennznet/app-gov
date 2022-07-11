@@ -58,10 +58,10 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 	}, [formState?.status, onDialogDismiss]);
 
 	return (
-		<Layout>
+		<Layout.PageWrapper>
 			<Header />
-			<div className="page-wrapper">
-				<h1 className="page-heading">Submit a Proposal</h1>
+			<Layout.PageContent>
+				<Layout.PageHeader>Submit a Proposal</Layout.PageHeader>
 
 				<p className="prose mb-8 text-base">
 					To submit a proposal you must be a CENNZnet Councillor. Lorem laborum
@@ -79,8 +79,8 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 					onClose={onDialogClose}
 					onDismiss={onDialogDismiss}
 				/>
-			</div>
-		</Layout>
+			</Layout.PageContent>
+		</Layout.PageWrapper>
 	);
 };
 
