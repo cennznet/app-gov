@@ -24,7 +24,7 @@ export const ProposalNewForm: FC<
 
 	useEffect(() => {
 		ref.current?.focus();
-	}, [ref]);
+	}, []);
 
 	return (
 		<form {...props}>
