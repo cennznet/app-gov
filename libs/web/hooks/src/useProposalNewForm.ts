@@ -127,8 +127,7 @@ export const useProposalNewForm = () => {
 					};
 				}
 
-				setFormStatus("Ok");
-				setFormStep("Success");
+				setFormState({ step: "Success", status: "Ok" });
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {

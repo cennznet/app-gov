@@ -104,10 +104,7 @@ export const useIdentityConnectForm = () => {
 						);
 					}
 
-					setFormState(
-						(current) =>
-							({ step: "Success", status: "Ok" } as IdentityFormState)
-					);
+					setFormState({ step: "Success", status: "Ok" });
 				});
 			} catch (error: unknown) {
 				console.info(error);
