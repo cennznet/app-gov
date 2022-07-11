@@ -1,9 +1,9 @@
 import type {
 	ChangeEventHandler,
 	ComponentProps,
-	FC,
 	MouseEventHandler,
 } from "react";
+import { forwardRef } from "react";
 
 import { useCENNZExtension, useCENNZWallet } from "@app-gov/web/providers";
 import { CENNZLogo } from "@app-gov/web/vectors";
@@ -12,44 +12,43 @@ import { Button, Select } from "./";
 
 type SelectProps = ComponentProps<typeof Select>;
 
-export const AccountSelect: FC<SelectProps> = (props) => {
-	const {
-		onCENNZConnectClick,
-		onCENNZAccountSelect,
-		allAccounts,
-		selectedAccount,
-	} = useCENNZConnect();
+export const AccountSelect = forwardRef<HTMLSelectElement, SelectProps>(
+	(props, ref) => {
+		const { onConnectClick, onAccountSelect, allAccounts, selectedAccount } =
+			useCENNZConnect();
 
-	return (
-		<Select
-			placeholder="Connect CENNZnet Wallet"
-			inputClassName="!py-4"
-			defaultValue={selectedAccount}
-			onChange={onCENNZAccountSelect}
-			endAdornment={
-				<Button
-					active={!!selectedAccount}
-					size="small"
-					onMouseDown={onCENNZConnectClick}
-					startAdornment={<CENNZLogo className="h-4" />}
-				>
-					{!!selectedAccount && "Connected"}
-					{!selectedAccount && "Connect"}
-				</Button>
-			}
-			{...props}
-		>
-			{!!selectedAccount &&
-				allAccounts?.map((account, index) => (
-					<option value={account.address} key={index}>
-						{`${account.meta.name} - ${account.address
-							.slice(0, 8)
-							.concat("...", account.address.slice(-8))}`}
-					</option>
-				))}
-		</Select>
-	);
-};
+		return (
+			<Select
+				ref={ref}
+				placeholder="Connect CENNZnet Wallet"
+				inputClassName="!py-3"
+				defaultValue={selectedAccount}
+				onChange={onAccountSelect}
+				endAdornment={
+					<Button
+						active={!!selectedAccount}
+						size="small"
+						onMouseDown={onConnectClick}
+						startAdornment={<CENNZLogo className="h-4" />}
+					>
+						{!!selectedAccount && "Connected"}
+						{!selectedAccount && "Connect"}
+					</Button>
+				}
+				{...props}
+			>
+				{!!selectedAccount &&
+					allAccounts?.map((account, index) => (
+						<option value={account.address} key={index}>
+							{`${account.meta.name} - ${account.address
+								.slice(0, 8)
+								.concat("...", account.address.slice(-8))}`}
+						</option>
+					))}
+			</Select>
+		);
+	}
+);
 
 const useCENNZConnect = () => {
 	const { accounts } = useCENNZExtension();
@@ -57,12 +56,10 @@ const useCENNZConnect = () => {
 
 	const allAccounts = accounts?.filter(Boolean);
 
-	const onCENNZConnectClick: MouseEventHandler<HTMLButtonElement> = () =>
+	const onConnectClick: MouseEventHandler<HTMLButtonElement> = () =>
 		connectWallet();
 
-	const onCENNZAccountSelect: ChangeEventHandler<HTMLSelectElement> = (
-		event
-	) => {
+	const onAccountSelect: ChangeEventHandler<HTMLSelectElement> = (event) => {
 		const address = event.target.value;
 		const item = accounts?.find((account) => account.address === address);
 
@@ -70,8 +67,8 @@ const useCENNZConnect = () => {
 	};
 
 	return {
-		onCENNZConnectClick,
-		onCENNZAccountSelect,
+		onConnectClick,
+		onAccountSelect,
 		allAccounts,
 		selectedAccount: selectedAccount?.address,
 	};

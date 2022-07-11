@@ -22,14 +22,14 @@ export const useControlledInput = <
 	};
 };
 
-export const useControlledCheckbox = (defaultValue: boolean) => {
-	const [value, setValue] = useState<boolean>(defaultValue);
+export const useControlledCheckbox = (defaultChecked: boolean) => {
+	const [checked, setChecked] = useState<boolean>(defaultChecked);
 
 	const onChange = (event: ChangeEvent<HTMLInputElement>) =>
-		setValue(event.target.checked);
+		setChecked(event.target.checked);
 
 	return {
-		value,
+		checked,
 		onChange,
 	};
 };

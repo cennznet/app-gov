@@ -1,1 +1,1 @@
-export * from "./pinProposal";
+export * from "./pinProposalData";

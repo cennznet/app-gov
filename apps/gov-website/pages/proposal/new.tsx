@@ -1,6 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { FormEventHandler, useCallback } from "react";
-import { If } from "react-extras";
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
 
 import {
 	extractCallableExtrinsics,
@@ -8,24 +7,22 @@ import {
 } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
-	AccountSelect,
-	Button,
 	FunctionCallFieldSet,
 	Header,
 	Layout,
-	MarkdownField,
-	Select,
+	ProposalNewForm,
+	ProposalNewFormDialog,
+	useTransactionDialog,
 } from "@app-gov/web/components";
-import { useControlledCheckbox, useControlledInput } from "@app-gov/web/hooks";
+import { useProposalNewForm } from "@app-gov/web/hooks";
 
-interface StaticProps {
+interface NewProposalProps {
 	extrinsics: Awaited<ReturnType<typeof extractCallableExtrinsics>>;
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+export const getStaticProps: GetStaticProps<NewProposalProps> = async () => {
 	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 	const extrinsics = await extractCallableExtrinsics(api);
-
 	return {
 		props: {
 			extrinsics,
@@ -33,136 +30,55 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 	};
 };
 
-const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
-	const { value: justification, onChange: onJustificationChange } =
-		useControlledInput<string, HTMLTextAreaElement>("");
+const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
+	const { submitForm, formState } = useProposalNewForm();
+	const [formKey, setFormKey] = useState<string>(`PrposalNewForm${Date.now()}`);
+	const { open, openDialog, closeDialog } = useTransactionDialog();
 
-	const { value: functionCall, onChange: onFunctionCallChange } =
-		useControlledCheckbox(true);
+	const resetForm = () => setFormKey(`PrposalNewForm${Date.now()}`);
 
-	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+	const onFormSubmit: ChangeEventHandler<HTMLFormElement> = useCallback(
 		(event) => {
 			event.preventDefault();
+			openDialog();
+			submitForm(new FormData(event.target));
 		},
-		[]
+		[openDialog, submitForm]
 	);
+
+	const onDialogDismiss = useCallback(() => {
+		closeDialog();
+
+		setTimeout(resetForm, 200);
+	}, [closeDialog]);
+
+	const onDialogClose = useCallback(() => {
+		if (formState?.status === "Cancelled") return;
+		onDialogDismiss();
+	}, [formState?.status, onDialogDismiss]);
 
 	return (
 		<Layout>
 			<Header />
 			<div className="page-wrapper">
-				<form onSubmit={onFormSubmit}>
-					<h1 className="page-heading">Submit a Proposal</h1>
+				<h1 className="page-heading">Submit a Proposal</h1>
 
-					<p className="prose mb-8 text-base">
-						To submit a proposal you must be a CENNZnet Councillor. Lorem
-						laborum dolor minim mollit eu reprehenderit culpa dolore labore
-						dolor mollit commodo do anim incididunt sunt id pariatur elit tempor
-						nostrud nulla eu proident ut id qui incididunt.
-					</p>
+				<p className="prose mb-8 text-base">
+					To submit a proposal you must be a CENNZnet Councillor. Lorem laborum
+					dolor minim mollit eu reprehenderit culpa dolore labore dolor mollit
+					commodo do anim incididunt sunt id pariatur elit tempor nostrud nulla
+					eu proident ut id qui incididunt.
+				</p>
+				<FunctionCallFieldSet.Provider extrinsics={extrinsics}>
+					<ProposalNewForm onSubmit={onFormSubmit} key={formKey} />
+				</FunctionCallFieldSet.Provider>
 
-					<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
-						Proposal Details
-					</h2>
-
-					<fieldset className="mb-6">
-						<label
-							className="mb-1 block text-base font-bold"
-							htmlFor="justification"
-						>
-							Justification
-						</label>
-						<MarkdownField
-							required
-							id="justification"
-							value={justification}
-							onChange={onJustificationChange}
-						/>
-					</fieldset>
-
-					<fieldset className="mb-6">
-						<label
-							className="mb-1 block text-base font-bold"
-							htmlFor="enacmentDelay"
-						>
-							Enactment Delay
-						</label>
-						<Select className="w-1/2" id="enacmentDelay">
-							<option value={24}>24 hours</option>
-							<option value={12}>12 hours</option>
-							<option value={6}>6 hours</option>
-							<option value={1}>1 hour</option>
-						</Select>
-					</fieldset>
-
-					<fieldset className="mb-6">
-						<label
-							htmlFor="functionCall"
-							className="flex cursor-pointer items-center"
-						>
-							<input
-								type="checkbox"
-								checked={functionCall}
-								onChange={onFunctionCallChange}
-								className="mr-1 inline-block"
-								id="functionCall"
-							/>
-							This proposal require a function call
-						</label>
-					</fieldset>
-
-					<If condition={functionCall}>
-						<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
-							Function Call
-						</h2>
-
-						<fieldset className="mb-6 grid grid-cols-2 gap-4">
-							<FunctionCallFieldSet.Provider extrinsics={extrinsics}>
-								<div className="cols-span-1">
-									<label className="mb-1 block text-base font-bold">
-										Section
-									</label>
-									<FunctionCallFieldSet.Section />
-								</div>
-								<div className="cols-span-2">
-									<label className="mb-1 block text-base font-bold">
-										Method
-									</label>
-									<FunctionCallFieldSet.Method />
-								</div>
-								<div className="col-span-full">
-									<label className="mb-1 block text-base font-bold">
-										Arguments
-									</label>
-									<FunctionCallFieldSet.Args />
-								</div>
-							</FunctionCallFieldSet.Provider>
-						</fieldset>
-					</If>
-
-					<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
-						Sign and Submit
-					</h2>
-
-					<fieldset className="mb-6">
-						<label
-							className="mb-1 block text-base font-bold"
-							htmlFor="enacmentDelay"
-						>
-							Signing Account
-						</label>
-						<AccountSelect required name="address" />
-					</fieldset>
-
-					<fieldset className="mt-16 text-center">
-						<Button type="submit" className="w-1/3 text-center">
-							<div className="flex items-center justify-center text-base">
-								<span>Proceed</span>
-							</div>
-						</Button>
-						<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
-					</fieldset>
-				</form>
+				<ProposalNewFormDialog
+					open={open}
+					formState={formState}
+					onClose={onDialogClose}
+					onDismiss={onDialogDismiss}
+				/>
 			</div>
 		</Layout>
 	);

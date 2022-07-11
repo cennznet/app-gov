@@ -11,3 +11,5 @@ export * from "./Dialog";
 export * from "./MarkdownField";
 export * from "./FunctionCallFieldSet";
 export * from "./Markdown";
+export * from "./ProposalNewForm";
+export * from "./ProposalNewFormDialog";

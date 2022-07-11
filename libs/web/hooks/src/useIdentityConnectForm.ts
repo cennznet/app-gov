@@ -65,14 +65,15 @@ export const useIdentityConnectForm = () => {
 				});
 
 				tx.on("txFailed", (error) => {
-					const { code = "Unknow", message = "" } = tx.decodeError(error);
+					const { code = "CENNZ/UNKNOWN", message = "" } =
+						tx.decodeError(error);
 
 					setFormState(
 						(current) =>
 							({
 								...current,
 								status: "NotOk",
-								message: `[TX/${code}] ${message}`,
+								message: `[CENNZ/${code}] ${message}`,
 							} as IdentityFormState)
 					);
 				});

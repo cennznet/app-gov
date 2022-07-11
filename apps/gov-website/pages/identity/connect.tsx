@@ -160,7 +160,7 @@ const Connect: NextPage<StaticProps> = ({
 						<div className="grid grid-cols-2 items-center gap-4">
 							<TextField
 								placeholder="Sign-in to verify"
-								inputClassName="!py-4"
+								inputClassName="!py-3"
 								name="twitterUsername"
 								value={twitterUsername}
 								onInput={onNoop}
@@ -189,7 +189,7 @@ const Connect: NextPage<StaticProps> = ({
 
 							<TextField
 								placeholder="Sign-in to verify"
-								inputClassName="!py-4"
+								inputClassName="!py-3"
 								name="discordUsername"
 								value={discordUsername}
 								onChange={onNoop}

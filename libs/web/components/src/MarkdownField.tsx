@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC, useCallback, useState } from "react";
+import { forwardRef, useCallback, useState } from "react";
 import { classNames } from "react-extras";
 
 import { IntrinsicElements } from "@app-gov/web/types";
@@ -8,9 +8,10 @@ import { Markdown } from "./";
 
 interface MarkdownFieldProps {}
 
-export const MarkdownField: FC<
+export const MarkdownField = forwardRef<
+	HTMLTextAreaElement,
 	IntrinsicElements["textarea"] & MarkdownFieldProps
-> = ({ className, children, value, rows = 10, ...props }) => {
+>(({ className, children, value, rows = 10, ...props }, ref) => {
 	const [preview, setPreview] = useState<boolean>(false);
 	const onWriteClick = useCallback(() => {
 		setPreview(false);
@@ -52,6 +53,7 @@ export const MarkdownField: FC<
 			<div className="relative flex-1">
 				<textarea
 					{...props}
+					ref={ref}
 					value={value}
 					rows={rows}
 					className="absolute inset-0 resize-none p-2 font-mono text-sm outline-none"
@@ -80,4 +82,4 @@ export const MarkdownField: FC<
 			</p>
 		</div>
 	);
-};
+});
