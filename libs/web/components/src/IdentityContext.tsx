@@ -1,17 +1,23 @@
+import type { AnyTuple } from "@cennznet/types";
+import type { Option } from "@polkadot/types-codec";
+import type { IdentityInfo } from "@polkadot/types/interfaces";
 import {
 	createContext,
 	FC,
 	MouseEventHandler,
 	useCallback,
 	useContext,
+	useEffect,
+	useState,
 } from "react";
-import { If } from "react-extras";
+import { classNames, If } from "react-extras";
 
 import { useSocialSignIn } from "@app-gov/web/hooks";
+import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 import { PropsWithChildren } from "@app-gov/web/types";
-import { DiscordLogo, TwitterLogo, X } from "@app-gov/web/vectors";
+import { DiscordLogo, TwitterLogo, WarningIcon, X } from "@app-gov/web/vectors";
 
-import { Button, TextField } from "./";
+import { AccountSelect, Button, TextField } from "./";
 
 interface ContextType {
 	twitterUsername: string;
@@ -141,14 +147,76 @@ const Twitter: FC = () => {
 	);
 };
 
+const Connect: FC = () => {
+	const identityCheck = useIdentityCheck();
+
+	return (
+		<fieldset
+			className={classNames("mb-12 min-w-0", identityCheck && "space-y-4")}
+		>
+			<AccountSelect required name="address" />
+			<If condition={!!identityCheck}>
+				<div className="text-hero float-left inline p-[0.1875rem] pb-0">
+					<WarningIcon className="h-6 w-6" />
+				</div>
+				<p className="prose text-sm leading-7">
+					<If condition={!!identityCheck?.identitySet}>
+						This account already has a registered identity. Connecting your
+						social channels will overwrite the previously registered channels.
+					</If>
+					<If condition={!!identityCheck?.judgementProvided}>
+						This account already has judgements provided on its identity.
+						Connecting your social channels will remove the previous judgements.
+					</If>
+				</p>
+			</If>
+		</fieldset>
+	);
+};
+
 const useOnNoop = () => {
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	return useCallback(() => {}, []);
 };
 
+const useIdentityCheck = () => {
+	const { api } = useCENNZApi();
+	const { selectedAccount } = useCENNZWallet();
+	const [identityCheck, setIdentityCheck] = useState<{
+		identitySet?: boolean;
+		judgementProvided?: boolean;
+	}>();
+
+	useEffect(() => {
+		if (!api || !selectedAccount?.address) return;
+
+		const checkIdentity = async () => {
+			const identity = (await api.query.identity.identityOf(
+				selectedAccount.address
+			)) as Option<IdentityInfo>;
+
+			if (!identity.isSome) return setIdentityCheck(undefined);
+
+			const prevIdentity = identity.toJSON() as unknown as {
+				judgements: AnyTuple[];
+			};
+
+			if (prevIdentity?.judgements.length)
+				return setIdentityCheck({ judgementProvided: true });
+
+			setIdentityCheck({ identitySet: true });
+		};
+
+		checkIdentity();
+	}, [selectedAccount?.address, api]);
+
+	return identityCheck;
+};
+
 export const IdentityContext = {
 	Provider,
+	Context,
+	Connect,
 	Discord,
 	Twitter,
-	Context,
 };
