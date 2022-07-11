@@ -124,9 +124,9 @@ const Connect: NextPage<StaticProps> = ({
 						)}
 					>
 						<AccountSelect required name="address" />
-						<div className="items-center justify-center">
+						<div className="items-center">
 							<If condition={!!identityCheck}>
-								<div className="text-hero float-left mt-px inline p-2">
+								<div className="text-hero float-left m-px inline p-2">
 									<WarningIcon className="h-6 w-6" />
 								</div>
 								<p className="prose text-xs">
