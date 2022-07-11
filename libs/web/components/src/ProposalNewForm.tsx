@@ -33,7 +33,10 @@ export const ProposalNewForm: FC<
 			</h2>
 
 			<fieldset className="mb-6">
-				<label className="mb-1 block text-lg font-bold" htmlFor="justification">
+				<label
+					className="mb-1 block text-base font-bold"
+					htmlFor="justification"
+				>
 					Justification
 				</label>
 				<MarkdownField
@@ -47,7 +50,7 @@ export const ProposalNewForm: FC<
 
 			<fieldset className="mb-6">
 				<label
-					className="mb-1 block text-lg font-bold"
+					className="mb-1 block text-base font-bold"
 					htmlFor="enactmentDelay"
 				>
 					Enactment Delay
