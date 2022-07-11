@@ -27,22 +27,6 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 				error={formState?.status === "NotOk"}
 			>
 				<Choose>
-					<Choose.When condition={formState?.step === "Await"}>
-						<p className="text-center">
-							Please sign the transaction when prompted...
-						</p>
-					</Choose.When>
-
-					<Choose.When
-						condition={
-							formState?.step !== "Idle" && formState?.status !== "NotOk"
-						}
-					>
-						<p className="text-center">
-							Please wait until this process completes...
-						</p>
-					</Choose.When>
-
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="text-center">
 							Your identity has been successfully set. Visit Discord to view the
@@ -85,6 +69,22 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 								Dismiss
 							</Button>
 						</div>
+					</Choose.When>
+
+					<Choose.When condition={formState?.step === "Await"}>
+						<p className="text-center">
+							Please sign the transaction when prompted...
+						</p>
+					</Choose.When>
+
+					<Choose.When
+						condition={
+							formState?.step !== "Idle" && formState?.status !== "NotOk"
+						}
+					>
+						<p className="text-center">
+							Please wait until this process completes...
+						</p>
 					</Choose.When>
 				</Choose>
 			</StepProgress>
