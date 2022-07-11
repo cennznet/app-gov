@@ -20,8 +20,7 @@ export const ProposalNewForm: FC<
 	const copyInput = useControlledInput<string, HTMLTextAreaElement>("");
 	const delayInput = useControlledInput<string, HTMLSelectElement>("24");
 	const callToggle = useControlledCheckbox(false);
-
-	const { ref, characterCount } = useMarkdownValidation(copyInput?.value);
+	const ref = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
 		ref.current?.focus();
@@ -43,7 +42,6 @@ export const ProposalNewForm: FC<
 					ref={ref}
 					id="justification"
 					name="justification"
-					characterCount={characterCount}
 				/>
 			</fieldset>
 
@@ -126,22 +124,4 @@ export const ProposalNewForm: FC<
 			</fieldset>
 		</form>
 	);
-};
-
-const useMarkdownValidation = (value: string) => {
-	const ref = useRef<HTMLTextAreaElement>(null);
-	const characterCount = useMemo(() => value?.length, [value]);
-
-	useEffect(() => {
-		const input = ref.current;
-		if (!input) return;
-
-		if (!characterCount) return input.setCustomValidity("");
-
-		input.setCustomValidity(
-			characterCount > 1024 ? "Justification exceeds character limit" : ""
-		);
-	}, [characterCount, ref]);
-
-	return { characterCount, ref };
 };
