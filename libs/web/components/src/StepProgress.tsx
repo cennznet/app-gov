@@ -66,7 +66,7 @@ export const StepProgress: FC<StepProgressProps> = ({
 									</If>
 								</IconWrapper>
 
-								<StepText>{error ? "Error" : step}</StepText>
+								<StepText>{step}</StepText>
 							</div>
 						</Choose.When>
 
