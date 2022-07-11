@@ -1,17 +1,117 @@
 import type { AnyTuple } from "@cennznet/types";
 import type { Option } from "@polkadot/types-codec";
 import type { IdentityInfo } from "@polkadot/types/interfaces";
-import { FC, useCallback, useContext, useEffect, useState } from "react";
-import { classNames, If } from "react-extras";
+import {
+	createContext,
+	FC,
+	MouseEventHandler,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
+import { If } from "react-extras";
 
+import { useSocialSignIn } from "@app-gov/web/hooks";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
+import { PropsWithChildren } from "@app-gov/web/types";
 import { DiscordLogo, TwitterLogo, WarningIcon, X } from "@app-gov/web/vectors";
 
-import { AccountSelect, Button, IdentityContext, TextField } from "./";
+import { AccountSelect, Button, TextField } from "./";
+
+interface IdentityCheck {
+	identitySet?: boolean;
+	judgementProvided?: boolean;
+}
+
+interface ContextType {
+	twitterUsername: string;
+	clearTwitterUsername: () => void;
+	onTwitterSignInClick: MouseEventHandler<HTMLButtonElement>;
+	twitterRegistrarIndex: number;
+
+	discordUsername: string;
+	clearDiscordUsername: () => void;
+	onDiscordSignInClick: MouseEventHandler<HTMLButtonElement>;
+	discordRegistrarIndex: number;
+
+	identityCheck: IdentityCheck | undefined;
+}
+
+interface ProviderProps extends PropsWithChildren {
+	twitterRegistrarIndex: number;
+	discordRegistrarIndex: number;
+}
+
+const Context = createContext({} as ContextType);
+
+const Provider: FC<ProviderProps> = ({
+	twitterRegistrarIndex,
+	discordRegistrarIndex,
+	children,
+}) => {
+	const {
+		onSignInClick: onTwitterSignInClick,
+		username: twitterUsername,
+		clearUsername: clearTwitterUsername,
+	} = useSocialSignIn("Twitter");
+	const {
+		onSignInClick: onDiscordSignInClick,
+		username: discordUsername,
+		clearUsername: clearDiscordUsername,
+	} = useSocialSignIn("Discord");
+
+	const { api } = useCENNZApi();
+	const { selectedAccount } = useCENNZWallet();
+	const [identityCheck, setIdentityCheck] = useState<IdentityCheck>();
+
+	useEffect(() => {
+		if (!api || !selectedAccount?.address) return;
+
+		const checkIdentity = async () => {
+			const identity = (await api.query.identity.identityOf(
+				selectedAccount.address
+			)) as Option<IdentityInfo>;
+
+			if (!identity.isSome) return setIdentityCheck(undefined);
+
+			const prevIdentity = identity.toJSON() as unknown as {
+				judgements: AnyTuple[];
+			};
+
+			if (prevIdentity?.judgements.length)
+				return setIdentityCheck({ judgementProvided: true });
+
+			setIdentityCheck({ identitySet: true });
+		};
+
+		checkIdentity();
+	}, [api, selectedAccount?.address]);
+
+	return (
+		<Context.Provider
+			value={{
+				twitterUsername,
+				clearTwitterUsername,
+				onTwitterSignInClick,
+				twitterRegistrarIndex,
+
+				discordUsername,
+				clearDiscordUsername,
+				onDiscordSignInClick,
+				discordRegistrarIndex,
+
+				identityCheck,
+			}}
+		>
+			{children}
+		</Context.Provider>
+	);
+};
 
 const Discord: FC = () => {
 	const { discordUsername, clearDiscordUsername, onDiscordSignInClick } =
-		useContext(IdentityContext.Context);
+		useContext(Context);
 	const onNoop = useOnNoop();
 
 	return (
@@ -48,7 +148,7 @@ const Discord: FC = () => {
 
 const Twitter: FC = () => {
 	const { twitterUsername, clearTwitterUsername, onTwitterSignInClick } =
-		useContext(IdentityContext.Context);
+		useContext(Context);
 	const onNoop = useOnNoop();
 
 	return (
@@ -83,23 +183,11 @@ const Twitter: FC = () => {
 	);
 };
 
-const Channels: FC = () => (
-	<fieldset className="mb-12">
-		<div className="grid grid-cols-2 items-center gap-4">
-			<Twitter />
-
-			<Discord />
-		</div>
-	</fieldset>
-);
-
-const Connect: FC = () => {
-	const identityCheck = useIdentityCheck();
+const Account: FC = () => {
+	const { identityCheck } = useContext(Context);
 
 	return (
-		<fieldset
-			className={classNames("mb-12 min-w-0", identityCheck && "space-y-4")}
-		>
+		<>
 			<AccountSelect required name="address" />
 			<If condition={!!identityCheck}>
 				<div className="text-hero float-left inline p-[0.1875rem] pb-0">
@@ -116,7 +204,7 @@ const Connect: FC = () => {
 					</If>
 				</p>
 			</If>
-		</fieldset>
+		</>
 	);
 };
 
@@ -125,41 +213,10 @@ const useOnNoop = () => {
 	return useCallback(() => {}, []);
 };
 
-const useIdentityCheck = () => {
-	const { api } = useCENNZApi();
-	const { selectedAccount } = useCENNZWallet();
-	const [identityCheck, setIdentityCheck] = useState<{
-		identitySet?: boolean;
-		judgementProvided?: boolean;
-	}>();
-
-	useEffect(() => {
-		if (!api || !selectedAccount?.address) return;
-
-		const checkIdentity = async () => {
-			const identity = (await api.query.identity.identityOf(
-				selectedAccount.address
-			)) as Option<IdentityInfo>;
-
-			if (!identity.isSome) return setIdentityCheck(undefined);
-
-			const prevIdentity = identity.toJSON() as unknown as {
-				judgements: AnyTuple[];
-			};
-
-			if (prevIdentity?.judgements.length)
-				return setIdentityCheck({ judgementProvided: true });
-
-			setIdentityCheck({ identitySet: true });
-		};
-
-		checkIdentity();
-	}, [selectedAccount?.address, api]);
-
-	return identityCheck;
-};
-
 export const IdentityFieldSet = {
-	Connect,
-	Channels,
+	Provider,
+	Context,
+	Account,
+	Discord,
+	Twitter,
 };

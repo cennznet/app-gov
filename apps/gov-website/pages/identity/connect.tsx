@@ -13,7 +13,7 @@ import { getApiInstance } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
 	Header,
-	IdentityContext,
+	IdentityFieldSet,
 	IdentityForm,
 	IdentityFormDialog,
 	Layout,
@@ -45,12 +45,12 @@ const Connect: NextPage<StaticProps> = ({
 	return (
 		<Layout>
 			<Header />
-			<IdentityContext.Provider
+			<IdentityFieldSet.Provider
 				twitterRegistrarIndex={twitterRegistrarIndex}
 				discordRegistrarIndex={discordRegistrarIndex}
 			>
 				<ConnectComponent />
-			</IdentityContext.Provider>
+			</IdentityFieldSet.Provider>
 		</Layout>
 	);
 };
@@ -61,7 +61,7 @@ const ConnectComponent: FC = () => {
 	const { submitForm, formState, resetFormState } = useIdentityConnectForm();
 	const { open, openDialog, closeDialog } = useTransactionDialog();
 	const { clearTwitterUsername, clearDiscordUsername } = useContext(
-		IdentityContext.Context
+		IdentityFieldSet.Context
 	);
 
 	const [formKey, setFormKey] = useState<string>(`IdentityForm${Date.now()}`);

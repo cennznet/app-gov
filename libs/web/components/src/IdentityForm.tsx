@@ -1,8 +1,9 @@
 import { FC, useContext } from "react";
+import { classNames } from "react-extras";
 
 import { IntrinsicElements } from "@app-gov/web/types";
 
-import { Button, IdentityContext, IdentityFieldSet } from "./";
+import { Button, IdentityFieldSet } from "./";
 
 interface IdentityFormProps {
 	open: boolean;
@@ -11,9 +12,8 @@ interface IdentityFormProps {
 export const IdentityForm: FC<
 	Omit<IntrinsicElements["form"], "parent"> & IdentityFormProps
 > = ({ open, ...props }) => {
-	const { twitterRegistrarIndex, discordRegistrarIndex } = useContext(
-		IdentityContext.Context
-	);
+	const { twitterRegistrarIndex, discordRegistrarIndex, identityCheck } =
+		useContext(IdentityFieldSet.Context);
 
 	return (
 		<form {...props}>
@@ -36,7 +36,11 @@ export const IdentityForm: FC<
 				stash account that is actively staking, you may connect your controller
 				wallet.
 			</p>
-			<IdentityFieldSet.Connect />
+			<fieldset
+				className={classNames("mb-12 min-w-0", identityCheck && "space-y-4")}
+			>
+				<IdentityFieldSet.Account />
+			</fieldset>
 
 			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 				Connect your social channels
@@ -49,7 +53,13 @@ export const IdentityForm: FC<
 				Discord’ icons, sign and submit the transaction to send this information
 				to the blockchain.
 			</p>
-			<IdentityFieldSet.Channels />
+			<fieldset className="mb-12">
+				<div className="grid grid-cols-2 items-center gap-4">
+					<IdentityFieldSet.Twitter />
+
+					<IdentityFieldSet.Discord />
+				</div>
+			</fieldset>
 
 			<fieldset className="mt-16 text-center">
 				<Button type="submit" className="w-1/3 text-center" disabled={open}>
