@@ -2,16 +2,22 @@ import type { FC } from "react";
 import { Choose, classNames, If } from "react-extras";
 
 import { PropsWithChildren } from "@app-gov/web/types";
-import { CheckCircleFilled, Spinner } from "@app-gov/web/vectors";
+import {
+	CheckCircleFilled,
+	ExclamationCircle,
+	Spinner,
+} from "@app-gov/web/vectors";
 
 interface StepProgressProps extends PropsWithChildren {
 	steps: string[];
 	stepIndex: number;
+	error?: boolean;
 }
 
 export const StepProgress: FC<StepProgressProps> = ({
 	steps,
 	stepIndex,
+	error,
 	children,
 }) => (
 	<div className="space-y-4">
@@ -34,12 +40,29 @@ export const StepProgress: FC<StepProgressProps> = ({
 							<div>
 								<IconWrapper>
 									<If condition={index === steps.length - 1}>
-										<CheckCircleFilled className="text-hero h-10 w-10 sm:h-12 sm:w-12" />
+										<If condition={!error}>
+											<CheckCircleFilled className="text-hero h-12 w-12" />
+										</If>
+
+										<If condition={!!error}>
+											<IconWrapper>
+												<ExclamationCircle className="text-hero h-12 w-12" />
+											</IconWrapper>
+										</If>
 									</If>
 
 									<If condition={index < steps.length - 1}>
-										<Spinner className="text-hero mx-1 h-8 w-8 animate-spin sm:h-10 sm:w-10" />
-										<StepLine active />
+										<If condition={!error}>
+											<Spinner className="text-hero mx-1 h-10 w-10 animate-spin" />
+											<StepLine active />
+										</If>
+
+										<If condition={!!error}>
+											<IconWrapper>
+												<ExclamationCircle className="text-hero h-12 w-12" />
+												<StepLine />
+											</IconWrapper>
+										</If>
 									</If>
 								</IconWrapper>
 
@@ -52,8 +75,12 @@ export const StepProgress: FC<StepProgressProps> = ({
 								<IconWrapper>
 									<div
 										className={classNames(
-											"mx-1 h-8 w-8 rounded-3xl border-4 sm:h-10 sm:w-10",
-											index === stepIndex + 1 ? "border-hero" : "border-hero/40"
+											"mx-1 h-10 w-10 rounded-3xl border-4",
+											error
+												? "border-hero/40"
+												: index === stepIndex + 1
+												? "border-hero"
+												: "border-hero/40"
 										)}
 									/>
 
