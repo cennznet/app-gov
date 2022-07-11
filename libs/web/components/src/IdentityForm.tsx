@@ -2,7 +2,7 @@ import { FC, useContext } from "react";
 
 import { IntrinsicElements } from "@app-gov/web/types";
 
-import { Button, IdentityContext } from "./";
+import { Button, IdentityContext, IdentityFieldSet } from "./";
 
 interface IdentityFormProps {
 	open: boolean;
@@ -36,7 +36,7 @@ export const IdentityForm: FC<
 				stash account that is actively staking, you may connect your controller
 				wallet.
 			</p>
-			<IdentityContext.Connect />
+			<IdentityFieldSet.Connect />
 
 			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 				Connect your social channels
@@ -49,13 +49,7 @@ export const IdentityForm: FC<
 				Discord’ icons, sign and submit the transaction to send this information
 				to the blockchain.
 			</p>
-			<fieldset className="mb-12">
-				<div className="grid grid-cols-2 items-center gap-4">
-					<IdentityContext.Twitter />
-
-					<IdentityContext.Discord />
-				</div>
-			</fieldset>
+			<IdentityFieldSet.Channels />
 
 			<fieldset className="mt-16 text-center">
 				<Button type="submit" className="w-1/3 text-center" disabled={open}>
