@@ -121,7 +121,7 @@ const Discord: FC = () => {
 			name="discordUsername"
 			value={discordUsername}
 			onChange={onNoop}
-			// required
+			required
 			endAdornment={
 				<div className="flex items-center">
 					<If condition={!!discordUsername}>
