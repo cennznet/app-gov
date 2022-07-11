@@ -3,7 +3,7 @@ import { classNames } from "react-extras";
 
 import { IntrinsicElements } from "@app-gov/web/types";
 
-import { Button, IdentityFieldSet } from "./";
+import { Button, IdentityFieldSet, Layout } from "./";
 
 interface IdentityFormProps {
 	open: boolean;
@@ -17,17 +17,15 @@ export const IdentityForm: FC<
 
 	return (
 		<form {...props}>
-			<h1 className="font-display text-hero mb-8 text-center text-7xl uppercase">
-				Set your identity
-			</h1>
+			<Layout.PageHeader>Set your identity</Layout.PageHeader>
 
-			<p className="prose mb-8 text-lg">
+			<p className="prose mb-8 text-base">
 				The Identity Module ensures an authentic governance and voting
 				experience. It does this by requiring every voting wallet to be
 				connected to 2 social accounts.
 			</p>
 
-			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 				Connect your wallet
 			</h2>
 			<p className="prose mb-8">
@@ -42,7 +40,7 @@ export const IdentityForm: FC<
 				<IdentityFieldSet.Account />
 			</fieldset>
 
-			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 				Connect your social channels
 			</h2>
 			<p className="prose mb-8">
