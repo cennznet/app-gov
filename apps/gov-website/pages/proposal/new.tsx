@@ -55,9 +55,9 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 	}, [closeDialog]);
 
 	const onDialogClose = useCallback(() => {
-		if (formState?.status === "Cancelled") return;
+		if (!formState?.status || formState?.status === "Cancelled") return;
 		onDialogDismiss();
-	}, [formState?.status, onDialogDismiss]);
+	}, [onDialogDismiss, formState?.status]);
 
 	return (
 		<Layout>

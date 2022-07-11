@@ -91,7 +91,7 @@ const ConnectComponent: FC = () => {
 	}, [closeDialog, formState]);
 
 	const onDialogClose = useCallback(() => {
-		if (formState?.status === "Cancelled") return;
+		if (!formState?.status || formState?.status === "Cancelled") return;
 		onDialogDismiss();
 	}, [onDialogDismiss, formState?.status]);
 
