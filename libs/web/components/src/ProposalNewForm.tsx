@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { If } from "react-extras";
 
 import { useControlledCheckbox, useControlledInput } from "@app-gov/web/hooks";

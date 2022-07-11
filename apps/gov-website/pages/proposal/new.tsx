@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
+import { ChangeEventHandler, useCallback, useState } from "react";
 
 import {
 	extractCallableExtrinsics,
