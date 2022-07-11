@@ -91,7 +91,7 @@ export const useIdentityConnectForm = () => {
 
 					const result = await response.json();
 
-					if (response.ok) {
+					if (!response.ok) {
 						return setFormState(
 							(current) =>
 								({

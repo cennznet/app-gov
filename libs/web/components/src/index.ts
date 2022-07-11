@@ -13,4 +13,6 @@ export * from "./FunctionCallFieldSet";
 export * from "./Markdown";
 export * from "./ProposalNewForm";
 export * from "./ProposalNewFormDialog";
+export * from "./IdentityForm";
 export * from "./IdentityFormDialog";
+export * from "./IdentityContext";

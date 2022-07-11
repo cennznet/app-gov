@@ -32,7 +32,9 @@ export const getStaticProps: GetStaticProps<NewProposalProps> = async () => {
 
 const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 	const { submitForm, formState } = useProposalNewForm();
-	const [formKey, setFormKey] = useState<string>(`ProposalNewForm${Date.now()}`);
+	const [formKey, setFormKey] = useState<string>(
+		`ProposalNewForm${Date.now()}`
+	);
 	const { open, openDialog, closeDialog } = useTransactionDialog();
 
 	const resetForm = () => setFormKey(`ProposalNewForm${Date.now()}`);
