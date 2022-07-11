@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
+import { ChangeEventHandler, useCallback, useState } from "react";
 
 import {
 	extractCallableExtrinsics,
@@ -32,10 +32,10 @@ export const getStaticProps: GetStaticProps<NewProposalProps> = async () => {
 
 const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 	const { submitForm, formState } = useProposalNewForm();
-	const [formKey, setFormKey] = useState<string>(`PrposalNewForm${Date.now()}`);
+	const [formKey, setFormKey] = useState<string>(`ProposalNewForm${Date.now()}`);
 	const { open, openDialog, closeDialog } = useTransactionDialog();
 
-	const resetForm = () => setFormKey(`PrposalNewForm${Date.now()}`);
+	const resetForm = () => setFormKey(`ProposalNewForm${Date.now()}`);
 
 	const onFormSubmit: ChangeEventHandler<HTMLFormElement> = useCallback(
 		(event) => {

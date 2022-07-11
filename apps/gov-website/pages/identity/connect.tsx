@@ -3,7 +3,7 @@ import type { Option } from "@polkadot/types-codec";
 import type { IdentityInfo } from "@polkadot/types/interfaces";
 import type { GetStaticProps, NextPage } from "next";
 import { FormEventHandler, useCallback, useEffect, useState } from "react";
-import { Choose, classNames, If } from "react-extras";
+import { classNames, If } from "react-extras";
 
 import { fetchRequiredRegistrars } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
@@ -12,21 +12,14 @@ import {
 	AccountSelect,
 	Button,
 	Header,
+	IdentityFormDialog,
 	Layout,
-	StepProgress,
 	TextField,
-	TransactionDialog,
 	useTransactionDialog,
 } from "@app-gov/web/components";
 import { useIdentityConnectForm, useSocialSignIn } from "@app-gov/web/hooks";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
-import {
-	DiscordLogo,
-	ExclamationCircle,
-	TwitterLogo,
-	WarningIcon,
-	X,
-} from "@app-gov/web/vectors";
+import { DiscordLogo, TwitterLogo, WarningIcon, X } from "@app-gov/web/vectors";
 
 interface StaticProps {
 	twitterRegistrarIndex: number;
@@ -72,7 +65,7 @@ const Connect: NextPage<StaticProps> = ({
 		[openDialog, submitForm]
 	);
 
-	const onDismissClick = useCallback(() => {
+	const onDialogDismiss = useCallback(() => {
 		closeDialog();
 		clearTwitterUsername();
 		clearDiscordUsername();
@@ -90,8 +83,8 @@ const Connect: NextPage<StaticProps> = ({
 
 	const onDialogClose = useCallback(() => {
 		if (formState?.status === "Cancelled") return;
-		onDismissClick();
-	}, [onDismissClick, formState?.status]);
+		onDialogDismiss();
+	}, [onDialogDismiss, formState?.status]);
 
 	const identityCheck = useIdentityCheck();
 
@@ -240,81 +233,12 @@ const Connect: NextPage<StaticProps> = ({
 				</form>
 			</div>
 
-			<TransactionDialog open={open} onClose={onDialogClose}>
-				<StepProgress
-					steps={["Confirming", "Submitting", "Processing", "Success!"]}
-					stepIndex={["Await", "Submit", "Process", "Success"].indexOf(
-						formState?.step
-					)}
-					error={formState?.status === "NotOk"}
-				>
-					<Choose>
-						<Choose.When condition={formState?.step === "Await"}>
-							<p className="text-center">
-								Please sign the transaction when prompted...
-							</p>
-						</Choose.When>
-
-						<Choose.When
-							condition={
-								formState?.step !== "Idle" && formState?.status !== "NotOk"
-							}
-						>
-							<p className="text-center">
-								Please wait until this process completes...
-							</p>
-						</Choose.When>
-
-						<Choose.When condition={formState?.status === "Ok"}>
-							<p className="text-center">
-								Your identity has been successfully set. Visit Discord to view
-								the Governance channels with your new role!
-							</p>
-							<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
-								<div className="mb-4">
-									<a
-										href="https://discord.gg/zbwXQZCcwr"
-										target="_blank"
-										rel="noreferrer"
-									>
-										<Button startAdornment={<DiscordLogo className="h-4" />}>
-											Join Our Discord
-										</Button>
-									</a>
-								</div>
-
-								<div>
-									<Button
-										onClick={onDismissClick}
-										variant="white"
-										className="w-28"
-									>
-										Dismiss
-									</Button>
-								</div>
-							</div>
-						</Choose.When>
-
-						<Choose.When condition={formState?.status === "NotOk"}>
-							<p className="text-center">
-								Something went wrong while processing your request.
-							</p>
-
-							<If condition={!!formState?.statusMessage}>
-								<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
-									{formState?.statusMessage}
-								</p>
-							</If>
-
-							<div className="mt-8 flex justify-center">
-								<Button onClick={onDismissClick} className="w-28">
-									Dismiss
-								</Button>
-							</div>
-						</Choose.When>
-					</Choose>
-				</StepProgress>
-			</TransactionDialog>
+			<IdentityFormDialog
+				open={open}
+				formState={formState}
+				onClose={onDialogClose}
+				onDismiss={onDialogDismiss}
+			/>
 		</Layout>
 	);
 };
