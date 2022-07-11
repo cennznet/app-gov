@@ -13,7 +13,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface ProposalNewFormState {
-	step?: "Await" | "Submit" | "Process";
+	step: "Idle" | "Await" | "Submit" | "Process" | "Success";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
@@ -43,7 +43,9 @@ interface PropsalData extends Record<string, unknown> {
 export const useProposalNewForm = () => {
 	const { api } = useCENNZApi();
 	const { wallet } = useCENNZWallet();
-	const [formState, setFormState] = useState<ProposalNewFormState>({});
+	const [formState, setFormState] = useState<ProposalNewFormState>({
+		step: "Idle",
+	});
 
 	const setFormStep = (step: ProposalNewFormState["step"]) => {
 		setFormState({ step });
@@ -140,7 +142,7 @@ export const useProposalNewForm = () => {
 	);
 
 	const resetFormState = useCallback(() => {
-		setFormState({});
+		setFormState({ step: "Idle" });
 	}, []);
 
 	return { submitForm, formState, resetFormState };
