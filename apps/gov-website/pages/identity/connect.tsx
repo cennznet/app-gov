@@ -43,7 +43,7 @@ const Connect: NextPage<StaticProps> = ({
 	discordRegistrarIndex,
 }) => {
 	return (
-		<Layout>
+		<Layout.PageWrapper>
 			<Header />
 			<IdentityFieldSet.Provider
 				twitterRegistrarIndex={twitterRegistrarIndex}
@@ -51,7 +51,7 @@ const Connect: NextPage<StaticProps> = ({
 			>
 				<ConnectPage />
 			</IdentityFieldSet.Provider>
-		</Layout>
+		</Layout.PageWrapper>
 	);
 };
 
@@ -96,8 +96,10 @@ const ConnectPage: FC = () => {
 	}, [onDialogDismiss, formState?.status]);
 
 	return (
-		<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-			<IdentityForm open={open} onSubmit={onFormSubmit} key={formKey} />
+		<>
+			<Layout.PageContent>
+				<IdentityForm open={open} onSubmit={onFormSubmit} key={formKey} />
+			</Layout.PageContent>
 
 			<IdentityFormDialog
 				open={open}
@@ -105,6 +107,6 @@ const ConnectPage: FC = () => {
 				onClose={onDialogClose}
 				onDismiss={onDialogDismiss}
 			/>
-		</div>
+		</>
 	);
 };

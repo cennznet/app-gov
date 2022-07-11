@@ -60,14 +60,12 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 	}, [onDialogDismiss, formState?.status]);
 
 	return (
-		<Layout>
+		<Layout.PageWrapper>
 			<Header />
-			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<h1 className="font-display text-hero mb-8 text-center text-7xl uppercase">
-					Submit a Proposal
-				</h1>
+			<Layout.PageContent>
+				<Layout.PageHeader>Submit a Proposal</Layout.PageHeader>
 
-				<p className="mb-8 text-lg">
+				<p className="prose mb-8 text-base">
 					To submit a proposal you must be a CENNZnet Councillor. Lorem laborum
 					dolor minim mollit eu reprehenderit culpa dolore labore dolor mollit
 					commodo do anim incididunt sunt id pariatur elit tempor nostrud nulla
@@ -83,8 +81,8 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 					onClose={onDialogClose}
 					onDismiss={onDialogDismiss}
 				/>
-			</div>
-		</Layout>
+			</Layout.PageContent>
+		</Layout.PageWrapper>
 	);
 };
 

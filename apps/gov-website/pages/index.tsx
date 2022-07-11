@@ -4,9 +4,9 @@ import { Header, Layout } from "@app-gov/web/components";
 
 const Home: NextPage = () => {
 	return (
-		<Layout>
+		<Layout.PageWrapper>
 			<Header />
-		</Layout>
+		</Layout.PageWrapper>
 	);
 };
 

@@ -11,11 +11,7 @@ export const TransactionDialog: FC<TransactionDialogProps> = ({
 	const focusElement = useRef(null);
 
 	return (
-		<Dialog
-			{...props}
-			initialFocus={focusElement}
-			panelClassName="w-1/2 max-w-2xl min-w-[480px]"
-		>
+		<Dialog {...props} initialFocus={focusElement} panelClassName="min-w-fit">
 			<div
 				ref={focusElement}
 				className="border-hero bg-light shadow-sharp shadow-dark flex  h-full flex-col items-center justify-center border-4 p-8"

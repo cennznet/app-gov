@@ -28,12 +28,15 @@ export const ProposalNewForm: FC<
 
 	return (
 		<form {...props}>
-			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 				Proposal Details
 			</h2>
 
 			<fieldset className="mb-6">
-				<label className="mb-1 block text-lg font-bold" htmlFor="justification">
+				<label
+					className="mb-1 block text-base font-bold"
+					htmlFor="justification"
+				>
 					Justification
 				</label>
 				<MarkdownField
@@ -47,7 +50,7 @@ export const ProposalNewForm: FC<
 
 			<fieldset className="mb-6">
 				<label
-					className="mb-1 block text-lg font-bold"
+					className="mb-1 block text-base font-bold"
 					htmlFor="enactmentDelay"
 				>
 					Enactment Delay
@@ -82,32 +85,32 @@ export const ProposalNewForm: FC<
 			</fieldset>
 
 			<If condition={callToggle.checked}>
-				<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+				<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 					Function Call
 				</h2>
 
 				<fieldset className="mb-6 grid grid-cols-2 gap-4">
 					<div className="cols-span-1">
-						<label className="mb-1 block text-lg font-bold">Section</label>
+						<label className="mb-1 block text-base font-bold">Section</label>
 						<FunctionCallFieldSet.Section name="callSection" />
 					</div>
 					<div className="cols-span-2">
-						<label className="mb-1 block text-lg font-bold">Method</label>
+						<label className="mb-1 block text-base font-bold">Method</label>
 						<FunctionCallFieldSet.Method name="callMethod" />
 					</div>
 					<div className="col-span-full">
-						<label className="mb-1 block text-lg font-bold">Arguments</label>
+						<label className="mb-1 block text-base font-bold">Arguments</label>
 						<FunctionCallFieldSet.Args name="callArgs[]" />
 					</div>
 				</fieldset>
 			</If>
 
-			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
 				Signing Wallet
 			</h2>
 
 			<fieldset className="mb-6">
-				<p className="mb-4">
+				<p className="prose mb-4">
 					Ex consequat occaecat id nulla voluptate anim eu velit et laboris
 					reprehenderit ut dolor magna ut minim voluptate labore non adipisicing
 				</p>

@@ -79,12 +79,10 @@ const Proposal: NextPage<ProposalProps> = ({
 	const { busy, onVoteClick } = useVote(proposalId);
 
 	return (
-		<Layout>
+		<Layout.PageWrapper>
 			<Header />
-			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<h1 className="font-display text-hero mb-6 text-center text-6xl uppercase">
-					Proposal #{proposalId}
-				</h1>
+			<Layout.PageContent>
+				<Layout.PageHeader>Proposal #{proposalId}</Layout.PageHeader>
 
 				<ProposalDetailsDisplay
 					proposalDetails={proposal?.proposalDetails}
@@ -94,10 +92,10 @@ const Proposal: NextPage<ProposalProps> = ({
 				/>
 
 				<If condition={!proposal || proposal?.status?.includes("Deliberation")}>
-					<h2 className="font-display border-hero mt-12 border-b-2 text-4xl uppercase">
+					<h2 className="font-display border-hero mt-12 border-b-2 text-2xl uppercase">
 						Connect your wallet
 					</h2>
-					<p className="mb-8">
+					<p className="prose mb-8">
 						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
@@ -153,8 +151,8 @@ const Proposal: NextPage<ProposalProps> = ({
 						</If>
 					</div>
 				</If>
-			</div>
-		</Layout>
+			</Layout.PageContent>
+		</Layout.PageWrapper>
 	);
 };
 

@@ -27,14 +27,14 @@ const SignIn: NextPage = () => {
 	}, [provider, callback, error]);
 
 	return (
-		<Layout>
+		<Layout.PageWrapper>
 			<div className="flex flex-1 flex-col items-center justify-center">
 				<div>
 					Redirecting to {capitalize(provider as BuiltInProviderType)} for
 					authentication...
 				</div>
 			</div>
-		</Layout>
+		</Layout.PageWrapper>
 	);
 };
 

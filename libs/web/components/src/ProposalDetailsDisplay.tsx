@@ -25,9 +25,9 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	const { method, section, args } = proposalCall || {};
 
 	return (
-		<div className="text-lg">
+		<div>
 			<div className="space-y-8">
-				<div className="text-xl">
+				<div className="text-lg">
 					<Markdown>{proposalDetails?.description}</Markdown>
 				</div>
 
