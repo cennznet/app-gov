@@ -29,6 +29,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 				stepIndex={["Await", "Submit", "Process", "Success"].indexOf(
 					formState.step
 				)}
+				error={formState?.status === "NotOk"}
 			>
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
@@ -52,10 +53,6 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 					</Choose.When>
 
 					<Choose.When condition={formState?.status === "NotOk"}>
-						<ExclamationCircle className="text-hero mb-2 h-12 w-12  flex-shrink-0" />
-						<div className="font-display text-hero mb-4 text-2xl uppercase">
-							Ah, Error!
-						</div>
 						<p className="text-center">
 							Something went wrong while processing your request.
 						</p>
@@ -66,7 +63,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 							</p>
 						</If>
 
-						<div className="mt-8 flex">
+						<div className="mt-8 flex justify-center">
 							<Button onClick={onDismiss} className="w-28">
 								Dismiss
 							</Button>

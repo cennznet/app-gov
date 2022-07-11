@@ -296,20 +296,20 @@ const Connect: NextPage<StaticProps> = ({
 						</Choose.When>
 
 						<Choose.When condition={formState?.status === "NotOk"}>
-							<div className="text-center">
-								<p>Something went wrong while processing your request.</p>
+							<p className="text-center">
+								Something went wrong while processing your request.
+							</p>
 
-								<If condition={!!formState?.statusMessage}>
-									<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
-										{formState?.statusMessage}
-									</p>
-								</If>
+							<If condition={!!formState?.statusMessage}>
+								<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
+									{formState?.statusMessage}
+								</p>
+							</If>
 
-								<div className="mt-8 flex justify-center">
-									<Button onClick={onDismissClick} className="w-28">
-										Dismiss
-									</Button>
-								</div>
+							<div className="mt-8 flex justify-center">
+								<Button onClick={onDismissClick} className="w-28">
+									Dismiss
+								</Button>
 							</div>
 						</Choose.When>
 					</Choose>
