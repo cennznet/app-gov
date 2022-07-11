@@ -50,11 +50,9 @@ const NewProposal: NextPage<StaticProps> = ({ extrinsics }) => {
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-2xl flex-1 self-center px-8 pb-12 lg:max-w-3xl">
+			<div className="page-wrapper">
 				<form onSubmit={onFormSubmit}>
-					<h1 className="font-display text-hero mb-4 text-center text-6xl uppercase md:mb-6 lg:mb-8">
-						Submit a Proposal
-					</h1>
+					<h1 className="page-heading">Submit a Proposal</h1>
 
 					<p className="prose mb-8 text-base">
 						To submit a proposal you must be a CENNZnet Councillor. Lorem

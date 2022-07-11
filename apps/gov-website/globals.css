@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+	.page-wrapper {
+		@apply w-full max-w-2xl flex-1 self-center px-8 pb-12 lg:max-w-3xl;
+	}
+
+	.page-heading {
+		@apply font-display text-hero mb-4 text-center text-6xl uppercase md:mb-6 lg:mb-8;
+	}
+}
+
 html,
 body,
 #__next {

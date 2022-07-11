@@ -81,10 +81,8 @@ const Proposal: NextPage<ProposalProps> = ({
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-2xl flex-1 self-center px-8 pb-12 lg:max-w-3xl">
-				<h1 className="font-display text-hero mb-4 text-center text-6xl uppercase md:mb-6 lg:mb-8">
-					Proposal #{proposalId}
-				</h1>
+			<div className="page-wrapper">
+				<h1 className="page-heading">Proposal #{proposalId}</h1>
 
 				<ProposalDetailsDisplay
 					proposalDetails={proposal?.proposalDetails}
