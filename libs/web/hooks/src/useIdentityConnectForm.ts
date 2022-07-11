@@ -8,7 +8,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface IdentityFormState {
-	step: "Idle" | "Await" | "Submit" | "Process";
+	step: "Idle" | "Await" | "Submit" | "Process" | "Success";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
@@ -16,7 +16,7 @@ export interface IdentityFormState {
 export const useIdentityConnectForm = () => {
 	const { api } = useCENNZApi();
 	const { wallet } = useCENNZWallet();
-	
+
 	const [formState, setFormState] = useState<IdentityFormState>({
 		step: "Idle",
 	});
@@ -91,7 +91,7 @@ export const useIdentityConnectForm = () => {
 
 					const result = await response.json();
 
-					if (!response.ok) {
+					if (response.ok) {
 						return setFormState(
 							(current) =>
 								({
@@ -105,7 +105,8 @@ export const useIdentityConnectForm = () => {
 					}
 
 					setFormState(
-						(current) => ({ ...current, status: "Ok" } as IdentityFormState)
+						(current) =>
+							({ step: "Success", status: "Ok" } as IdentityFormState)
 					);
 				});
 			} catch (error: unknown) {
