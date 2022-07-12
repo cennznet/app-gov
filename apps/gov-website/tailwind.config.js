@@ -30,8 +30,8 @@ module.exports = {
 
 		fluidType: {
 			settings: {
-				fontSizeMin: 0.875, // 1.125rem === 18px
-				fontSizeMax: 1, // 1.25rem === 20px
+				fontSizeMin: 0.875, // 0.875rem === 14px
+				fontSizeMax: 1, // 1rem === 16px
 				ratioMin: 1, // Multiplicator Min
 				ratioMax: 1.2, // Multiplicator Max
 				screenMin: 20, // 20rem === 320px
