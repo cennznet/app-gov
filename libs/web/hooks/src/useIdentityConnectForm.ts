@@ -80,7 +80,7 @@ export const useIdentityConnectForm = () => {
 					throw {
 						code: `APP/${response.status}`,
 						message: response.statusText,
-						details: await response.text(),
+						details: JSON.parse(await response.text()).message,
 					};
 				}
 

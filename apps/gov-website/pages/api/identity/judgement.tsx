@@ -73,11 +73,12 @@ export default withMethodGuard(
 		} catch (error) {
 			return res
 				.status(error?.httpStatus ?? 500)
-				.json(
-					error?.code === 50007
-						? "DISCORD_MESSAGES_NOT_ALLOWED"
-						: error?.message
-				);
+				.json({
+					message:
+						error?.code === 50007
+							? "DISCORD_MESSAGES_NOT_ALLOWED"
+							: error?.message,
+				});
 		}
 	},
 	["POST"]
