@@ -37,6 +37,11 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 								Visit Discord to view the Governance channels with your new
 								role!
 							</If>
+							<If condition={!!errorAssigningDiscordRole}>
+								Join our Discord Server and and leave a message at our reception
+								channel so we can sort out your Citizen role and grant access to our
+								Governance channels!
+							</If>
 						</p>
 						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
 							<div className="mb-4">
