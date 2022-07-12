@@ -49,7 +49,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 									href={
 										!errorAssigningDiscordRole
 											? "https://discord.gg/zbwXQZCcwr"
-											: "http://discord.gg/cennznet"
+											: "https://discord.com/invite/AnB3tRtkJ4"
 									}
 									target="_blank"
 									rel="noreferrer"
