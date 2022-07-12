@@ -18,7 +18,8 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 	...props
 }) => {
 	const errorAssigningDiscordRole =
-		formState?.statusMessage?.includes("DISCORD");
+		formState?.statusMessage?.includes("DISCORD") &&
+		formState?.statusMessage !== "DISCORD_MESSAGES_NOT_ALLOWED";
 
 	return (
 		<TransactionDialog {...props}>
