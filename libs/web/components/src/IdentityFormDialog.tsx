@@ -17,8 +17,8 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 	onDismiss,
 	...props
 }) => {
-	const isCennzDiscordMember =
-		formState?.statusMessage !== "DISCORD_USER_NOT_FOUND";
+	const errorAssigningDiscordRole =
+		formState?.statusMessage?.includes("DISCORD");
 
 	return (
 		<TransactionDialog {...props}>
@@ -33,7 +33,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="prose text-center">
 							Your identity has been successfully set.&nbsp;
-							<If condition={isCennzDiscordMember}>
+							<If condition={!errorAssigningDiscordRole}>
 								Visit Discord to view the Governance channels with your new
 								role!
 							</If>
@@ -42,7 +42,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 							<div className="mb-4">
 								<a
 									href={
-										isCennzDiscordMember
+										!errorAssigningDiscordRole
 											? "https://discord.gg/zbwXQZCcwr"
 											: "http://discord.gg/cennznet"
 									}
@@ -50,8 +50,8 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 									rel="noreferrer"
 								>
 									<Button startAdornment={<DiscordLogo className="h-4" />}>
-										{isCennzDiscordMember
-											? "Visit Discord"
+										{!errorAssigningDiscordRole
+											? "Visit Governance Channel"
 											: "Join Our Discord"}
 									</Button>
 								</a>
