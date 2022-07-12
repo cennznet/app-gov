@@ -28,7 +28,7 @@ export const StepProgress: FC<StepProgressProps> = ({
 						<Choose.When condition={index < stepIndex}>
 							<div>
 								<IconWrapper>
-									<CheckCircleFilled className="text-hero h-10 w-10 sm:h-12 sm:w-12" />
+									<CheckCircleFilled className="text-hero h-8 w-8 lg:h-10 lg:w-10" />
 									<StepLine active />
 								</IconWrapper>
 
@@ -41,25 +41,25 @@ export const StepProgress: FC<StepProgressProps> = ({
 								<IconWrapper>
 									<If condition={index === steps.length - 1}>
 										<If condition={!error}>
-											<CheckCircleFilled className="text-hero h-12 w-12" />
+											<CheckCircleFilled className="text-hero h-8 w-8 lg:h-10 lg:w-10" />
 										</If>
 
 										<If condition={!!error}>
 											<IconWrapper>
-												<ExclamationCircle className="text-hero h-12 w-12" />
+												<ExclamationCircle className="text-hero h-6 w-6 lg:h-8 lg:w-8" />
 											</IconWrapper>
 										</If>
 									</If>
 
 									<If condition={index < steps.length - 1}>
 										<If condition={!error}>
-											<Spinner className="text-hero mx-1 h-10 w-10 animate-spin" />
+											<Spinner className="text-hero mx-1 h-6 w-6 animate-spin lg:h-8 lg:w-8" />
 											<StepLine active />
 										</If>
 
 										<If condition={!!error}>
 											<IconWrapper>
-												<ExclamationCircle className="text-hero h-12 w-12" />
+												<ExclamationCircle className="text-hero h-6 w-6 lg:h-8 lg:w-8" />
 												<StepLine />
 											</IconWrapper>
 										</If>
@@ -75,7 +75,7 @@ export const StepProgress: FC<StepProgressProps> = ({
 								<IconWrapper>
 									<div
 										className={classNames(
-											"mx-1 h-10 w-10 rounded-3xl border-4",
+											"mx-1 h-6 w-6 rounded-3xl border-2 lg:h-8 lg:w-8",
 											error
 												? "border-hero/40"
 												: index === stepIndex + 1
@@ -118,7 +118,7 @@ const StepText: FC<StepTextProps> = ({ waiting, children }) => (
 const StepLine: FC<{ active?: boolean }> = ({ active }) => (
 	<span
 		className={classNames(
-			"h-0 w-16 rounded-xl border-2 md:w-24 lg:w-32",
+			"h-0 w-16 rounded-xl border lg:w-20",
 			active ? "border-hero" : "border-hero/40"
 		)}
 	/>

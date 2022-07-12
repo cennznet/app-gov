@@ -27,7 +27,7 @@ input::-webkit-input-placeholder {
 }
 
 .markdown code {
-	@apply text-hero border-hero bg-light inline-block rounded border px-[4px] text-sm;
+	@apply text-hero border-hero bg-light inline-block rounded border px-[4px] text-xs;
 }
 
 .markdown pre {

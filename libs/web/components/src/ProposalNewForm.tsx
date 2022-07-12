@@ -28,7 +28,7 @@ export const ProposalNewForm: FC<
 
 	return (
 		<form {...props}>
-			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 				Proposal Details
 			</h2>
 
@@ -85,7 +85,7 @@ export const ProposalNewForm: FC<
 			</fieldset>
 
 			<If condition={callToggle.checked}>
-				<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
+				<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 					Function Call
 				</h2>
 
@@ -110,7 +110,7 @@ export const ProposalNewForm: FC<
 			</h2>
 
 			<fieldset className="mb-6">
-				<p className="prose mb-4">
+				<p className="prose mb-[1em] text-base">
 					Ex consequat occaecat id nulla voluptate anim eu velit et laboris
 					reprehenderit ut dolor magna ut minim voluptate labore non adipisicing
 				</p>

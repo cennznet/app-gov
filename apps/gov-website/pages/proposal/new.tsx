@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { ChangeEventHandler, useCallback, useState } from "react";
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
 
 import {
 	extractCallableExtrinsics,
@@ -69,7 +69,7 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 			<Layout.PageContent>
 				<Layout.PageHeader>Submit a Proposal</Layout.PageHeader>
 
-				<p className="prose mb-8 text-base">
+				<p className="prose mb-[1.5em] text-lg">
 					To submit a proposal you must be a CENNZnet Councillor. Lorem laborum
 					dolor minim mollit eu reprehenderit culpa dolore labore dolor mollit
 					commodo do anim incididunt sunt id pariatur elit tempor nostrud nulla
