@@ -54,6 +54,10 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 		setTimeout(resetForm, 200);
 	}, [closeDialog]);
 
+	useEffect(() => {
+		if (formState?.status === "Cancelled") closeDialog();
+	}, [closeDialog, formState]);
+
 	const onDialogClose = useCallback(() => {
 		if (!formState?.status || formState?.status === "Cancelled") return;
 		onDialogDismiss();
