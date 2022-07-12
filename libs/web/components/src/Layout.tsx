@@ -33,7 +33,7 @@ const PageContent: FC<PropsWithChildren> = ({ children }) => (
 );
 
 const PageHeader: FC<PropsWithChildren> = ({ children }) => (
-	<h1 className="font-display text-hero mb-[0.4em] text-center text-6xl uppercase">
+	<h1 className="font-display text-hero mb-[0.4em] text-center text-8xl uppercase">
 		{children}
 	</h1>
 );

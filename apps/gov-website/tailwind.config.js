@@ -27,6 +27,19 @@ module.exports = {
 				"sharp-7": "7px 7px 0px 0px",
 			},
 		},
+
+		fluidType: {
+			settings: {
+				fontSizeMin: 0.875, // 0.875rem === 14px
+				fontSizeMax: 1, // 1rem === 16px
+				ratioMin: 1, // Multiplicator Min
+				ratioMax: 1.2, // Multiplicator Max
+				screenMin: 20, // 20rem === 320px
+				screenMax: 96, // 96rem === 1536px
+				unit: "rem", // default is rem but it's also possible to use 'px'
+				prefix: "", // set a prefix to use it alongside the default font sizes
+			},
+		},
 	},
 	plugins: [
 		require("@tailwindcss/typography"),

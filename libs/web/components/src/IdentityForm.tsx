@@ -19,16 +19,16 @@ export const IdentityForm: FC<
 		<form {...props}>
 			<Layout.PageHeader>Set your identity</Layout.PageHeader>
 
-			<p className="prose mb-8 text-base">
+			<p className="prose mb-[1.5em] text-lg">
 				The Identity Module ensures an authentic governance and voting
 				experience. It does this by requiring every voting wallet to be
 				connected to 2 social accounts.
 			</p>
 
-			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 				Connect your wallet
 			</h2>
-			<p className="prose mb-8">
+			<p className="prose mb-[1em] text-base">
 				Connect your voting wallet here. This is the wallet that will be checked
 				against the staking requirement. If you have a controller wallet with a
 				stash account that is actively staking, you may connect your controller
@@ -40,10 +40,10 @@ export const IdentityForm: FC<
 				<IdentityFieldSet.Account />
 			</fieldset>
 
-			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 				Connect your social channels
 			</h2>
-			<p className="prose mb-8">
+			<p className="prose mb-[1em] text-base">
 				If your wallet is yet to be associated with a social account, you will
 				be able to sign in to Twitter and Discord below. This will establish
 				that you are the owner of the social accounts and therefore a real

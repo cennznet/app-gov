@@ -5,13 +5,17 @@ export const getSubmitProposalExtrinsic = (
 	api: Api,
 	justificationUrl: string,
 	enactmentDelay: number,
-	functionCall: [string, string, ...string[]]
+	functionCall: [string, string, ...string[]] | SubmittableExtrinsic<"promise">
 ): SubmittableExtrinsic<"promise"> => {
-	const [section, method, ...args] = functionCall;
-	const call = api.createType("Call", api.tx[section][method](...args));
+	let extrinsic = functionCall;
+
+	if (Array.isArray(functionCall)) {
+		const [section, method, ...args] = functionCall;
+		extrinsic = api.tx[section][method](...args);
+	}
 
 	return api.tx.governance.submitProposal(
-		call.toHex(),
+		api.createType("Call", extrinsic).toHex(),
 		justificationUrl,
 		enactmentDelay
 	);

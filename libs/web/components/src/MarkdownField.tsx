@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { forwardRef, useCallback, useState } from "react";
+import { forwardRef, useCallback, useMemo, useState } from "react";
 import { classNames } from "react-extras";
 
 import { IntrinsicElements } from "@app-gov/web/types";
@@ -13,6 +13,9 @@ export const MarkdownField = forwardRef<
 	IntrinsicElements["textarea"] & MarkdownFieldProps
 >(({ className, children, value, rows = 10, ...props }, ref) => {
 	const [preview, setPreview] = useState<boolean>(false);
+
+	const characterCount = useMemo(() => (value as string)?.length, [value]);
+
 	const onWriteClick = useCallback(() => {
 		setPreview(false);
 	}, []);
@@ -28,7 +31,7 @@ export const MarkdownField = forwardRef<
 				"border-hero flex min-h-[400px] w-full  flex-col border-2 bg-white"
 			)}
 		>
-			<div className="flex border-b border-b-slate-200 bg-white p-2 text-slate-600">
+			<div className="flex border-b border-b-slate-200 bg-white p-2 text-xs text-slate-600">
 				<span
 					onClick={onWriteClick}
 					className={classNames(
@@ -56,7 +59,8 @@ export const MarkdownField = forwardRef<
 					ref={ref}
 					value={value}
 					rows={rows}
-					className="absolute inset-0 resize-none p-2 font-mono text-sm outline-none"
+					maxLength={1024}
+					className="absolute inset-0 resize-none p-2 font-mono text-xs outline-none"
 				/>
 
 				<div
@@ -71,15 +75,25 @@ export const MarkdownField = forwardRef<
 					</Markdown>
 				</div>
 			</div>
-			<p className="markdown bg-slate-100 p-2 text-xs">
-				Supported markdown: <strong>**bold**</strong>, <em>*italic*</em>,{" "}
-				<a href="#">[link]()</a>, <code className="!text-xs">`code`</code> and{" "}
-				<span className="mb-4 inline whitespace-pre-wrap bg-slate-50">
-					<code className="!p-0 !text-xs !text-inherit">
-						```multiline code```
-					</code>
-				</span>
-			</p>
+			<span className="flex bg-slate-100 p-2">
+				<p className="markdown flex-1 text-xs">
+					Supported markdown: <strong>**bold**</strong>, <em>*italic*</em>,{" "}
+					<a href="#">[link]()</a>, <code className="!text-xs">`code`</code> and{" "}
+					<span className="mb-4 inline whitespace-pre-wrap bg-slate-50">
+						<code className="!p-0 !text-xs !text-inherit">
+							```multiline code```
+						</code>
+					</span>
+				</p>
+				<p
+					className={classNames(
+						characterCount === 1024 && "text-red-600",
+						"text-xs"
+					)}
+				>
+					{characterCount} / 1024
+				</p>
+			</span>
 		</div>
 	);
 });

@@ -31,7 +31,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 			>
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
-						<p className="prose text-center">
+						<p className="prose text-center text-sm">
 							Your identity has been successfully set.&nbsp;
 							<If condition={!errorAssigningDiscordRole}>
 								Visit Discord to view the Governance channels with your new
@@ -66,7 +66,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 					</Choose.When>
 
 					<Choose.When condition={formState?.status === "NotOk"}>
-						<p className="prose text-center">
+						<p className="prose text-center text-sm">
 							Something went wrong while processing your request.
 						</p>
 
@@ -84,7 +84,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 					</Choose.When>
 
 					<Choose.When condition={formState?.step === "Await"}>
-						<p className="prose text-center">
+						<p className="prose text-center text-sm">
 							Please sign the transaction when prompted...
 						</p>
 					</Choose.When>
@@ -94,7 +94,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 							formState?.step !== "Idle" && formState?.status !== "NotOk"
 						}
 					>
-						<p className="prose text-center">
+						<p className="prose text-center text-sm">
 							Please wait until this process completes...
 						</p>
 					</Choose.When>

@@ -74,13 +74,15 @@ export const useProposalNewForm = () => {
 				const { pinHash, pinUrl } = await pinProposalData(proposalData);
 
 				// 2. Send governance.submitProposal extrinsinc
+				// note the default `api.tx.system.remark("Proposal enacted")` will not execute
+				// as `system.remark` is not a priveledged command, but good enough to serve as placeholder
 				const extrinsic = getSubmitProposalExtrinsic(
 					api,
 					pinUrl,
 					enactmentDelay,
 					functionCall.length
 						? functionCall
-						: ["system", "remark", `Proposal enacted`]
+						: api.tx.system.remark("Proposal enacted")
 				);
 				await signAndSend([extrinsic, sponsor, { signer: wallet.signer }], {
 					onHashed() {
