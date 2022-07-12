@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import {
 	getRequestJudgementExtrinsic,
 	getSetIdentityExtrinsic,
-	signAndSendTx,
+	signAndSend,
 } from "@app-gov/service/cennznet";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
@@ -44,68 +44,59 @@ export const useIdentityConnectForm = () => {
 					getRequestJudgementExtrinsic(api, Number(discordRegistrarIndex)),
 				]);
 
-				const tx = await signAndSendTx(
-					extrinsic,
-					wallet.signer,
-					address as string
-				);
+				await signAndSend([extrinsic, address, { signer: wallet.signer }], {
+					onHashed() {
+						setFormState({ step: "Submit" });
+					},
 
-				tx.on("txCancelled", () =>
-					setFormState(
-						(current) =>
-							({
-								...current,
-								status: "Cancelled",
-							} as IdentityFormState)
-					)
-				);
-
-				tx.on("txHashed", () => {
-					setFormState({ step: "Submit" });
+					onCancelled() {
+						setFormState(
+							(current) =>
+								({
+									...current,
+									status: "Cancelled",
+								} as IdentityFormState)
+						);
+					},
 				});
 
-				tx.on("txFailed", (error) => {
-					const { code = "CENNZ/UNKNOWN", message = "" } =
-						tx.decodeError(error);
+				setFormState({ step: "Process" });
 
-					setFormState(
-						(current) =>
-							({
-								...current,
-								status: "NotOk",
-								message: `[CENNZ/${code}] ${message}`,
-							} as IdentityFormState)
-					);
+				const response = await fetch("/api/identity/judgement", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(Object.fromEntries(data.entries())),
 				});
 
-				tx.on("txSuccessful", async () => {
-					setFormState({ step: "Process" });
+				const result = await response.json();
 
-					const response = await fetch("/api/identity/judgement", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(Object.fromEntries(data.entries())),
-					});
-
-					const result = await response.json();
-
-					if (!response.ok) {
+				if (!response.ok) {
+					if (result?.message === "DISCORD_USER_NOT_FOUND")
 						return setFormState(
 							(current) =>
 								({
 									...current,
-									status: "NotOk",
-									statusMessage: `[HTTP/${response.status}] ${
-										result?.message ?? response?.statusText
-									}`,
+									step: "Success",
+									status: "Ok",
+									statusMessage: result.message,
 								} as IdentityFormState)
 						);
-					}
 
-					setFormState({ step: "Success", status: "Ok" });
-				});
+					return setFormState(
+						(current) =>
+							({
+								...current,
+								status: "NotOk",
+								statusMessage: `[HTTP/${response.status}] ${
+									result?.message ?? response?.statusText
+								}`,
+							} as IdentityFormState)
+					);
+				}
+
+				setFormState({ step: "Success", status: "Ok" });
 			} catch (error: unknown) {
 				console.info(error);
 				setFormState(
