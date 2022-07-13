@@ -44,12 +44,13 @@ export const IdentityForm: FC<
 				Connect your social channels
 			</h2>
 			<p className="prose mb-[1em] text-base">
-				If your wallet is yet to be associated with a social account, you will
-				be able to sign in to Twitter and Discord below. This will establish
-				that you are the owner of the social accounts and therefore a real
-				individual. After seeing both the ‘Verified Twitter’ and ‘Verified
+				Signing into your social accounts below will establish that you are the
+				owner of the accounts and will allow your wallet to participate in
+				Governance. After seeing both the ‘Verified Twitter’ and ‘Verified
 				Discord’ icons, sign and submit the transaction to send this information
-				to the blockchain.
+				to the blockchain. If you wish to change the social accounts connected
+				to your wallet, simply connect the same wallet address, but sign into
+				different social accounts.
 			</p>
 			<fieldset className="mb-12">
 				<div className="grid grid-cols-2 items-center gap-4">
