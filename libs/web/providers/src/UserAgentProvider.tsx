@@ -61,7 +61,7 @@ export const UserAgentProvider: FC<UserAgentProviderProps> = ({
 				{children}
 			</UserAgentContext.Provider>
 
-			<UserAgentDialog open={open} onClose={() => setOpen(false)} />
+			<BrowsersDialog open={open} onClose={() => setOpen(false)} />
 		</div>
 	);
 };
@@ -70,9 +70,9 @@ export function useUserAgent(): UserAgentContextType {
 	return useContext(UserAgentContext);
 }
 
-export interface UserAgentDialogProps extends ComponentProps<typeof Dialog> {}
+export interface BrowsersDialogProps extends ComponentProps<typeof Dialog> {}
 
-const UserAgentDialog: FC<UserAgentDialogProps> = (props) => (
+const BrowsersDialog: FC<BrowsersDialogProps> = (props) => (
 	<Dialog {...props}>
 		<div className="border-hero bg-light shadow-sharp shadow-dark -mx-[4em] flex h-full flex-col items-center justify-center border-4 p-8">
 			<p className="prose w-full text-center text-base">
