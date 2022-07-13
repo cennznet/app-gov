@@ -11,3 +11,5 @@ export * from "./getProvideJudgementExtrinsic";
 export * from "./extractCallableExtrinsics";
 export * from "./getSubmitProposalExtrinsic";
 export * from "./findProposalId";
+export * from "./getNetworkDetails";
+export * from "./waitForBlock";

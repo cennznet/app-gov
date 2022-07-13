@@ -6,17 +6,27 @@
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/gov-relayer",
         "main": "apps/gov-relayer/main.ts",
-        "tsConfig": "apps/gov-relayer/tsconfig.app.json"
+        "tsConfig": "apps/gov-relayer/tsconfig.app.json",
+        "assets": ["apps/gov-relayer/.env"]
       },
       "configurations": {
         "production": {
           "optimization": true,
-          "extractLicenses": true,
-          "inspect": false
+          "assets": []
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "gov-relayer:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "gov-relayer:build:production"
         }
       }
     },

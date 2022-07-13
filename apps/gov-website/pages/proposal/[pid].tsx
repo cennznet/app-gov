@@ -12,7 +12,7 @@ import type {
 	ProposalVote,
 } from "@app-gov/node/types";
 import { getApiInstance } from "@app-gov/service/cennznet";
-import { MONGODB_SERVER } from "@app-gov/service/constants";
+import { MONGODB_URI } from "@app-gov/service/constants";
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
 import {
 	AccountSelect,
@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps = async (content) => {
 	const connectMongoose = async () => {
 		if (mongoose.connection.readyState >= 1) return;
 
-		await mongoose.connect(MONGODB_SERVER);
+		await mongoose.connect(MONGODB_URI);
 	};
 
 	await connectMongoose();
