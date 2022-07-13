@@ -5,6 +5,7 @@ import Head from "next/head";
 import { FC } from "react";
 
 import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import { BrowsersDialog } from "@app-gov/web/components";
 import {
 	CENNZApiProvider,
 	CENNZExtensionProvider,
@@ -33,6 +34,7 @@ const NextApp: FC<AppProps> = ({
 					<title>CENNZnet | Governance Platform</title>
 				</Head>
 				<Component {...pageProps} />
+				<BrowsersDialog />
 			</MainProvider>
 		</SessionProvider>
 	);
