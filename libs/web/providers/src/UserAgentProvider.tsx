@@ -9,7 +9,7 @@ type UserAgentContextType = {
 	browser: IBrowser;
 	os: IOS;
 	device: IDevice;
-	runtimeMode: RuntimeMode;
+	runtimeMode?: RuntimeMode;
 };
 
 type UserAgent = Omit<UserAgentContextType, "runtimeMode">;
@@ -27,7 +27,7 @@ export const UserAgentProvider: FC<UserAgentProviderProps> = ({
 	value,
 }) => {
 	const [userAgent, setUserAgent] = useState<UserAgent>({} as UserAgent);
-	const [runtimeMode, setRuntimeMode] = useState<RuntimeMode>("ReadWrite");
+	const [runtimeMode, setRuntimeMode] = useState<RuntimeMode>();
 
 	useEffect(() => {
 		import("ua-parser-js").then(({ default: UAParser }) => {
@@ -41,8 +41,8 @@ export const UserAgentProvider: FC<UserAgentProviderProps> = ({
 	}, [value]);
 
 	useEffect(() => {
-		if (!userAgent) return;
-		
+		if (!userAgent?.browser?.name || !userAgent?.os?.name) return;
+
 		const { browser, os } = userAgent;
 
 		if (
@@ -51,7 +51,9 @@ export const UserAgentProvider: FC<UserAgentProviderProps> = ({
 			os.name === "iOS" ||
 			os.name === "Android"
 		)
-			setRuntimeMode("ReadOnly");
+			return setRuntimeMode("ReadOnly");
+
+		setRuntimeMode("ReadWrite");
 	}, [userAgent]);
 
 	return (

@@ -36,28 +36,24 @@ export const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({
 	children,
 }) => {
 	const { api } = useCENNZApi();
-	const { browser } = useUserAgent();
+	const { runtimeMode } = useUserAgent();
 	const { promptInstallExtension, getInstalledExtension, accounts } =
 		useCENNZExtension();
 	const [wallet, setWallet] = useState<InjectedExtension>();
 	const [cennzAccount, setCENNZAccount] = useState<InjectedAccountWithMeta>();
 
 	const connectWallet = useCallback(async () => {
-		if (!api || !browser?.name) return;
+		if (!api || !runtimeMode || runtimeMode === "ReadOnly") return;
 
 		const extension = await getInstalledExtension?.();
 
-		if (
-			!extension &&
-			browser?.name !== "Firefox" &&
-			browser?.name !== "Safari"
-		) {
+		if (!extension) {
 			return promptInstallExtension?.();
 		}
 
 		setWallet(extension);
 		store.set("CENNZNET-EXTENSION", extension);
-	}, [api, getInstalledExtension, promptInstallExtension, browser?.name]);
+	}, [api, getInstalledExtension, promptInstallExtension, runtimeMode]);
 
 	const disconnectWallet = useCallback(() => {
 		store.remove("CENNZNET-EXTENSION");

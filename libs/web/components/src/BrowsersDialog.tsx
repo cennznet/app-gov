@@ -6,13 +6,13 @@ import { Dialog } from "./";
 
 export const BrowsersDialog: FC = () => {
 	const [open, setOpen] = useState<boolean>(false);
-	const { browser } = useUserAgent();
+	const { runtimeMode } = useUserAgent();
 
 	useEffect(() => {
-		if (!browser?.name) return;
+		if (!runtimeMode) return;
 
-		if (browser.name === "Firefox" || browser.name === "Safari") setOpen(true);
-	}, [browser?.name]);
+		if (runtimeMode === "ReadOnly") setOpen(true);
+	}, [runtimeMode]);
 
 	return (
 		<Dialog open={open} onClose={() => setOpen(false)}>

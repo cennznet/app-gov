@@ -35,17 +35,11 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	appName,
 	children,
 }) => {
-	const { browser, os } = useUserAgent();
+	const { runtimeMode } = useUserAgent();
 	const [module, setModule] = useState<typeof Extension>();
 	const [accounts, setAccounts] = useState<Array<InjectedAccountWithMeta>>();
 
 	const promptInstallExtension = useCallback(() => {
-		if (os.name === "iOS" || os.name === "Android") {
-			return alert(
-				"Sorry, this browser is not supported by this app. To use this app, please switch to Chrome or its on a Mac or PC."
-			);
-		}
-
 		const url =
 			"https://chrome.google.com/webstore/detail/cennznet-extension/feckpephlmdcjnpoclagmaogngeffafk";
 
@@ -56,7 +50,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		if (!confirmed) return;
 
 		window.open(url, "_blank");
-	}, [os]);
+	}, []);
 
 	useEffect(() => {
 		import("@polkadot/extension-dapp").then(setModule);
@@ -73,7 +67,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	}, [appName, module]);
 
 	useEffect(() => {
-		if (!module || !browser?.name) return;
+		if (!module || !runtimeMode || runtimeMode === "ReadOnly") return;
 		let unsubscribe: () => void;
 
 		const fetchAccounts = async () => {
@@ -81,11 +75,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 
 			await web3Enable(appName);
 			const accounts = (await web3Accounts()) || [];
-			if (
-				!accounts.length &&
-				browser?.name !== "Firefox" &&
-				browser?.name !== "Safari"
-			)
+			if (!accounts.length)
 				return alert(
 					"Please create at least one account in CENNZnet extension to continue."
 				);
@@ -100,7 +90,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		void fetchAccounts();
 
 		return () => unsubscribe?.();
-	}, [appName, module, browser?.name]);
+	}, [appName, module, runtimeMode]);
 
 	return (
 		<CENNZExtensionContext.Provider
