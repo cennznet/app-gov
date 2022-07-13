@@ -40,20 +40,14 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	const [accounts, setAccounts] = useState<Array<InjectedAccountWithMeta>>();
 
 	const promptInstallExtension = useCallback(() => {
-		if (
-			browser.name === "Safari" ||
-			os.name === "iOS" ||
-			os.name === "Android"
-		) {
+		if (os.name === "iOS" || os.name === "Android") {
 			return alert(
-				"Sorry, this browser is not supported by this app. To use this app, please switch to Chrome or Firefox browsers on a Mac or PC."
+				"Sorry, this browser is not supported by this app. To use this app, please switch to Chrome or its on a Mac or PC."
 			);
 		}
 
 		const url =
-			browser?.name === "Firefox"
-				? "https://addons.mozilla.org/en-US/firefox/addon/cennznet-browser-extension/"
-				: "https://chrome.google.com/webstore/detail/cennznet-extension/feckpephlmdcjnpoclagmaogngeffafk";
+			"https://chrome.google.com/webstore/detail/cennznet-extension/feckpephlmdcjnpoclagmaogngeffafk";
 
 		const confirmed = window.confirm(
 			"Please install CENNZnet Extension for your browser and create at least one account to continue."
@@ -62,7 +56,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		if (!confirmed) return;
 
 		window.open(url, "_blank");
-	}, [browser, os]);
+	}, [os]);
 
 	useEffect(() => {
 		import("@polkadot/extension-dapp").then(setModule);
@@ -79,7 +73,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	}, [appName, module]);
 
 	useEffect(() => {
-		if (!module) return;
+		if (!module || !browser?.name) return;
 		let unsubscribe: () => void;
 
 		const fetchAccounts = async () => {
@@ -87,7 +81,11 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 
 			await web3Enable(appName);
 			const accounts = (await web3Accounts()) || [];
-			if (!accounts.length)
+			if (
+				!accounts.length &&
+				browser?.name !== "Firefox" &&
+				browser?.name !== "Safari"
+			)
 				return alert(
 					"Please create at least one account in CENNZnet extension to continue."
 				);
@@ -102,7 +100,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		void fetchAccounts();
 
 		return () => unsubscribe?.();
-	}, [appName, module]);
+	}, [appName, module, browser?.name]);
 
 	return (
 		<CENNZExtensionContext.Provider

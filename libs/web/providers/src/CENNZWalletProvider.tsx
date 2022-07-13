@@ -16,6 +16,7 @@ import type { PropsWithChildren } from "@app-gov/web/types";
 
 import { useCENNZApi } from "./CENNZApiProvider";
 import { useCENNZExtension } from "./CENNZExtensionProvider";
+import { useUserAgent } from "./UserAgentProvider";
 
 interface CENNZWalletContextType {
 	selectedAccount?: InjectedAccountWithMeta;
@@ -35,23 +36,28 @@ export const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({
 	children,
 }) => {
 	const { api } = useCENNZApi();
+	const { browser } = useUserAgent();
 	const { promptInstallExtension, getInstalledExtension, accounts } =
 		useCENNZExtension();
 	const [wallet, setWallet] = useState<InjectedExtension>();
 	const [cennzAccount, setCENNZAccount] = useState<InjectedAccountWithMeta>();
 
 	const connectWallet = useCallback(async () => {
-		if (!api) return;
+		if (!api || !browser?.name) return;
 
 		const extension = await getInstalledExtension?.();
 
-		if (!extension) {
+		if (
+			!extension &&
+			browser?.name !== "Firefox" &&
+			browser?.name !== "Safari"
+		) {
 			return promptInstallExtension?.();
 		}
 
 		setWallet(extension);
 		store.set("CENNZNET-EXTENSION", extension);
-	}, [api, getInstalledExtension, promptInstallExtension]);
+	}, [api, getInstalledExtension, promptInstallExtension, browser?.name]);
 
 	const disconnectWallet = useCallback(() => {
 		store.remove("CENNZNET-EXTENSION");
