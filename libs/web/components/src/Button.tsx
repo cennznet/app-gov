@@ -39,7 +39,7 @@ export const Button: FC<IntrinsicElements["button"] & ButtonProps> = ({
 				}[size],
 
 				active &&
-					`bg-light pointer-events-none translate-y-0 translate-x-0 shadow-none`
+					`bg-[#F5ECFF] text-hero pointer-events-none translate-y-0 translate-x-0 shadow-none`
 			)}
 			{...props}
 		>
