@@ -77,10 +77,12 @@ export const useIdentityConnectForm = () => {
 				});
 
 				if (!response.ok) {
+					const responseText = JSON.parse(await response.text());
+
 					throw {
 						code: `APP/${response.status}`,
 						message: response.statusText,
-						details: JSON.parse(await response.text()).message,
+						details: responseText?.message ?? responseText?.details,
 					};
 				}
 
