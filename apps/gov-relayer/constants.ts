@@ -12,3 +12,5 @@ export const CENNZ_NETWORK: NetworkDetails = getNetworkDetails(
 export const BLOCK_POLLING_INTERVAL = Number(
 	process.env.BLOCK_POLLING_INTERVAL || 2
 );
+export const PROPOSAL_QUEUE = `${CENNZ_NETWORK.chainName}_AppGov_Proposal`;
+export const MESSAGE_TIMEOUT = Number(process.env.MESSAGE_TIMEOUT || 10000);

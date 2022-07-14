@@ -15,7 +15,9 @@
     "gov-relayer:serve": "nx run gov-relayer:serve",
     "gov-relayer:docker": "docker compose up",
     "test": "nx test",
-    "relayer:run": "node dist/apps/gov-relayer/main.js"
+    "relayer:proposal-pub": "node dist/apps/gov-relayer/main.js proposal-pub",
+    "relayer:proposal-sub": "node dist/apps/gov-relayer/main.js proposal-sub",
+    "relayer:run": "run-p relayer:proposal-pub relayer:proposal-sub relayer:proposal-sub"
   },
   "private": true,
   "dependencies": {

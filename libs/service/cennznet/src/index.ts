@@ -13,3 +13,4 @@ export * from "./getSubmitProposalExtrinsic";
 export * from "./findProposalId";
 export * from "./getNetworkDetails";
 export * from "./waitForBlock";
+export * from "./fetchProposalInfo";

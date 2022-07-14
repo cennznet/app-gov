@@ -2,14 +2,14 @@ import { AMQPError } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
 import { getLogger, monitorNewProposal } from "@app-gov/node/utils";
-import { getApiInstance, waitForBlock } from "@app-gov/service/cennznet";
+import { getApiInstance } from "@app-gov/service/cennznet";
 import { getMDBClient } from "@app-gov/service/mongodb";
 import { getAMQClient, getQueueByName } from "@app-gov/service/rabbitmq";
 
 import {
-	BLOCK_POLLING_INTERVAL,
 	CENNZ_NETWORK,
 	MONGODB_URI,
+	PROPOSAL_QUEUE,
 	RABBITMQ_URI,
 } from "../constants";
 
@@ -30,24 +30,18 @@ module.exports = {
 				getMDBClient(MONGODB_URI),
 			]);
 
-			const polling = true;
 			const proposalQueue = await getQueueByName(
 				amqClient,
-				CENNZ_NETWORK.chainName,
-				"AppGov",
-				"ProposalQueue"
+				"Producer",
+				PROPOSAL_QUEUE
 			);
 
 			monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
 				logger.info("Proposal #%d: Send to queue...", proposalId);
 				proposalQueue.publish(JSON.stringify({ proposalId }), {
-					type: "new-proposal",
+					type: "proposal-new",
 				});
 			});
-
-			do {
-				await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
-			} while (polling);
 		} catch (error) {
 			if (error instanceof AMQPError) error?.connection?.close();
 			logger.error("%s", error);
