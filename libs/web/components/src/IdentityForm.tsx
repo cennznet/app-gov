@@ -19,16 +19,16 @@ export const IdentityForm: FC<
 		<form {...props}>
 			<Layout.PageHeader>Set your identity</Layout.PageHeader>
 
-			<p className="prose mb-8 text-base">
+			<p className="prose mb-[1.5em] text-lg">
 				The Identity Module ensures an authentic governance and voting
 				experience. It does this by requiring every voting wallet to be
 				connected to 2 social accounts.
 			</p>
 
-			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 				Connect your wallet
 			</h2>
-			<p className="prose mb-8">
+			<p className="prose mb-[1em] text-base">
 				Connect your voting wallet here. This is the wallet that will be checked
 				against the staking requirement. If you have a controller wallet with a
 				stash account that is actively staking, you may connect your controller
@@ -40,16 +40,17 @@ export const IdentityForm: FC<
 				<IdentityFieldSet.Account />
 			</fieldset>
 
-			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 				Connect your social channels
 			</h2>
-			<p className="prose mb-8">
-				If your wallet is yet to be associated with a social account, you will
-				be able to sign in to Twitter and Discord below. This will establish
-				that you are the owner of the social accounts and therefore a real
-				individual. After seeing both the ‘Verified Twitter’ and ‘Verified
+			<p className="prose mb-[1em] text-base">
+				Signing into your social accounts below will establish that you are the
+				owner of the accounts and will allow your wallet to participate in
+				Governance. After seeing both the ‘Verified Twitter’ and ‘Verified
 				Discord’ icons, sign and submit the transaction to send this information
-				to the blockchain.
+				to the blockchain. If you wish to change the social accounts connected
+				to your wallet, simply connect the same wallet address, but sign into
+				different social accounts.
 			</p>
 			<fieldset className="mb-12">
 				<div className="grid grid-cols-2 items-center gap-4">

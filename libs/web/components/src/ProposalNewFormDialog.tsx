@@ -3,12 +3,7 @@ import { Choose, If } from "react-extras";
 
 import { StepProgress } from "@app-gov/web/components";
 import { ProposalNewFormState } from "@app-gov/web/hooks";
-import {
-	CheckCircle,
-	DiscordLogo,
-	ExclamationCircle,
-	Spinner,
-} from "@app-gov/web/vectors";
+import { DiscordLogo } from "@app-gov/web/vectors";
 
 import { Button, TransactionDialog, TransactionDialogProps } from "./";
 
@@ -33,7 +28,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 			>
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
-						<p className="text-center">
+						<p className="prose text-center  text-sm">
 							Your proposal has been submitted successfully, [and maybe some
 							message to view the proposal on Discord].
 						</p>
@@ -53,7 +48,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 					</Choose.When>
 
 					<Choose.When condition={formState?.status === "NotOk"}>
-						<p className="text-center">
+						<p className="prose text-center text-sm">
 							Something went wrong while processing your request.
 						</p>
 
@@ -71,7 +66,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 					</Choose.When>
 
 					<Choose.When condition={formState?.step === "Await"}>
-						<p className="text-center">
+						<p className="prose text-center text-sm">
 							Please sign the transaction when prompted...
 						</p>
 					</Choose.When>
@@ -81,7 +76,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 							formState?.step === "Submit" || formState?.step === "Process"
 						}
 					>
-						<p className="text-center">
+						<p className="prose text-center text-sm">
 							Please wait until this proccess completes...
 						</p>
 					</Choose.When>

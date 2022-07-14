@@ -31,7 +31,7 @@ export const MarkdownField = forwardRef<
 				"border-hero flex min-h-[400px] w-full  flex-col border-2 bg-white"
 			)}
 		>
-			<div className="flex border-b border-b-slate-200 bg-white p-2 text-slate-600">
+			<div className="flex border-b border-b-slate-200 bg-white p-2 text-xs text-slate-600">
 				<span
 					onClick={onWriteClick}
 					className={classNames(
@@ -60,7 +60,7 @@ export const MarkdownField = forwardRef<
 					value={value}
 					rows={rows}
 					maxLength={1024}
-					className="absolute inset-0 resize-none p-2 font-mono text-sm outline-none"
+					className="absolute inset-0 resize-none p-2 font-mono text-xs outline-none"
 				/>
 
 				<div
@@ -75,8 +75,8 @@ export const MarkdownField = forwardRef<
 					</Markdown>
 				</div>
 			</div>
-			<span className="flex bg-slate-100 p-2 text-xs">
-				<p className="markdown flex-1">
+			<span className="flex bg-slate-100 p-2">
+				<p className="markdown flex-1 text-xs">
 					Supported markdown: <strong>**bold**</strong>, <em>*italic*</em>,{" "}
 					<a href="#">[link]()</a>, <code className="!text-xs">`code`</code> and{" "}
 					<span className="mb-4 inline whitespace-pre-wrap bg-slate-50">
@@ -85,7 +85,12 @@ export const MarkdownField = forwardRef<
 						</code>
 					</span>
 				</p>
-				<p className={classNames(characterCount === 1024 && "text-red-600")}>
+				<p
+					className={classNames(
+						characterCount === 1024 && "text-red-600",
+						"text-xs"
+					)}
+				>
 					{characterCount} / 1024
 				</p>
 			</span>

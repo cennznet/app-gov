@@ -3,11 +3,16 @@ import type { IBrowser, IDevice, IOS } from "ua-parser-js";
 
 import { PropsWithChildren } from "@app-gov/web/types";
 
+type RuntimeMode = "ReadOnly" | "ReadWrite";
+
 type UserAgentContextType = {
 	browser: IBrowser;
 	os: IOS;
 	device: IDevice;
+	runtimeMode?: RuntimeMode;
 };
+
+type UserAgent = Omit<UserAgentContextType, "runtimeMode">;
 
 const UserAgentContext = createContext<UserAgentContextType>(
 	{} as UserAgentContextType
@@ -21,9 +26,8 @@ export const UserAgentProvider: FC<UserAgentProviderProps> = ({
 	children,
 	value,
 }) => {
-	const [userAgent, setUserAgent] = useState<UserAgentContextType>(
-		{} as UserAgentContextType
-	);
+	const [userAgent, setUserAgent] = useState<UserAgent>({} as UserAgent);
+	const [runtimeMode, setRuntimeMode] = useState<RuntimeMode>();
 
 	useEffect(() => {
 		import("ua-parser-js").then(({ default: UAParser }) => {
@@ -36,8 +40,24 @@ export const UserAgentProvider: FC<UserAgentProviderProps> = ({
 		});
 	}, [value]);
 
+	useEffect(() => {
+		if (!userAgent?.browser?.name || !userAgent?.os?.name) return;
+
+		const { browser, os } = userAgent;
+
+		if (
+			browser.name === "Safari" ||
+			browser.name === "Firefox" ||
+			os.name === "iOS" ||
+			os.name === "Android"
+		)
+			return setRuntimeMode("ReadOnly");
+
+		setRuntimeMode("ReadWrite");
+	}, [userAgent]);
+
 	return (
-		<UserAgentContext.Provider value={userAgent}>
+		<UserAgentContext.Provider value={{ ...userAgent, runtimeMode }}>
 			{children}
 		</UserAgentContext.Provider>
 	);
