@@ -10,13 +10,12 @@ export const monitorNewProposal = async (
 	callback: (proposalId: number) => void
 ): Promise<void> => {
 	const proposal = mdb.model<ProposalModel>("Proposal");
-	const lastKnownId =
-		Number(
-			(await proposal.findOne().sort({ proposalId: "desc" }).exec())
-				?.proposalId ?? -1
-		) + 1;
-
 	api.query.governance.nextProposalId(async (nextProposalId: u64) => {
+		const lastKnownId =
+			Number(
+				(await proposal.findOne().sort({ proposalId: "desc" }).exec())
+					?.proposalId ?? -1
+			) + 1;
 		const endId = nextProposalId.toNumber();
 		const proposalIds = [];
 		for (let i = lastKnownId; i < endId; i++) proposalIds.push(i);
