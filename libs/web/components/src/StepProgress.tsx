@@ -46,7 +46,7 @@ export const StepProgress: FC<StepProgressProps> = ({
 
 										<If condition={!!error}>
 											<IconWrapper>
-												<ExclamationCircle className="text-hero h-6 w-6 lg:h-8 lg:w-8" />
+												<ExclamationCircle className="text-hero h-8 w-8 lg:h-10 lg:w-10" />
 											</IconWrapper>
 										</If>
 									</If>
@@ -59,7 +59,7 @@ export const StepProgress: FC<StepProgressProps> = ({
 
 										<If condition={!!error}>
 											<IconWrapper>
-												<ExclamationCircle className="text-hero h-6 w-6 lg:h-8 lg:w-8" />
+												<ExclamationCircle className="text-hero h-8 w-8 lg:h-10 lg:w-10" />
 												<StepLine />
 											</IconWrapper>
 										</If>
