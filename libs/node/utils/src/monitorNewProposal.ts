@@ -9,8 +9,8 @@ export const monitorNewProposal = async (
 	mdb: Mongoose,
 	callback: (proposalId: number) => void
 ): Promise<void> => {
-	const proposal = mdb.model<ProposalModel>("Proposal");
 	api.query.governance.nextProposalId(async (nextProposalId: u64) => {
+		const proposal = mdb.model<ProposalModel>("Proposal");
 		const lastKnownId =
 			Number(
 				(await proposal.findOne().sort({ proposalId: "desc" }).exec())
