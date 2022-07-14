@@ -14,3 +14,4 @@ export const BLOCK_POLLING_INTERVAL = Number(
 );
 export const PROPOSAL_QUEUE = `${CENNZ_NETWORK.chainName}_AppGov_Proposal`;
 export const MESSAGE_TIMEOUT = Number(process.env.MESSAGE_TIMEOUT || 10000);
+export const MESSAGE_MAX_RETRY = Number(process.env.MESSAGE_MAX_RETRY || 5);

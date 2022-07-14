@@ -1,13 +1,22 @@
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import { getLogger, handleNewProposalMessage } from "@app-gov/node/utils";
+import {
+	AbortError,
+	getLogger,
+	handleNewProposalMessage,
+} from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import { getMDBClient } from "@app-gov/service/mongodb";
-import { getAMQClient, getQueueByName } from "@app-gov/service/rabbitmq";
+import {
+	getAMQClient,
+	getQueueByName,
+	requeueMessage,
+} from "@app-gov/service/rabbitmq";
 
 import {
 	CENNZ_NETWORK,
+	MESSAGE_MAX_RETRY,
 	MESSAGE_TIMEOUT,
 	MONGODB_URI,
 	PROPOSAL_QUEUE,
@@ -57,6 +66,12 @@ module.exports = {
 					}
 				} catch (error) {
 					logger.error("%s", error);
+					const result = await requeueMessage(
+						proposalQueue,
+						message,
+						MESSAGE_MAX_RETRY
+					);
+					logger.info(`Proposal #%d: ${result}`, body.proposalId);
 				}
 				await message.ack();
 			};

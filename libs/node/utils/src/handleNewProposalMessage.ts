@@ -34,7 +34,7 @@ export const handleNewProposalMessage = async (
 
 		abortSignal.addEventListener("abort", () => {
 			if (processed) return;
-			logger.info("Proposal #%d: aborted.", proposalId);
+			logger.info("Proposal #%d: 🛑 aborted", proposalId);
 			reject(new AbortError());
 		});
 
@@ -44,12 +44,12 @@ export const handleNewProposalMessage = async (
 		);
 
 		if (abortSignal.aborted) return;
-		logger.info("Proposal #%d: [1/2] fetching info...", proposalId);
+		logger.info("Proposal #%d: 🎾 fetch info [1/3]", proposalId);
 		fetchProposalInfo(api, proposalId)
 			.then((proposalInfo) => {
 				if (abortSignal.aborted) return;
 				if (!proposalInfo) return true;
-				logger.info("Proposal #%d: [2/3] updating db...", proposalId);
+				logger.info("Proposal #%d: 📮 file to DB [2/3]", proposalId);
 				return updateProposalRecord({
 					proposalId,
 					...proposalInfo,
@@ -57,16 +57,19 @@ export const handleNewProposalMessage = async (
 			})
 			.then((success) => {
 				if (!success) return;
-				logger.info("Proposal #%d: [3/3] publishing on Discord...", proposalId);
+				logger.info("Proposal #%d: 💌 post on Discord [3/3]", proposalId);
 				// TODO: publishOnDiscord
 				return success;
 			})
 			.then((success) => {
 				processed = success as boolean;
 				if (!success) return;
-				logger.info("Proposal #%d: done.", proposalId);
+				logger.info("Proposal #%d: 🎉 complete", proposalId);
 				resolve();
 			})
-			.catch(reject);
+			.catch((error) => {
+				processed = true;
+				reject(error);
+			});
 	});
 };

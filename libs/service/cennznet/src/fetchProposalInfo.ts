@@ -1,6 +1,6 @@
 import { Api } from "@cennznet/api";
 
-interface ProposalInfo {
+export interface ProposalInfo {
 	sponsor: string;
 	justificationUri: string;
 	enactmentDelay: number;
@@ -35,9 +35,10 @@ export const fetchProposalInfo = async (
 			string,
 			unknown
 		>;
-	} catch (error) {
-		call = {};
-	}
+		// eslint-disable-next-line no-empty
+	} catch (error) {}
+
+	if (!call) return;
 
 	return {
 		...proposalInfo,
