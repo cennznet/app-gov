@@ -34,7 +34,6 @@ export const DISCORD_CLIENT: Pick<
 	clientId: process.env.DISCORD_CLIENT_ID ?? "",
 	clientSecret: process.env.DISCORD_CLIENT_SECRET ?? "",
 };
-
 export const TWITTER_CLIENT: Pick<
 	OAuthUserConfig<"twitter">,
 	"clientId" | "clientSecret"
