@@ -101,7 +101,7 @@ export const useIdentityConnectForm = () => {
 
 				setFormStatus(
 					"NotOk",
-					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
+					`[${error?.code ?? "UNKNOWN"}] ${error?.details ?? error.message}`
 				);
 			}
 		},
