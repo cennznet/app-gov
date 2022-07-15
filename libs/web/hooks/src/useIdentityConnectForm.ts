@@ -77,12 +77,16 @@ export const useIdentityConnectForm = () => {
 				});
 
 				if (!response.ok) {
-					const responseText = JSON.parse(await response.text());
+					let responseBody;
+					const contentType = response.headers.get("Content-Type");
+
+					if (contentType?.includes("application/json"))
+						responseBody = await response.json();
 
 					throw {
 						code: `APP/${response.status}`,
 						message: response.statusText,
-						details: responseText?.message ?? responseText?.details,
+						details: responseBody?.message ?? responseBody?.details,
 					};
 				}
 
