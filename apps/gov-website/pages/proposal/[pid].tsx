@@ -1,11 +1,11 @@
 import { GetStaticProps, NextPage } from "next";
 
 import { MONGODB_URI } from "@app-gov/service/constants";
-import { getMDBClient, ProposalModel } from "@app-gov/service/mongodb";
+import { getMongoClient, ProposalModel } from "@app-gov/service/mongodb";
 import { Header, Layout } from "@app-gov/web/components";
 
 export const getStaticPaths = async () => {
-	const mdb = await getMDBClient(MONGODB_URI);
+	const mdb = await getMongoClient(MONGODB_URI);
 	const proposals = await mdb
 		.model<ProposalModel>("Proposal")
 		.find()
@@ -23,7 +23,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 	const {
 		params: { pid },
 	} = context;
-	const mdb = await getMDBClient(MONGODB_URI);
+	const mdb = await getMongoClient(MONGODB_URI);
 	const proposal = await mdb
 		.model<ProposalModel>("Proposal")
 		.findOne({ proposalId: pid });

@@ -3,8 +3,8 @@ import chalk from "chalk";
 
 import { getLogger, monitorNewProposal } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
-import { getMDBClient } from "@app-gov/service/mongodb";
-import { getAMQClient, getQueueByName } from "@app-gov/service/rabbitmq";
+import { getMongoClient } from "@app-gov/service/mongodb";
+import { getQueueByName, getRabbitClient } from "@app-gov/service/rabbitmq";
 
 import {
 	CENNZ_NETWORK,
@@ -26,8 +26,8 @@ module.exports = {
 		try {
 			const [cennzApi, amqClient, mdbClient] = await Promise.all([
 				getApiInstance(CENNZ_NETWORK.chainName),
-				getAMQClient(RABBITMQ_URI),
-				getMDBClient(MONGODB_URI),
+				getRabbitClient(RABBITMQ_URI),
+				getMongoClient(MONGODB_URI),
 			]);
 
 			const proposalQueue = await getQueueByName(

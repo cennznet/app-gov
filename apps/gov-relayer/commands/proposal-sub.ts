@@ -7,10 +7,10 @@ import {
 	handleNewProposalMessage,
 } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
-import { getMDBClient } from "@app-gov/service/mongodb";
+import { getMongoClient } from "@app-gov/service/mongodb";
 import {
-	getAMQClient,
 	getQueueByName,
+	getRabbitClient,
 	requeueMessage,
 } from "@app-gov/service/rabbitmq";
 
@@ -36,8 +36,8 @@ module.exports = {
 		try {
 			const [cennzApi, amqClient, mdbClient] = await Promise.all([
 				getApiInstance(CENNZ_NETWORK.chainName),
-				getAMQClient(RABBITMQ_URI),
-				getMDBClient(MONGODB_URI),
+				getRabbitClient(RABBITMQ_URI),
+				getMongoClient(MONGODB_URI),
 			]);
 
 			const proposalQueue = await getQueueByName(

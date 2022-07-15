@@ -1,3 +1,3 @@
-export * from "./getAMQClient";
+export * from "./getRabbitClient";
 export * from "./getQueueByName";
 export * from "./requeueMessage";
