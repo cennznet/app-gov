@@ -5,7 +5,7 @@ import type {
 	ProposalCall,
 	ProposalDetails,
 	ProposalInfo,
-} from "@app-gov/node/types";
+} from "@app-gov/node/utils";
 
 import { Markdown } from "./";
 

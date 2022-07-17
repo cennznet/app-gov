@@ -4,3 +4,4 @@ export * from "./getLogger";
 export * from "./monitorNewProposal";
 export * from "./handleNewProposalMessage";
 export * from "./AbortError";
+export * from "./types";
