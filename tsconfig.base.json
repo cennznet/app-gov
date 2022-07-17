@@ -27,7 +27,7 @@
       "@app-gov/web/components": ["libs/web/components/src/index.ts"],
       "@app-gov/web/hooks": ["libs/web/hooks/src/index.ts"],
       "@app-gov/web/providers": ["libs/web/providers/src/index.ts"],
-      "@app-gov/web/types": ["libs/web/types/src/index.ts"],
+      "@app-gov/web/utils": ["libs/web/utils/src/index.ts"],
       "@app-gov/web/vectors": ["libs/web/vectors/src/index.ts"]
     }
   },

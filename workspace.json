@@ -16,7 +16,7 @@
     "web-components": "libs/web/components",
     "web-hooks": "libs/web/hooks",
     "web-providers": "libs/web/providers",
-    "web-types": "libs/web/types",
+    "web-utils": "libs/web/utils",
     "web-vectors": "libs/web/vectors"
   }
 }

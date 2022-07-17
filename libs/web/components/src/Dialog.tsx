@@ -2,7 +2,7 @@ import { Dialog as BaseDialog, Transition } from "@headlessui/react";
 import { FC, Fragment, MutableRefObject } from "react";
 import { classNames } from "react-extras";
 
-import { PropsWithChildren } from "@app-gov/web/types";
+import { PropsWithChildren } from "@app-gov/web/utils";
 
 export interface DialogProps extends PropsWithChildren {
 	className?: string;
