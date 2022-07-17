@@ -77,10 +77,16 @@ export const useIdentityConnectForm = () => {
 				});
 
 				if (!response.ok) {
+					let responseBody;
+					const contentType = response.headers.get("Content-Type");
+
+					if (contentType?.includes("application/json"))
+						responseBody = await response.json();
+
 					throw {
 						code: `APP/${response.status}`,
 						message: response.statusText,
-						details: JSON.parse(await response.text()).message,
+						details: responseBody?.message ?? responseBody?.details,
 					};
 				}
 
@@ -99,7 +105,7 @@ export const useIdentityConnectForm = () => {
 
 				setFormStatus(
 					"NotOk",
-					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
+					`[${error?.code ?? "UNKNOWN"}] ${error?.details ?? error.message}`
 				);
 			}
 		},

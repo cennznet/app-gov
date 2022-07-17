@@ -107,9 +107,9 @@ const assignDiscordRole = async (discordUsername: string) => {
 	await user.roles.add(identityRole);
 	// Send a message to the user letting them know the verification has been successful
 	await user.send(
-		`***Congratulations on completing the steps for verifying your identity.*** \n\n` +
-			`Thank you for supporting CENNZnet and helping to build the blockchain for the Metaverse!\n` +
-			`You have been assigned the ${identityRole.name} role and can now participate in private channels\n` +
+		`***Welcome Citizen ${username}.*** \n\n` +
+			`Thank you for doing your part in governing the CENNZnet blockchain!\n` +
+			`You have been assigned the ${identityRole.name} role and can now participate in private channels.\n` +
 			`Please note that for your safety, we will never ask for private keys, seed phrases or send links via DM.`
 	);
 };
