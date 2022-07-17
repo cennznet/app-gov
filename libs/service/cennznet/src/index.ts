@@ -1,4 +1,4 @@
-export * from "./signAndSendTx";
+export * from "./signAndSend";
 export * from "./Transaction";
 export * from "./getSetIdentityExtrinsic";
 export * from "./getApiInstance";
