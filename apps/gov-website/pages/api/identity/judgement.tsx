@@ -7,7 +7,7 @@ import {
 	getApiInstance,
 	getProvideJudgementExtrinsic,
 	isIdentityValueMatched,
-	signAndSendPromise,
+	signAndSend,
 } from "@app-gov/service/cennznet";
 import { CENNZ_NETWORK, DISCORD_BOT } from "@app-gov/service/constants";
 import { getDiscordBot } from "@app-gov/service/discord";
@@ -62,8 +62,8 @@ export default withMethodGuard(
 			);
 
 			await Promise.all([
-				signAndSendPromise(twitterExtrinsic, twitterRegistrar.signer),
-				signAndSendPromise(discordExtrinsic, discordRegistrar.signer),
+				signAndSend([twitterExtrinsic, twitterRegistrar.signer]),
+				signAndSend([discordExtrinsic, discordRegistrar.signer]),
 			]);
 
 			// 4. Assign user with a special role
