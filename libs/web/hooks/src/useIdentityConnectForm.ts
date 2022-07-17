@@ -8,7 +8,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface IdentityFormState {
-	step: "Idle" | "Await" | "Submit" | "Process" | "Success";
+	step: "Idle" | "Await" | "Submit" | "Process" | "Complete";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
@@ -90,7 +90,7 @@ export const useIdentityConnectForm = () => {
 					};
 				}
 
-				setFormState({ step: "Success", status: "Ok" });
+				setFormState({ step: "Complete", status: "Ok" });
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
@@ -98,7 +98,7 @@ export const useIdentityConnectForm = () => {
 
 				if (error?.details?.includes("DISCORD"))
 					return setFormState({
-						step: "Success",
+						step: "Complete",
 						status: "Ok",
 						statusMessage: error.details,
 					});

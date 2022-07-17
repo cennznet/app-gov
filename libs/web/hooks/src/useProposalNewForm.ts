@@ -13,7 +13,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface ProposalNewFormState {
-	step: "Idle" | "Await" | "Submit" | "Process" | "Success";
+	step: "Idle" | "Await" | "Submit" | "Process" | "Complete";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
@@ -129,7 +129,7 @@ export const useProposalNewForm = () => {
 					};
 				}
 
-				setFormState({ step: "Success", status: "Ok" });
+				setFormState({ step: "Complete", status: "Ok" });
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
