@@ -67,7 +67,7 @@ export default withMethodGuard(
 			]);
 
 			// 4. Assign user with a special role
-			await assignDiscordRole(discordUsername);
+			if (DISCORD_BOT.Token) await assignDiscordRole(discordUsername);
 
 			return res.json({ ok: true });
 		} catch (error) {
