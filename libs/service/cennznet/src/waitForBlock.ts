@@ -5,16 +5,18 @@ export async function waitForBlock(
 	numberOfBlocks: number
 ): Promise<void> {
 	let firstBlock: number;
-	// eslint-disable-next-line no-async-promise-executor
-	return new Promise(async (resolve) => {
-		const unsubscribe = await api.derive.chain.subscribeNewHeads(
-			async (header) => {
+	let unsubscribeFn: () => void;
+	return new Promise((resolve) => {
+		api.derive.chain
+			.subscribeNewHeads((header) => {
 				const headerBlock = header.number.toNumber();
 				if (!firstBlock) firstBlock = header.number.toNumber();
 				if (headerBlock < firstBlock + numberOfBlocks) return;
-				unsubscribe();
+				unsubscribeFn?.();
 				resolve();
-			}
-		);
+			})
+			.then((unsubscribe) => {
+				unsubscribeFn = unsubscribe;
+			});
 	});
 }
