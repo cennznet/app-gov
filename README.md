@@ -26,7 +26,7 @@ yarn gov-website:dev
 yarn gov-relayer:docker
 
 # start webpack
-yarn gov-relayer:serve
+yarn gov-relayer:webpack
 
 # start the CLI
 yarn relayer:run
