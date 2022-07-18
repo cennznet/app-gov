@@ -53,7 +53,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 						</p>
 
 						<If condition={!!formState?.statusMessage}>
-							<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
+							<p className="prose mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
 								{formState?.statusMessage}
 							</p>
 						</If>
