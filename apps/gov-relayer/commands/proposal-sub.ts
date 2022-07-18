@@ -50,13 +50,7 @@ module.exports = {
 				try {
 					switch (type) {
 						case "proposal-new":
-							const abortSignal = (AbortSignal as any).timeout(MESSAGE_TIMEOUT);
-							await handleNewProposalMessage(
-								cennzApi,
-								mdbClient,
-								body,
-								abortSignal
-							);
+							await handleNewProposalMessage(cennzApi, mdbClient, body);
 							break;
 					}
 				} catch (error) {
