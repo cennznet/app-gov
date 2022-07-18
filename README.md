@@ -39,4 +39,4 @@ yarn relayer:run
 
 - Ensure `apps/gov-relayer/package.json#dependencies` is up-to-date with the code base
 - Run `yarn gov-relayer:build`
-- The folder `dist/apps/gov-relayer` are ready to be copy over to a container
+- The folder `dist/apps/gov-relayer` is ready to be copied over to a container
