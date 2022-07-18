@@ -3,6 +3,7 @@ import { Mongoose } from "mongoose";
 
 import {
 	fetchProposalStatus,
+	fetchProposalVetoPercentage,
 	fetchProposalVotes,
 } from "@app-gov/service/cennznet";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
@@ -61,8 +62,17 @@ export const handleProposalActivityMessage = async (
 				break;
 			}
 
-			case "ReferendumDeliberation":
+			case "ReferendumDeliberation": {
+				const vetoPercentage = await fetchProposalVetoPercentage(
+					api,
+					proposalId
+				);
+
+				if (proposal.vetoPercentage === vetoPercentage) break;
+				logger.info("Proposal #%d: 🗳  update veto [1/2]", proposalId);
+				updatedData = { ...updatedData, vetoPercentage };
 				break;
+			}
 		}
 
 		if (!Object.keys(updatedData).length) return;
