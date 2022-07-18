@@ -13,7 +13,7 @@ export const RABBITMQ_URI: string =
 
 // CENNZNET
 export const CENNZ_NETWORK: NetworkDetails = getNetworkDetails(
-	(process.env.CENNZ_NETWORK ?? "rata") as CENNZNetNetwork
+	(process.env.NX_CENNZ_NETWORK ?? "rata") as CENNZNetNetwork
 );
 export const TWITTER_REGISTRAR_SEED: Uint8Array = (process.env
 	.TWITTER_REGISTRAR_SEED ?? "") as unknown as Uint8Array;
