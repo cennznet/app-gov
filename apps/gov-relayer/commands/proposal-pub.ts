@@ -40,8 +40,20 @@ module.exports = {
 				PROPOSAL_QUEUE
 			);
 
-			do {
-				logger.info("Health check: 👌 ok");
+			let lastBlockPolled: number;
+			cennzApi.rpc.chain.subscribeFinalizedHeads(async (head) => {
+				const blockNumber = head.number.toNumber();
+				if (
+					lastBlockPolled &&
+					blockNumber < lastBlockPolled + BLOCK_POLLING_INTERVAL
+				)
+					return;
+				lastBlockPolled = blockNumber;
+				logger.info(
+					`Health check: 👌 ${chalk.green("ok")} @ ${chalk.gray("%s")}`,
+					blockNumber
+				);
+
 				await monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
 					proposalQueue.publish(JSON.stringify({ proposalId }), {
 						type: "proposal-new",
@@ -53,9 +65,7 @@ module.exports = {
 						type: "proposal-activity",
 					});
 				});
-
-				await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
-			} while (true);
+			});
 		} catch (error) {
 			if (error instanceof AMQPError) error?.connection?.close();
 			logger.error("%s", error);
