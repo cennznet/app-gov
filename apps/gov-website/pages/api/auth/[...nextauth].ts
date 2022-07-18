@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import TwitterProvider from "next-auth/providers/twitter";
 
-import { DISCORD_CLIENT, TWITTER_CLIENT } from "@app-gov/service/constants";
+import { DISCORD_CLIENT, TWITTER_CLIENT } from "@app-gov/service/env-vars";
 
 export default NextAuth({
 	pages: {

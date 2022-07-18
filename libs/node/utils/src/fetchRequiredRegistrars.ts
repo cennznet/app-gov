@@ -2,13 +2,13 @@ import { Api } from "@cennznet/api";
 import { KeyringPair } from "@polkadot/keyring/types";
 
 import {
-	DISCORD_REGISTRAR_SEED,
-	TWITTER_REGISTRAR_SEED,
-} from "@app-gov/node/constants";
-import {
 	fetchIdentityRegistrars,
 	getKeyringPairFromSeed,
 } from "@app-gov/service/cennznet";
+import {
+	DISCORD_REGISTRAR_SEED,
+	TWITTER_REGISTRAR_SEED,
+} from "@app-gov/service/env-vars";
 
 interface Registrar {
 	address: string;

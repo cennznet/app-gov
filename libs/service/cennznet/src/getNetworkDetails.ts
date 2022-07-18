@@ -1,31 +1,31 @@
 import { CENNZNetNetwork } from "@cennznet/api/types";
 
 export interface NetworkDetails {
-	chainName: CENNZNetNetwork;
-	chainTitle: string;
-	chainExplorer: string;
+	ChainSlug: CENNZNetNetwork;
+	ChainName: string;
+	ChainExplorer: string;
 }
 
 const networks: Record<CENNZNetNetwork, NetworkDetails> = {
 	local: {
-		chainName: "local",
-		chainTitle: "Local Testnet",
-		chainExplorer: "http://localhost",
+		ChainSlug: "local",
+		ChainName: "Local Testnet",
+		ChainExplorer: "http://localhost",
 	},
 	rata: {
-		chainName: "rata",
-		chainTitle: "Rata Testnet",
-		chainExplorer: "https://rata.uncoverexplorer.com",
+		ChainSlug: "rata",
+		ChainName: "Rata Testnet",
+		ChainExplorer: "https://rata.uncoverexplorer.com",
 	},
 	nikau: {
-		chainName: "nikau",
-		chainTitle: "Nikau Testnet",
-		chainExplorer: "https://nikau.uncoverexplorer.com",
+		ChainSlug: "nikau",
+		ChainName: "Nikau Testnet",
+		ChainExplorer: "https://nikau.uncoverexplorer.com",
 	},
 	azalea: {
-		chainName: "azalea",
-		chainTitle: "CENNZnet Mainnet",
-		chainExplorer: "https://uncoverexplorer.com",
+		ChainSlug: "azalea",
+		ChainName: "CENNZnet Mainnet",
+		ChainExplorer: "https://uncoverexplorer.com",
 	},
 };
 

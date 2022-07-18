@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import type { IntrinsicElements, PropsWithChildren } from "@app-gov/web/types";
+import type { IntrinsicElements, PropsWithChildren } from "@app-gov/web/utils";
 import { CENNZNetLogoSrc } from "@app-gov/web/vectors";
 
 interface HeaderProps extends PropsWithChildren {}

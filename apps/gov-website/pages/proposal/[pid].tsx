@@ -1,6 +1,6 @@
 import { GetStaticProps, NextPage } from "next";
 
-import { MONGODB_URI } from "@app-gov/service/constants";
+import { MONGODB_URI } from "@app-gov/service/env-vars";
 import { getMongoClient, ProposalModel } from "@app-gov/service/mongodb";
 import { Header, Layout } from "@app-gov/web/components";
 

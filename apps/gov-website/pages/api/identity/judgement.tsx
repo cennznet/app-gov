@@ -1,16 +1,19 @@
 import { getToken } from "next-auth/jwt";
 
-import { NEXTAUTH_SECRET } from "@app-gov/node/constants";
 import { fetchRequiredRegistrars, withMethodGuard } from "@app-gov/node/utils";
 import {
 	fetchIdentityOf,
 	getApiInstance,
 	getProvideJudgementExtrinsic,
 	isIdentityValueMatched,
-	signAndSendPromise,
+	signAndSend,
 } from "@app-gov/service/cennznet";
-import { CENNZ_NETWORK, DISCORD_BOT } from "@app-gov/service/constants";
 import { getDiscordBot } from "@app-gov/service/discord";
+import {
+	CENNZ_NETWORK,
+	DISCORD_BOT,
+	NEXTAUTH_SECRET,
+} from "@app-gov/service/env-vars";
 
 export default withMethodGuard(
 	async function identityConnectRoute(req, res) {
@@ -62,12 +65,12 @@ export default withMethodGuard(
 			);
 
 			await Promise.all([
-				signAndSendPromise(twitterExtrinsic, twitterRegistrar.signer),
-				signAndSendPromise(discordExtrinsic, discordRegistrar.signer),
+				signAndSend([twitterExtrinsic, twitterRegistrar.signer]),
+				signAndSend([discordExtrinsic, discordRegistrar.signer]),
 			]);
 
 			// 4. Assign user with a special role
-			await assignDiscordRole(discordUsername);
+			if (DISCORD_BOT.Token) await assignDiscordRole(discordUsername);
 
 			return res.json({ ok: true });
 		} catch (error) {
