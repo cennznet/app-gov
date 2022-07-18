@@ -11,5 +11,6 @@ import type { ProposalModel } from "./types";
 			justificationUri: { type: Schema.Types.String },
 			enactmentDelay: { type: Schema.Types.Number },
 			call: { type: Schema.Types.Map },
+			status: { type: Schema.Types.String },
 		})
 	);
