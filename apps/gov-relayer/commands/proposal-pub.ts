@@ -3,15 +3,14 @@ import chalk from "chalk";
 
 import { getLogger, monitorNewProposal } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
-import { getMongoClient } from "@app-gov/service/mongodb";
-import { getQueueByName, getRabbitClient } from "@app-gov/service/rabbitmq";
-
 import {
 	CENNZ_NETWORK,
 	MONGODB_URI,
 	PROPOSAL_QUEUE,
 	RABBITMQ_URI,
-} from "../constants";
+} from "@app-gov/service/env-vars";
+import { getMongoClient } from "@app-gov/service/mongodb";
+import { getQueueByName, getRabbitClient } from "@app-gov/service/rabbitmq";
 
 module.exports = {
 	command: "proposal-pub",
@@ -20,12 +19,12 @@ module.exports = {
 		const logger = getLogger("ProposalPub");
 		logger.info(
 			`Start process on ${chalk.magenta("%s")}...`,
-			CENNZ_NETWORK.chainTitle
+			CENNZ_NETWORK.ChainName
 		);
 
 		try {
 			const [cennzApi, amqClient, mdbClient] = await Promise.all([
-				getApiInstance(CENNZ_NETWORK.chainName),
+				getApiInstance(CENNZ_NETWORK.ChainSlug),
 				getRabbitClient(RABBITMQ_URI),
 				getMongoClient(MONGODB_URI),
 			]);

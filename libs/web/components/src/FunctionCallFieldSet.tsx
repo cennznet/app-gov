@@ -17,7 +17,7 @@ import {
 	extractCallableExtrinsics,
 	ExtrinsicArg,
 } from "@app-gov/service/cennznet";
-import { IntrinsicElements, PropsWithChildren } from "@app-gov/web/types";
+import { IntrinsicElements, PropsWithChildren } from "@app-gov/web/utils";
 
 import { Select, TextField } from "./";
 

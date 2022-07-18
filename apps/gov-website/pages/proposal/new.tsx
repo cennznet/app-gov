@@ -5,7 +5,7 @@ import {
 	extractCallableExtrinsics,
 	getApiInstance,
 } from "@app-gov/service/cennznet";
-import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import { CENNZ_NETWORK } from "@app-gov/service/env-vars";
 import {
 	FunctionCallFieldSet,
 	Header,

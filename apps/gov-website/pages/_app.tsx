@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { FC } from "react";
 
-import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import { CENNZ_NETWORK } from "@app-gov/service/env-vars";
 import { BrowsersDialog } from "@app-gov/web/components";
 import {
 	CENNZApiProvider,

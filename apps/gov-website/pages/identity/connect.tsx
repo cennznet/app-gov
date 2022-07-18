@@ -10,7 +10,7 @@ import {
 
 import { fetchRequiredRegistrars } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
-import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import { CENNZ_NETWORK } from "@app-gov/service/env-vars";
 import {
 	Header,
 	IdentityFieldSet,

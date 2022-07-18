@@ -12,7 +12,7 @@ import {
 } from "react";
 import store from "store";
 
-import type { PropsWithChildren } from "@app-gov/web/types";
+import type { PropsWithChildren } from "@app-gov/web/utils";
 
 import { useCENNZApi } from "./CENNZApiProvider";
 import { useCENNZExtension } from "./CENNZExtensionProvider";
