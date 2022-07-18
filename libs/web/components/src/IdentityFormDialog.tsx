@@ -24,7 +24,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 	return (
 		<TransactionDialog {...props}>
 			<StepProgress
-				steps={["Sign", "Submit", "Judgement", "Success!"]}
+				steps={["Confirm", "Submit", "Judgement", "Success!"]}
 				stepIndex={["Await", "Submit", "Process", "Complete"].indexOf(
 					formState?.step
 				)}

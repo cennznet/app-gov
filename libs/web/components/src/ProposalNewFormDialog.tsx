@@ -20,7 +20,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 	return (
 		<TransactionDialog {...props}>
 			<StepProgress
-				steps={["Sign", "Submit", "Process", "Success!"]}
+				steps={["Confirm", "Submit", "Process", "Success!"]}
 				stepIndex={["Await", "Submit", "Process", "Complete"].indexOf(
 					formState.step
 				)}
