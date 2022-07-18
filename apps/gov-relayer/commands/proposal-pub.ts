@@ -1,9 +1,14 @@
 import { AMQPError } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import { getLogger, monitorNewProposal } from "@app-gov/node/utils";
-import { getApiInstance } from "@app-gov/service/cennznet";
 import {
+	getLogger,
+	monitorNewProposal,
+	monitorProposalActivity,
+} from "@app-gov/node/utils";
+import { getApiInstance, waitForBlock } from "@app-gov/service/cennznet";
+import {
+	BLOCK_POLLING_INTERVAL,
 	CENNZ_NETWORK,
 	MONGODB_URI,
 	PROPOSAL_QUEUE,
@@ -35,12 +40,28 @@ module.exports = {
 				PROPOSAL_QUEUE
 			);
 
-			monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
-				logger.info("Proposal #%d: Send to queue...", proposalId);
-				proposalQueue.publish(JSON.stringify({ proposalId }), {
-					type: "proposal-new",
+			do {
+				logger.info("Health check: 👌 ok");
+
+				await monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
+					logger.info(`Proposal #%d: 📨 send to "proposal-new"`, proposalId);
+					proposalQueue.publish(JSON.stringify({ proposalId }), {
+						type: "proposal-new",
+					});
 				});
-			});
+
+				await monitorProposalActivity(mdbClient, (proposalId) => {
+					logger.info(
+						`Proposal #%d: 📨 send to "proposal-activity"`,
+						proposalId
+					);
+					proposalQueue.publish(JSON.stringify({ proposalId }), {
+						type: "proposal-activity",
+					});
+				});
+
+				await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
+			} while (true);
 		} catch (error) {
 			if (error instanceof AMQPError) error?.connection?.close();
 			logger.error("%s", error);

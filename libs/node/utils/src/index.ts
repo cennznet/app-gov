@@ -5,3 +5,4 @@ export * from "./monitorNewProposal";
 export * from "./handleNewProposalMessage";
 export * from "./errors";
 export * from "./types";
+export * from "./monitorProposalActivity";
