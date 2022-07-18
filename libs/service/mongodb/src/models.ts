@@ -12,5 +12,8 @@ import type { ProposalModel } from "./types";
 			enactmentDelay: { type: Schema.Types.Number },
 			call: { type: Schema.Types.Map },
 			status: { type: Schema.Types.String },
+			passVotes: { type: Schema.Types.Number },
+			rejectVotes: { type: Schema.Types.Number },
+			vetoPercentage: { type: Schema.Types.Number },
 		})
 	);

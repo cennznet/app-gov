@@ -42,19 +42,13 @@ module.exports = {
 
 			do {
 				logger.info("Health check: 👌 ok");
-
 				await monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
-					logger.info(`Proposal #%d: 📨 send to "proposal-new"`, proposalId);
 					proposalQueue.publish(JSON.stringify({ proposalId }), {
 						type: "proposal-new",
 					});
 				});
 
 				await monitorProposalActivity(mdbClient, (proposalId) => {
-					logger.info(
-						`Proposal #%d: 📨 send to "proposal-activity"`,
-						proposalId
-					);
 					proposalQueue.publish(JSON.stringify({ proposalId }), {
 						type: "proposal-activity",
 					});

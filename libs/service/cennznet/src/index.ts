@@ -13,4 +13,4 @@ export * from "./findProposalId";
 export * from "./getNetworkDetails";
 export * from "./waitForBlock";
 export * from "./fetchProposalInfo";
-export * from "./waitForTime";
+export * from "./fetchProposalVotes";

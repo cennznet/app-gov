@@ -6,3 +6,5 @@ export * from "./handleNewProposalMessage";
 export * from "./errors";
 export * from "./types";
 export * from "./monitorProposalActivity";
+export * from "./handleProposalActivityMessage";
+export * from "./waitForTime";

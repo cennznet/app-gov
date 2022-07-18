@@ -1,14 +1,13 @@
 import { Api } from "@cennznet/api";
 import { Mongoose } from "mongoose";
 
-import { fetchProposalInfo, waitForTime } from "@app-gov/service/cennznet";
+import { fetchProposalInfo } from "@app-gov/service/cennznet";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
-import { getLogger, TimeoutError } from "./";
+import { getLogger, TimeoutError, waitForTime } from "./";
 
 interface MessageBody {
-	messageId: string;
 	proposalId: number;
 }
 
@@ -36,12 +35,11 @@ export const handleNewProposalMessage = async (
 		const proposalInfo = await fetchProposalInfo(api, proposalId);
 		if (!proposalInfo) return;
 
-		logger.info("Proposal #%d: 📤 file to DB [2/2]", proposalId);
+		logger.info("Proposal #%d: 🗂  file to DB [2/2]", proposalId);
 		await updateProposalRecord({
 			proposalId,
 			...proposalInfo,
 		});
-		logger.info("Proposal #%d: 🎉 complete", proposalId);
 	};
 
 	const output = await Promise.race([
