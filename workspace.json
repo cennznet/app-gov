@@ -4,11 +4,10 @@
   "projects": {
     "gov-relayer": "apps/gov-relayer",
     "gov-website": "apps/gov-website",
-    "node-constants": "libs/node/constants",
     "node-utils": "libs/node/utils",
     "service-cennznet": "libs/service/cennznet",
-    "service-constants": "libs/service/constants",
     "service-discord": "libs/service/discord",
+    "service-env-vars": "libs/service/env-vars",
     "service-mongodb": "libs/service/mongodb",
     "service-pinata": "libs/service/pinata",
     "service-rabbitmq": "libs/service/rabbitmq",

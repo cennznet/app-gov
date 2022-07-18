@@ -1,19 +1,8 @@
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import {
-	AbortError,
-	getLogger,
-	handleNewProposalMessage,
-} from "@app-gov/node/utils";
+import { getLogger, handleNewProposalMessage } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
-import { getMongoClient } from "@app-gov/service/mongodb";
-import {
-	getQueueByName,
-	getRabbitClient,
-	requeueMessage,
-} from "@app-gov/service/rabbitmq";
-
 import {
 	CENNZ_NETWORK,
 	MESSAGE_MAX_RETRY,
@@ -21,7 +10,13 @@ import {
 	MONGODB_URI,
 	PROPOSAL_QUEUE,
 	RABBITMQ_URI,
-} from "../constants";
+} from "@app-gov/service/env-vars";
+import { getMongoClient } from "@app-gov/service/mongodb";
+import {
+	getQueueByName,
+	getRabbitClient,
+	requeueMessage,
+} from "@app-gov/service/rabbitmq";
 
 module.exports = {
 	command: "proposal-sub",
@@ -30,12 +25,12 @@ module.exports = {
 		const logger = getLogger("ProposalSub");
 		logger.info(
 			`Start process on ${chalk.magenta("%s")}...`,
-			CENNZ_NETWORK.chainTitle
+			CENNZ_NETWORK.ChainName
 		);
 
 		try {
 			const [cennzApi, amqClient, mdbClient] = await Promise.all([
-				getApiInstance(CENNZ_NETWORK.chainName),
+				getApiInstance(CENNZ_NETWORK.ChainSlug),
 				getRabbitClient(RABBITMQ_URI),
 				getMongoClient(MONGODB_URI),
 			]);

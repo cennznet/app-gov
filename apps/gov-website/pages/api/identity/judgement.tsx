@@ -1,6 +1,5 @@
 import { getToken } from "next-auth/jwt";
 
-import { NEXTAUTH_SECRET } from "@app-gov/node/constants";
 import { fetchRequiredRegistrars, withMethodGuard } from "@app-gov/node/utils";
 import {
 	fetchIdentityOf,
@@ -9,8 +8,12 @@ import {
 	isIdentityValueMatched,
 	signAndSend,
 } from "@app-gov/service/cennznet";
-import { CENNZ_NETWORK, DISCORD_BOT } from "@app-gov/service/constants";
 import { getDiscordBot } from "@app-gov/service/discord";
+import {
+	CENNZ_NETWORK,
+	DISCORD_BOT,
+	NEXTAUTH_SECRET,
+} from "@app-gov/service/env-vars";
 
 export default withMethodGuard(
 	async function identityConnectRoute(req, res) {
