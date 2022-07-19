@@ -9,3 +9,4 @@ export * from "./monitorProposalActivity";
 export * from "./handleProposalActivityMessage";
 export * from "./waitForTime";
 export * from "./resolveProposalJustification";
+export * from "./safeFetch";
