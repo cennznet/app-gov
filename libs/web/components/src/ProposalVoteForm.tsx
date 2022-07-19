@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback, useRef } from "react";
 import { If } from "react-extras";
 
 import { ProposalModel } from "@app-gov/service/mongodb";
@@ -17,9 +17,15 @@ export const ProposalVoteForm: FC<
 	ProposalVoteFormProps & Omit<IntrinsicElements["form"], "onSubmit">
 > = ({ proposal, onPass, onReject, ...props }) => {
 	const { status } = proposal;
+	const ref = useRef<HTMLFormElement>(null);
+
+	const onClick = useCallback((onCall: () => void) => {
+		if (!ref.current?.reportValidity()) return;
+		onCall();
+	}, []);
 
 	return (
-		<form {...props}>
+		<form {...props} ref={ref}>
 			<h2 className="font-display border-hero mb-4 border-b-2 text-3xl uppercase">
 				Signing Wallet
 			</h2>
@@ -39,13 +45,16 @@ export const ProposalVoteForm: FC<
 							<Button
 								startAdornment={<ThumbDown />}
 								className="relative"
-								onClick={onReject}
+								onClick={() => onClick(onReject)}
 							>
 								<span>Reject</span>
 							</Button>
 						</div>
 						<div className="col-span-1 text-left">
-							<Button startAdornment={<ThumbUp />} onClick={onPass}>
+							<Button
+								startAdornment={<ThumbUp />}
+								onClick={() => onClick(onPass)}
+							>
 								<span>Pass</span>
 							</Button>
 						</div>
@@ -56,7 +65,7 @@ export const ProposalVoteForm: FC<
 					<Button
 						startAdornment={<ThumbDown />}
 						className="relative"
-						onClick={onReject}
+						onClick={() => onClick(onReject)}
 					>
 						<span>Veto</span>
 					</Button>
