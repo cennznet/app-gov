@@ -60,3 +60,5 @@ export const DISCORD_RELAYER_BOT = {
 	ChannelId: process.env.DISCORD_CHANNEL_ID ?? "",
 	WebhookId: process.env.DISCORD_WEBHOOK_ID ?? "",
 };
+export const PROPOSAL_URL: string =
+	process.env.NX_PROPOSAL_URL ?? "http://localhost:4200";

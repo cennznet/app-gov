@@ -1,4 +1,5 @@
 import { Api } from "@cennznet/api";
+import type { InteractionWebhook } from "discord.js";
 import { Mongoose } from "mongoose";
 
 import {
@@ -8,7 +9,7 @@ import {
 } from "@app-gov/service/cennznet";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
-import type { InteractionWebhook } from "discord.js";
+
 import { getLogger, TimeoutError, waitForTime } from "./";
 
 interface MessageBody {
