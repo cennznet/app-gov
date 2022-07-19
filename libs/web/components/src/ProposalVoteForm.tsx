@@ -7,14 +7,14 @@ import { ThumbDown, ThumbUp } from "@app-gov/web/vectors";
 
 import { AccountSelect, Button } from "./";
 
-interface FormProps {
+interface ProposalVoteFormProps {
 	proposal: ProposalModel;
 	onPass: () => void;
 	onReject: () => void;
 }
 
 export const ProposalVoteForm: FC<
-	FormProps & Omit<IntrinsicElements["form"], "onSubmit">
+	ProposalVoteFormProps & Omit<IntrinsicElements["form"], "onSubmit">
 > = ({ proposal, onPass, onReject, ...props }) => {
 	const { status } = proposal;
 

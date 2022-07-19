@@ -12,6 +12,7 @@ import {
 	ProposalSidebar,
 	ProposalVoteForm,
 } from "@app-gov/web/components";
+import { useProposalVoteForm } from "@app-gov/web/hooks";
 
 export const getStaticPaths = async () => {
 	const mdb = await getMongoClient(MONGODB_URI);
@@ -67,8 +68,15 @@ interface ProposalProps {
 const Proposal: NextPage<ProposalProps> = ({ proposal, justification }) => {
 	const { proposalId, call, status } = proposal;
 
-	const onPass = useCallback(() => {}, []);
-	const onReject = useCallback(() => {}, []);
+	const { onVote, onVeto } = useProposalVoteForm(proposalId);
+
+	const onPass = useCallback(() => {
+		onVote(true);
+	}, [onVote]);
+	const onReject = useCallback(() => {
+		if (status === "Deliberation") onVote(false);
+		if (status === "ReferendumDeliberation") onVeto();
+	}, [onVeto, onVote, status]);
 
 	return (
 		<Layout.PageWrapper>
