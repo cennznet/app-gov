@@ -1,5 +1,6 @@
 import { GetStaticProps, NextPage } from "next";
 
+import { resolveProposalJustification } from "@app-gov/node/utils";
 import { MONGODB_URI } from "@app-gov/service/env-vars";
 import { getMongoClient, ProposalModel } from "@app-gov/service/mongodb";
 import { Header, Layout } from "@app-gov/web/components";
@@ -27,6 +28,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 	const proposal = await mdb
 		.model<ProposalModel>("Proposal")
 		.findOne({ proposalId: pid });
+
+	const justification = await resolveProposalJustification(
+		proposal.justificationUri
+	);
 
 	if (!proposal)
 		return {
