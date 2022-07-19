@@ -9,7 +9,7 @@ export const getProposalEmbed = (
 	proposalId: number,
 	proposalInfo: ProposalModel
 ): MessageEmbed =>
-	proposalInfo.status === "Deliberation"
+	proposalInfo.status?.includes("Deliberation")
 		? new MessageEmbed()
 				.setColor("#9847FF")
 				.setTitle(`Proposal ID: _#${proposalId}_`)
@@ -29,7 +29,7 @@ export const getProposalFields = (
 ): EmbedFieldData[] => [
 	{
 		name: "Details",
-		value: `[Read more](${proposalInfo.justificationUri})`,
+		value: `Justification details are published [here](${proposalInfo.justificationUri})`,
 	},
 	{
 		name: "Sponsor",

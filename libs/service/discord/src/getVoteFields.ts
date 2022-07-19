@@ -6,23 +6,60 @@ import type { ProposalModel } from "@app-gov/service/mongodb";
 export const getVoteFields = ({
 	passVotes,
 	rejectVotes,
-}: ProposalModel): EmbedFieldData[] => [
-	{
-		name: "Votes to Pass",
-		value: `_**${passVotes}**_`,
-		inline: true,
-	},
-	{
-		name: "Votes to Reject",
-		value: `_**${rejectVotes}**_`,
-		inline: true,
-	},
-];
+	status,
+	vetoPercentage,
+}: ProposalModel): EmbedFieldData[] =>
+	status === "Deliberation"
+		? [
+				{
+					name: "Veto Sum",
+					value: `_**${vetoPercentage} / 33 %**_`,
+					inline: false,
+				},
+		  ]
+		: [
+				{
+					name: "Votes to Pass",
+					value: `_**${passVotes}**_`,
+					inline: true,
+				},
+				{
+					name: "Votes to Reject",
+					value: `_**${rejectVotes}**_`,
+					inline: true,
+				},
+		  ];
 
-export const getVoteButtons = (proposalId: number): MessageActionRow =>
-	new MessageActionRow().addComponents(
-		new MessageButton()
-			.setURL(`${PROPOSAL_URL}/${proposalId}`)
-			.setLabel("Vote!")
-			.setStyle("LINK")
-	);
+type VoteButtons = MessageActionRow | undefined;
+
+export const getVoteButtons = (
+	proposalId: number,
+	proposalStatus: ProposalModel["status"]
+): VoteButtons => {
+	let voteButtons: VoteButtons;
+
+	switch (proposalStatus) {
+		case "Deliberation":
+			voteButtons = new MessageActionRow().addComponents(
+				new MessageButton()
+					.setURL(`${PROPOSAL_URL}/${proposalId}`)
+					.setLabel("Vote!")
+					.setStyle("LINK")
+			);
+			break;
+
+		case "ReferendumDeliberation":
+			voteButtons = new MessageActionRow().addComponents(
+				new MessageButton()
+					.setURL(`${PROPOSAL_URL}/${proposalId}`)
+					.setLabel("Veto!")
+					.setStyle("LINK")
+			);
+			break;
+
+		default:
+			break;
+	}
+
+	return voteButtons;
+};
