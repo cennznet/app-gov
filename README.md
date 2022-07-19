@@ -2,6 +2,7 @@
 
 - [Environment](#environments)
   - [Development](#development)
+- [Deployment](#deployment)
 
 ## Environments
 
@@ -26,8 +27,16 @@ yarn gov-website:dev
 yarn gov-relayer:docker
 
 # start webpack
-yarn gov-relayer:serve
+yarn gov-relayer:webpack
 
 # start the CLI
 yarn relayer:run
 ```
+
+## Deployment
+
+### `gov-relayer`
+
+- Ensure `apps/gov-relayer/package.json#dependencies` is up-to-date with the code base
+- Run `yarn gov-relayer:build`
+- The folder `dist/apps/gov-relayer` is ready to be copied over to a container

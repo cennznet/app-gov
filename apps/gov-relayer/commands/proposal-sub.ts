@@ -1,12 +1,15 @@
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import { getLogger, handleNewProposalMessage } from "@app-gov/node/utils";
+import {
+	getLogger,
+	handleNewProposalMessage,
+	handleProposalActivityMessage,
+} from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import {
 	CENNZ_NETWORK,
 	MESSAGE_MAX_RETRY,
-	MESSAGE_TIMEOUT,
 	MONGODB_URI,
 	PROPOSAL_QUEUE,
 	RABBITMQ_URI,
@@ -50,13 +53,10 @@ module.exports = {
 				try {
 					switch (type) {
 						case "proposal-new":
-							const abortSignal = (AbortSignal as any).timeout(MESSAGE_TIMEOUT);
-							await handleNewProposalMessage(
-								cennzApi,
-								mdbClient,
-								body,
-								abortSignal
-							);
+							await handleNewProposalMessage(cennzApi, mdbClient, body);
+							break;
+						case "proposal-activity":
+							await handleProposalActivityMessage(cennzApi, mdbClient, body);
 							break;
 					}
 				} catch (error) {

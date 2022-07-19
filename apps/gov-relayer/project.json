@@ -10,12 +10,11 @@
         "outputPath": "dist/apps/gov-relayer",
         "main": "apps/gov-relayer/main.ts",
         "tsConfig": "apps/gov-relayer/tsconfig.app.json",
-        "assets": ["apps/gov-relayer/.env"]
+        "assets": ["apps/gov-relayer/.env", "apps/gov-relayer/package.json"]
       },
       "configurations": {
         "production": {
-          "optimization": true,
-          "assets": []
+          "optimization": true
         }
       }
     },

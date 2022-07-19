@@ -13,3 +13,5 @@ export * from "./findProposalId";
 export * from "./getNetworkDetails";
 export * from "./waitForBlock";
 export * from "./fetchProposalInfo";
+export * from "./fetchProposalVotes";
+export * from "./fetchProposalVetoPercentage";
