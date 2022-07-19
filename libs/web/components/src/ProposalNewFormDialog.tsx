@@ -21,7 +21,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 		<TransactionDialog {...props}>
 			<StepProgress
 				steps={["Confirm", "Submit", "Process", "Success!"]}
-				stepIndex={["Await", "Submit", "Process", "Complete"].indexOf(
+				stepIndex={["Sign", "Submit", "Process", "Complete"].indexOf(
 					formState.step
 				)}
 				error={formState?.status === "NotOk"}
@@ -65,7 +65,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 						</div>
 					</Choose.When>
 
-					<Choose.When condition={formState?.step === "Await"}>
+					<Choose.When condition={formState?.step === "Sign"}>
 						<p className="prose text-center text-sm">
 							Please sign the transaction when prompted...
 						</p>
