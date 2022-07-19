@@ -3,7 +3,12 @@ import { GetStaticProps, NextPage } from "next";
 import { resolveProposalJustification } from "@app-gov/node/utils";
 import { MONGODB_URI } from "@app-gov/service/env-vars";
 import { getMongoClient, ProposalModel } from "@app-gov/service/mongodb";
-import { Header, Layout, ProposalBody } from "@app-gov/web/components";
+import {
+	Header,
+	Layout,
+	ProposalBody,
+	ProposalSidebar,
+} from "@app-gov/web/components";
 
 export const getStaticPaths = async () => {
 	const mdb = await getMongoClient(MONGODB_URI);
@@ -59,16 +64,19 @@ interface ProposalProps {
 const Proposal: NextPage<ProposalProps> = ({ proposal, justification }) => {
 	const { proposalId, call } = proposal;
 
-	console.log(call);
-
 	return (
 		<Layout.PageWrapper>
 			<Header />
-			<Layout.PageContent className="max-w-4xl lg:max-w-5xl">
+			<Layout.PageContent className="!max-w-4xl lg:!max-w-5xl">
 				<Layout.PageHeader>Proposal #{proposalId}</Layout.PageHeader>
-				<div>
-					<ProposalBody.Justification justification={justification} />
-					<ProposalBody.Call call={call} />
+				<div className="grid grid-cols-3 gap-8">
+					<div className="col-span-2 col-start-1">
+						<ProposalBody.Justification justification={justification} />
+						<ProposalBody.Call call={call} />
+					</div>
+					<div className="col-start-3">
+						<ProposalSidebar proposal={proposal} className="sticky top-12" />
+					</div>
 				</div>
 			</Layout.PageContent>
 		</Layout.PageWrapper>
