@@ -1,5 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { If } from "react-extras";
 
 import { resolveProposalJustification } from "@app-gov/node/utils";
@@ -11,6 +11,8 @@ import {
 	ProposalBody,
 	ProposalSidebar,
 	ProposalVoteForm,
+	ProposalVoteFormDialog,
+	useTransactionDialog,
 } from "@app-gov/web/components";
 import { useProposalVoteForm } from "@app-gov/web/hooks";
 
@@ -68,15 +70,31 @@ interface ProposalProps {
 const Proposal: NextPage<ProposalProps> = ({ proposal, justification }) => {
 	const { proposalId, call, status } = proposal;
 
-	const { onVote, onVeto } = useProposalVoteForm(proposalId);
+	const { open, openDialog, closeDialog } = useTransactionDialog();
+	const { onVote, onVeto, formState } = useProposalVoteForm(proposalId);
 
 	const onPass = useCallback(() => {
+		openDialog();
 		onVote(true);
-	}, [onVote]);
+	}, [onVote, openDialog]);
 	const onReject = useCallback(() => {
+		openDialog();
 		if (status === "Deliberation") onVote(false);
 		if (status === "ReferendumDeliberation") onVeto();
-	}, [onVeto, onVote, status]);
+	}, [onVeto, onVote, openDialog, status]);
+
+	const onDialogDismiss = useCallback(() => {
+		closeDialog();
+	}, [closeDialog]);
+
+	useEffect(() => {
+		if (formState?.status === "Cancelled") closeDialog();
+	}, [closeDialog, formState?.status]);
+
+	const onDialogClose = useCallback(() => {
+		if (!formState?.status || formState?.status === "Cancelled") return;
+		onDialogDismiss();
+	}, [onDialogDismiss, formState?.status]);
 
 	return (
 		<Layout.PageWrapper>
@@ -103,6 +121,12 @@ const Proposal: NextPage<ProposalProps> = ({ proposal, justification }) => {
 						<ProposalSidebar proposal={proposal} className="sticky top-12" />
 					</div>
 				</div>
+				<ProposalVoteFormDialog
+					open={open}
+					formState={formState}
+					onClose={onDialogClose}
+					onDismiss={onDialogDismiss}
+				/>
 			</Layout.PageContent>
 		</Layout.PageWrapper>
 	);

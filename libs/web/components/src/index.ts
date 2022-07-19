@@ -20,3 +20,4 @@ export * from "./BrowsersDialog";
 export * from "./ProposalBody";
 export * from "./ProposalSidebar";
 export * from "./ProposalVoteForm";
+export * from "./ProposalVoteFormDialog";
