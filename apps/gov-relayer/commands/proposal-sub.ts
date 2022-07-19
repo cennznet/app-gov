@@ -7,8 +7,10 @@ import {
 	handleProposalActivityMessage,
 } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
+import { getDiscordWebhook } from "@app-gov/service/discord";
 import {
 	CENNZ_NETWORK,
+	DISCORD_RELAYER_BOT,
 	MESSAGE_MAX_RETRY,
 	MONGODB_URI,
 	PROPOSAL_QUEUE,
@@ -55,9 +57,21 @@ module.exports = {
 						case "proposal-new":
 							await handleNewProposalMessage(cennzApi, mdbClient, body);
 							break;
-						case "proposal-activity":
-							await handleProposalActivityMessage(cennzApi, mdbClient, body);
+
+						case "proposal-activity": {
+							const discordWebhook = await getDiscordWebhook(
+								DISCORD_RELAYER_BOT.Token,
+								DISCORD_RELAYER_BOT.ChannelId,
+								DISCORD_RELAYER_BOT.WebhookId
+							);
+							await handleProposalActivityMessage(
+								cennzApi,
+								discordWebhook,
+								mdbClient,
+								body
+							);
 							break;
+						}
 					}
 				} catch (error) {
 					logger.error("%s", error);

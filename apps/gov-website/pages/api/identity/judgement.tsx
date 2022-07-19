@@ -11,7 +11,7 @@ import {
 import { getDiscordBot } from "@app-gov/service/discord";
 import {
 	CENNZ_NETWORK,
-	DISCORD_BOT,
+	DISCORD_WEBSITE_BOT,
 	NEXTAUTH_SECRET,
 } from "@app-gov/service/env-vars";
 
@@ -70,7 +70,7 @@ export default withMethodGuard(
 			]);
 
 			// 4. Assign user with a special role
-			if (DISCORD_BOT.Token) await assignDiscordRole(discordUsername);
+			if (DISCORD_WEBSITE_BOT.Token) await assignDiscordRole(discordUsername);
 
 			return res.json({ ok: true });
 		} catch (error) {
@@ -88,9 +88,9 @@ export default withMethodGuard(
 const assignDiscordRole = async (discordUsername: string) => {
 	const [username, discriminator] = discordUsername.split("#");
 
-	const discordBot = await getDiscordBot(DISCORD_BOT.Token);
+	const discordBot = await getDiscordBot(DISCORD_WEBSITE_BOT.Token);
 
-	const guildCache = discordBot.guilds.cache.get(DISCORD_BOT.ServerId);
+	const guildCache = discordBot.guilds.cache.get(DISCORD_WEBSITE_BOT.ServerId);
 	if (!guildCache) throw { message: "DISCORD_SERVER_NOT_FOUND" };
 	await guildCache.members.fetch();
 
@@ -103,7 +103,7 @@ const assignDiscordRole = async (discordUsername: string) => {
 	if (!user) throw { message: "DISCORD_USER_NOT_FOUND" };
 
 	const identityRole = guildCache.roles.cache.find(
-		(role) => role.id === DISCORD_BOT.IdentityRoleId
+		(role) => role.id === DISCORD_WEBSITE_BOT.IdentityRoleId
 	);
 	if (!identityRole) throw { message: "DISCORD_IDENTITY_ROLE_NOT_FOUND" };
 

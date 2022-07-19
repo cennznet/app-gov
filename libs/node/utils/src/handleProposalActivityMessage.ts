@@ -8,7 +8,7 @@ import {
 } from "@app-gov/service/cennznet";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
-
+import type { InteractionWebhook } from "discord.js";
 import { getLogger, TimeoutError, waitForTime } from "./";
 
 interface MessageBody {
@@ -25,6 +25,7 @@ interface MessageBody {
  */
 export const handleProposalActivityMessage = async (
 	api: Api,
+	webhook: InteractionWebhook,
 	mdb: Mongoose,
 	body: MessageBody
 ): Promise<void> => {

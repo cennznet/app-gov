@@ -25,7 +25,7 @@ export const PINATA_JWT: string = process.env.NX_PINATA_JWT ?? "";
 export const PINATA_GATEWAY: string = process.env.NX_PINATA_GATEWAY ?? "";
 
 // DISCORD
-export const DISCORD_BOT = {
+export const DISCORD_WEBSITE_BOT = {
 	Token: process.env.DISCORD_BOT_TOKEN ?? "",
 	ServerId: process.env.DISCORD_SERVER_ID ?? "",
 	IdentityRoleId: process.env.DISCORD_IDENTITY_ROLE_ID ?? "",
@@ -55,3 +55,8 @@ export const BLOCK_POLLING_INTERVAL = Number(
 export const PROPOSAL_QUEUE = `${CENNZ_NETWORK.ChainSlug}_AppGov_Proposal`;
 export const MESSAGE_TIMEOUT = Number(process.env.MESSAGE_TIMEOUT || 10000);
 export const MESSAGE_MAX_RETRY = Number(process.env.MESSAGE_MAX_RETRY || 5);
+export const DISCORD_RELAYER_BOT = {
+	Token: process.env.DISCORD_BOT_TOKEN ?? "",
+	ChannelId: process.env.DISCORD_CHANNEL_ID ?? "",
+	WebhookId: process.env.DISCORD_WEBHOOK_ID ?? "",
+};
