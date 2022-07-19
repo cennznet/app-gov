@@ -1,5 +1,11 @@
 import { PINATA_GATEWAY } from "@app-gov/service/env-vars";
 
+/**
+ * Resolve justification content from a uri
+ *
+ * @param {string} justificationUri
+ * @return {Promise<string>}
+ */
 export const resolveProposalJustification = async (
 	justificationUri: string
 ): Promise<string> => {
