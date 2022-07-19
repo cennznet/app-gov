@@ -1,4 +1,6 @@
 import { GetStaticProps, NextPage } from "next";
+import { useCallback } from "react";
+import { If } from "react-extras";
 
 import { resolveProposalJustification } from "@app-gov/node/utils";
 import { MONGODB_URI } from "@app-gov/service/env-vars";
@@ -8,6 +10,7 @@ import {
 	Layout,
 	ProposalBody,
 	ProposalSidebar,
+	ProposalVoteForm,
 } from "@app-gov/web/components";
 
 export const getStaticPaths = async () => {
@@ -62,7 +65,10 @@ interface ProposalProps {
 }
 
 const Proposal: NextPage<ProposalProps> = ({ proposal, justification }) => {
-	const { proposalId, call } = proposal;
+	const { proposalId, call, status } = proposal;
+
+	const onPass = useCallback(() => {}, []);
+	const onReject = useCallback(() => {}, []);
 
 	return (
 		<Layout.PageWrapper>
@@ -73,6 +79,17 @@ const Proposal: NextPage<ProposalProps> = ({ proposal, justification }) => {
 					<div className="col-span-2 col-start-1">
 						<ProposalBody.Justification justification={justification} />
 						<ProposalBody.Call call={call} />
+						<If
+							condition={
+								status === "Deliberation" || status === "ReferendumDeliberation"
+							}
+						>
+							<ProposalVoteForm
+								proposal={proposal}
+								onPass={onPass}
+								onReject={onReject}
+							/>
+						</If>
 					</div>
 					<div className="col-start-3">
 						<ProposalSidebar proposal={proposal} className="sticky top-12" />
