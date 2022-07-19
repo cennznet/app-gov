@@ -5,7 +5,6 @@ export * from "./Select";
 export * from "./StepProgress";
 export * from "./TextField";
 export * from "./AccountSelect";
-export * from "./ProposalDetailsDisplay";
 export * from "./TransactionDialog";
 export * from "./Dialog";
 export * from "./MarkdownField";
