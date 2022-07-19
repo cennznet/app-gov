@@ -57,6 +57,7 @@ export const handleProposalActivityMessage = async (
 					proposal.rejectVotes === rejectVotes
 				)
 					break;
+
 				logger.info("Proposal #%d: 🗳  update votes [1/2]", proposalId);
 				updatedData = { ...updatedData, passVotes, rejectVotes };
 				break;

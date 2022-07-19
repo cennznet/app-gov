@@ -6,7 +6,7 @@ import {
 	monitorNewProposal,
 	monitorProposalActivity,
 } from "@app-gov/node/utils";
-import { getApiInstance, waitForBlock } from "@app-gov/service/cennznet";
+import { getApiInstance } from "@app-gov/service/cennznet";
 import {
 	BLOCK_POLLING_INTERVAL,
 	CENNZ_NETWORK,
