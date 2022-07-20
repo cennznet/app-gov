@@ -33,7 +33,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 		proposal.justificationUri
 	);
 
-	if (!proposal)
+	if (!proposal || !justification)
 		return {
 			notFound: true,
 		};
