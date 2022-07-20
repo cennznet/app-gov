@@ -15,3 +15,6 @@ export * from "./waitForBlock";
 export * from "./fetchProposalInfo";
 export * from "./fetchProposalVotes";
 export * from "./fetchProposalVetoPercentage";
+export * from "./getVoteOnProposalExtrinsic";
+export * from "./getVoteAgainstReferendumExtrinsic";
+export * from "./subscribeFinalizedHeads";

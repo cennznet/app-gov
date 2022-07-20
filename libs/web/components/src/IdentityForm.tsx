@@ -62,9 +62,7 @@ export const IdentityForm: FC<
 
 			<fieldset className="mt-16 text-center">
 				<Button type="submit" className="w-1/3 text-center" disabled={open}>
-					<div className="flex items-center justify-center">
-						<span>Sign and Submit</span>
-					</div>
+					<span>Sign and Submit</span>
 				</Button>
 				<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
 			</fieldset>
