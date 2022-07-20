@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 	const vetoThreshold = await fetchProposalVetoThreshold(api);
 
-	if (!proposal)
+	if (!proposal || !justification)
 		return {
 			notFound: true,
 		};
