@@ -1,5 +1,4 @@
 import { Api } from "@cennznet/api";
-import type { InteractionWebhook } from "discord.js";
 import { Mongoose } from "mongoose";
 
 import {
@@ -7,14 +6,21 @@ import {
 	fetchProposalVetoPercentage,
 	fetchProposalVotes,
 } from "@app-gov/service/cennznet";
+import {
+	getDiscordMessage,
+	getDiscordWebhooks,
+} from "@app-gov/service/discord";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
 import { getLogger, TimeoutError, waitForTime } from "./";
+import chalk from "chalk";
 
 interface MessageBody {
 	proposalId: number;
 }
+
+type DiscordWebhooks = Awaited<ReturnType<typeof getDiscordWebhooks>>;
 
 /**
  * Handle the proposal activity message
@@ -26,7 +32,7 @@ interface MessageBody {
  */
 export const handleProposalActivityMessage = async (
 	api: Api,
-	webhook: InteractionWebhook,
+	[proposalWebhook, referendumWebhook]: DiscordWebhooks,
 	mdb: Mongoose,
 	body: MessageBody
 ): Promise<void> => {
@@ -43,7 +49,7 @@ export const handleProposalActivityMessage = async (
 		if (!proposal) return;
 
 		const status = await fetchProposalStatus(api, proposalId);
-		let updatedData = {};
+		let updatedData = {} as Partial<ProposalModel>;
 
 		if (proposal.status !== status) updatedData = { status };
 
@@ -60,7 +66,7 @@ export const handleProposalActivityMessage = async (
 				)
 					break;
 
-				logger.info("Proposal #%d: 🗳  update votes [1/2]", proposalId);
+				logger.info("Proposal #%d: 🗳  update votes [1/3]", proposalId);
 				updatedData = { ...updatedData, passVotes, rejectVotes };
 				break;
 			}
@@ -72,18 +78,84 @@ export const handleProposalActivityMessage = async (
 				);
 
 				if (proposal.vetoPercentage === vetoPercentage) break;
-				logger.info("Proposal #%d: 🗳  update veto [1/2]", proposalId);
+				logger.info("Proposal #%d: 🗳  update veto [1/3]", proposalId);
 				updatedData = { ...updatedData, vetoPercentage };
 				break;
 			}
 		}
 
+		const discordMessage = getDiscordMessage(proposalId, proposal);
+
+		let discordProposalMessage = "",
+			discordReferendumMessage = "";
+
+		switch (status) {
+			case "Deliberation": {
+				if (!proposal.discordProposalMessage) {
+					const { id } = await proposalWebhook.send(discordMessage);
+					discordProposalMessage = id;
+					break;
+				}
+
+				await proposalWebhook.editMessage(
+					proposal.discordProposalMessage,
+					discordMessage
+				);
+
+				logger.info(
+					`[${chalk.magenta("Discord")}] Proposal #%d: 🗳  update votes [2/3]`,
+					proposalId
+				);
+				break;
+			}
+
+			case "ReferendumDeliberation": {
+				if (!proposal.discordReferendumMessage) {
+					const { id } = await referendumWebhook.send(discordMessage);
+					discordReferendumMessage = id;
+					break;
+				}
+
+				await referendumWebhook.editMessage(
+					proposal.discordReferendumMessage,
+					discordMessage
+				);
+
+				logger.info(`[${chalk.magenta("Discord")}] Proposal #%d: 🗳  update veto [2/3]`, proposalId);
+				break;
+			}
+
+			default: {
+				if (proposal.discordProposalMessage)
+					await proposalWebhook.editMessage(
+						proposal.discordProposalMessage,
+						discordMessage
+					);
+
+				if (proposal.discordReferendumMessage)
+					await referendumWebhook.editMessage(
+						proposal.discordReferendumMessage,
+						discordMessage
+					);
+
+				logger.info(
+					`[${chalk.magenta("Discord")}] Proposal #%d: 🗳  update status [2/3]`,
+					proposalId
+				);
+				break;
+			}
+		}
+
+		updatedData = {
+			...updatedData,
+			discordProposalMessage,
+			discordReferendumMessage,
+		};
+
 		if (!Object.keys(updatedData).length) return;
 
-		logger.info("Proposal #%d: 🗂  file to DB [2/2]", proposalId);
+		logger.info("Proposal #%d: 🗂  file to DB [3/3]", proposalId);
 		await updateProposalRecord(updatedData);
-
-		// TODO: Update details on Discord
 	};
 
 	const output = await Promise.race([
