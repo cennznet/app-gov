@@ -108,7 +108,7 @@ const VetoInfo: FC<VetoInfoProps & IntrinsicElements["div"]> = ({
 				Threshold to Veto
 			</label>
 			<span>
-				Current: {vetoPercentage?.toFixed(2)}% / Require: {vetoThreshold}%
+				Current: {vetoPercentage?.toFixed(2)}% / Required: {vetoThreshold}%
 			</span>
 		</div>
 	);

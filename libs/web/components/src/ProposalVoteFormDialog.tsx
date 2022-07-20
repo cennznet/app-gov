@@ -61,7 +61,7 @@ export const ProposalVoteFormDialog: FC<ProposalVoteFormDialogProps> = ({
 
 					<Choose.When condition={formState?.step === "Submit"}>
 						<p className="prose text-center text-sm">
-							Please wait until this proccess completes...
+							Please wait until this process completes...
 						</p>
 					</Choose.When>
 				</Choose>
