@@ -14,7 +14,9 @@ export function getDiscordMessage(
 	proposalInfo: ProposalModel
 ): DiscordMessage {
 	return {
-		components: [getVoteButtons(proposalId, proposalInfo.status) as MessageActionRow],
+		components: [
+			getVoteButtons(proposalId, proposalInfo.status) as MessageActionRow,
+		],
 		embeds: [getProposalEmbed(proposalId, proposalInfo)],
 	};
 }

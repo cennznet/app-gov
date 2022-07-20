@@ -1,4 +1,5 @@
 import { Api } from "@cennznet/api";
+import chalk from "chalk";
 import { Mongoose } from "mongoose";
 
 import {
@@ -14,7 +15,6 @@ import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
 import { getLogger, TimeoutError, waitForTime } from "./";
-import chalk from "chalk";
 
 interface MessageBody {
 	proposalId: number;
@@ -121,7 +121,10 @@ export const handleProposalActivityMessage = async (
 					discordMessage
 				);
 
-				logger.info(`[${chalk.magenta("Discord")}] Proposal #%d: 🗳  update veto [2/3]`, proposalId);
+				logger.info(
+					`[${chalk.magenta("Discord")}] Proposal #%d: 🗳  update veto [2/3]`,
+					proposalId
+				);
 				break;
 			}
 
