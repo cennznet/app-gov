@@ -5,7 +5,7 @@ import {
 	getLogger,
 	monitorNewProposal,
 	monitorProposalActivity,
-} from "@app-gov/node/utils";
+} from "@app-gov/service/relayer";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import {
 	BLOCK_POLLING_INTERVAL,

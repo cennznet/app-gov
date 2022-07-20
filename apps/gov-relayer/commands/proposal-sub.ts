@@ -5,7 +5,7 @@ import {
 	getLogger,
 	handleNewProposalMessage,
 	handleProposalActivityMessage,
-} from "@app-gov/node/utils";
+} from "@app-gov/service/relayer";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import { getDiscordWebhooks } from "@app-gov/service/discord";
 import {
