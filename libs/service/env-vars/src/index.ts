@@ -57,8 +57,10 @@ export const MESSAGE_TIMEOUT = Number(process.env.MESSAGE_TIMEOUT || 10000);
 export const MESSAGE_MAX_RETRY = Number(process.env.MESSAGE_MAX_RETRY || 5);
 export const DISCORD_RELAYER_BOT = {
 	Token: process.env.DISCORD_BOT_TOKEN ?? "",
-	ChannelId: process.env.DISCORD_CHANNEL_ID ?? "",
-	WebhookId: process.env.DISCORD_WEBHOOK_ID ?? "",
+	ProposalChannel: process.env.DISCORD_PROPOSAL_CHANNEL_ID ?? "",
+	ReferendumChannel: process.env.DISCORD_REFERENDUM_CHANNEL_ID ?? "",
+	ProposalWebhookId: process.env.DISCORD_PROPOSAL_WEBHOOK_ID ?? "",
+	ReferendumWebhookId: process.env.DISCORD_REFERENDUM_WEBHOOK_ID ?? "",
 };
 export const PROPOSAL_URL: string =
 	process.env.NX_PROPOSAL_URL ?? "http://localhost:4200";
