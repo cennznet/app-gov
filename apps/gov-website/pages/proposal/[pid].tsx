@@ -1,8 +1,15 @@
+import { VoidFn } from "@cennznet/api/types";
 import { GetStaticProps, NextPage } from "next";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { If } from "react-extras";
 
 import { resolveProposalJustification } from "@app-gov/node/utils";
+import {
+	fetchProposalInfo,
+	fetchProposalVetoPercentage,
+	fetchProposalVotePercentage,
+	fetchProposalVotes,
+} from "@app-gov/service/cennznet";
 import { MONGODB_URI } from "@app-gov/service/env-vars";
 import { getMongoClient, ProposalModel } from "@app-gov/service/mongodb";
 import {
@@ -15,6 +22,7 @@ import {
 	useTransactionDialog,
 } from "@app-gov/web/components";
 import { useProposalVoteForm } from "@app-gov/web/hooks";
+import { useCENNZApi } from "@app-gov/web/providers";
 
 export const getStaticPaths = async () => {
 	const mdb = await getMongoClient(MONGODB_URI);
@@ -67,7 +75,11 @@ interface ProposalProps {
 	justification: string;
 }
 
-const Proposal: NextPage<ProposalProps> = ({ proposal, justification }) => {
+const Proposal: NextPage<ProposalProps> = ({
+	proposal: initialProposal,
+	justification,
+}) => {
+	const proposal = useProposal(initialProposal);
 	const { proposalId, call, status } = proposal;
 
 	const { open, openDialog, closeDialog } = useTransactionDialog();
@@ -133,3 +145,43 @@ const Proposal: NextPage<ProposalProps> = ({ proposal, justification }) => {
 };
 
 export default Proposal;
+
+const useProposal = (initialProposal: ProposalModel) => {
+	const { api } = useCENNZApi();
+	const { proposalId } = initialProposal;
+	const [proposal, setProposal] = useState<ProposalModel>(initialProposal);
+
+	useEffect(() => {
+		if (!api) return;
+		let unsubscribeFn: VoidFn;
+		api.rpc.chain
+			.subscribeFinalizedHeads(async () => {
+				const [proposalInfo, proposalVotes, vetoPercentage] = await Promise.all(
+					[
+						fetchProposalInfo(api, proposalId),
+						fetchProposalVotes(api, proposalId),
+						fetchProposalVetoPercentage(api, proposalId),
+					]
+				);
+
+				const votePercentage = await fetchProposalVotePercentage(
+					api,
+					proposalId,
+					proposalVotes
+				);
+
+				setProposal({
+					proposalId,
+					...proposalInfo,
+					...proposalVotes,
+					votePercentage,
+					vetoPercentage,
+				});
+			})
+			.then((unsubscribe) => (unsubscribeFn = unsubscribe));
+
+		return () => unsubscribeFn?.();
+	}, [api, proposalId]);
+
+	return proposal;
+};
