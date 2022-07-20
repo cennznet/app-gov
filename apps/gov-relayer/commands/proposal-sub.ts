@@ -48,6 +48,12 @@ module.exports = {
 				PROPOSAL_QUEUE
 			);
 
+			const discordWebhooks = await getDiscordWebhooks(
+				DISCORD_RELAYER_BOT.Token,
+				DISCORD_CHANNEL_IDS,
+				DISCORD_WEBHOOK_IDS
+			);
+
 			const onMessage = async (message: AMQPMessage) => {
 				const bodyString = message.bodyString();
 				const { type } = message.properties;
@@ -61,11 +67,6 @@ module.exports = {
 							break;
 
 						case "proposal-activity": {
-							const discordWebhooks = await getDiscordWebhooks(
-								DISCORD_RELAYER_BOT.Token,
-								DISCORD_CHANNEL_IDS,
-								DISCORD_WEBHOOK_IDS
-							);
 							await handleProposalActivityMessage(
 								cennzApi,
 								discordWebhooks,
