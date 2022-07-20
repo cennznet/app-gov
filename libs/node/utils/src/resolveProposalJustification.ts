@@ -11,12 +11,23 @@ import { safeFetch } from "./";
 export const resolveProposalJustification = async (
 	justificationUri: string
 ): Promise<string | void> => {
-	const fallback = `Justification details is published [here](${justificationUri})`;
-	if (justificationUri.indexOf(PINATA_GATEWAY) < 0) return fallback;
+	const fallback = `Justification details are published [here](${justificationUri})`;
+	if (!justificationUri.includes("pinata")) return fallback;
 
-	//TODO: Improve error handling for malformed URL
-	const response = await safeFetch(justificationUri.replace("ipfs//", "ipfs/"));
+	const pinataUri = fixPinataGateway(justificationUri);
+	const response = await safeFetch(pinataUri);
 	if (!response) return;
 
 	return (await response.json())?.justification ?? fallback;
+};
+
+const fixPinataGateway = (gatewayUri: string): string => {
+	const gatewayUrl = new URL(PINATA_GATEWAY);
+	return (
+		gatewayUri
+			// replace the old gateway url with our new pinata gateway
+			.replace("gateway.pinata.cloud", gatewayUrl.host)
+			// replace accidental double slashes ``
+			.replace("ipfs//", "ipfs/")
+	);
 };

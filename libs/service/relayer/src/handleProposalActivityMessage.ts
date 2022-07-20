@@ -77,7 +77,7 @@ export const handleProposalActivityMessage = async (
 				);
 
 				if (proposal.vetoPercentage === vetoPercentage) break;
-				
+
 				logger.info("Proposal #%d: 🗳  update veto [1/3]", proposalId);
 				updatedData = { ...updatedData, vetoPercentage };
 				break;
