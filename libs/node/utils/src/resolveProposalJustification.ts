@@ -34,7 +34,12 @@ export const resolveProposalJustification = async (
 
 type UriType = "external" | "pinata" | "unknown";
 const determineUriType = (justificationUri: string): UriType => {
-	const justificationUrl = new URL(justificationUri);
+	let justificationUrl: URL;
+	try {
+		justificationUrl = new URL(justificationUri);
+	} catch (error) {
+		return "unknown";
+	}
 	const gatewayUrl = new URL(PINATA_GATEWAY);
 
 	const external = ["hackmd.io", "medium.com"].some(
