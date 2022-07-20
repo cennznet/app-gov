@@ -25,13 +25,13 @@ export const getDiscordBot = (token: string): Promise<DiscordClient> =>
 		}
 	});
 
-export type DiscordWebhooks = Awaited<ReturnType<typeof getDiscordWebhooks>>;
+export type DiscordWebhooks = [InteractionWebhook, InteractionWebhook];
 
 export const getDiscordWebhooks = (
 	token: string,
 	channelIds: string[],
 	webhookIds: string[]
-): Promise<[InteractionWebhook, InteractionWebhook]> =>
+): Promise<DiscordWebhooks> =>
 	new Promise((resolve, reject) => {
 		try {
 			bot.login(token);
