@@ -26,7 +26,36 @@ export const fetchProposalVotes = async (
 	return getVotesFromBits(activeBits, voteBits);
 };
 
-export const getVotesFromBits = (
+/**
+ * Fetches a proposal vote percentage
+ *
+ * @param {Api} api
+ * @param {number} proposalId
+ * @return {Promise<number>}
+ */
+export const fetchProposalVotePercentage = async (
+	api: Api,
+	proposalId: number,
+	votes?: ProposalVotes
+): Promise<number> => {
+	const [{ passVotes, rejectVotes }, council] = await Promise.all([
+		votes ?? fetchProposalVotes(api, proposalId),
+		api.query.governance.council(),
+	]);
+
+	const councilCount = (council.toJSON() as []).length;
+
+	return ((passVotes + rejectVotes) / councilCount) * 100;
+};
+
+/**
+ * Gets the votes from bits
+ *
+ * @param {u128[]} activeBits
+ * @param {u128[]} voteBits
+ * @return {ProposalVotes}
+ */
+const getVotesFromBits = (
 	activeBits: u128[],
 	voteBits: u128[]
 ): ProposalVotes => {

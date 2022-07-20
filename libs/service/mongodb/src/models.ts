@@ -14,6 +14,7 @@ import type { ProposalModel } from "./types";
 			status: { type: Schema.Types.String },
 			passVotes: { type: Schema.Types.Number },
 			rejectVotes: { type: Schema.Types.Number },
+			votePercentage: { type: Schema.Types.Number },
 			vetoPercentage: { type: Schema.Types.Number },
 		})
 	);
