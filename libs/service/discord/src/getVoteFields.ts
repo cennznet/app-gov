@@ -12,13 +12,6 @@ export const getVoteFields = ({
 	status === "Deliberation"
 		? [
 				{
-					name: "Veto Sum",
-					value: `_**${vetoPercentage} / 33 %**_`,
-					inline: false,
-				},
-		  ]
-		: [
-				{
 					name: "Votes to Pass",
 					value: `_**${passVotes}**_`,
 					inline: true,
@@ -27,6 +20,13 @@ export const getVoteFields = ({
 					name: "Votes to Reject",
 					value: `_**${rejectVotes}**_`,
 					inline: true,
+				},
+		  ]
+		: [
+				{
+					name: "Veto Sum",
+					value: `_**${vetoPercentage} / 33 %**_`,
+					inline: false,
 				},
 		  ];
 
