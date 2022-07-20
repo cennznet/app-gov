@@ -62,11 +62,11 @@ export const DISCORD_RELAYER_BOT = {
 	ProposalWebhookId: process.env.DISCORD_PROPOSAL_WEBHOOK_ID ?? "",
 	ReferendumWebhookId: process.env.DISCORD_REFERENDUM_WEBHOOK_ID ?? "",
 };
-export const DISCORD_CHANNEL_IDS = [
+export const DISCORD_CHANNEL_IDS: [string, string] = [
 	DISCORD_RELAYER_BOT.ProposalChannelId,
 	DISCORD_RELAYER_BOT.ReferendumChannelId,
 ];
-export const DISCORD_WEBHOOK_IDS = [
+export const DISCORD_WEBHOOK_IDS: [string, string] = [
 	DISCORD_RELAYER_BOT.ProposalWebhookId,
 	DISCORD_RELAYER_BOT.ReferendumWebhookId,
 ];

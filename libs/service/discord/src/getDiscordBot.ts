@@ -29,8 +29,8 @@ export type DiscordWebhooks = [InteractionWebhook, InteractionWebhook];
 
 export const getDiscordWebhooks = (
 	token: string,
-	channelIds: string[],
-	webhookIds: string[]
+	channelIds: [string, string],
+	[proposalWebhookId, referendumWebhookId]: [string, string]
 ): Promise<DiscordWebhooks> =>
 	new Promise((resolve, reject) => {
 		try {
@@ -43,8 +43,8 @@ export const getDiscordWebhooks = (
 
 				const [proposalWebhook, referendumWebhook] = await Promise.all(
 					[
-						[proposalChannel, webhookIds[0]],
-						[referendumChannel, webhookIds[1]],
+						[proposalChannel, proposalWebhookId],
+						[referendumChannel, referendumWebhookId],
 					].map(async ([channel, webhookId]) => {
 						const webhooks: InteractionWebhook[] = await (
 							channel as any
