@@ -12,14 +12,14 @@ export const getVoteFields = ({
 		? [
 				{
 					name: "Threshold to Pass",
-					value: `Current: _${votePercentage}%_ / Require: _50%_`,
+					value: `Current: _${votePercentage}%_ / Required: _50%_`,
 					inline: false,
 				},
 		  ]
 		: [
 				{
 					name: "Threshold to Veto",
-					value: `Current: _${vetoPercentage}%_ / Require: _33%_`,
+					value: `Current: _${vetoPercentage}%_ / Required: _33%_`,
 					inline: false,
 				},
 		  ];
