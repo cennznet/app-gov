@@ -1,11 +1,6 @@
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import {
-	getLogger,
-	handleNewProposalMessage,
-	handleProposalActivityMessage,
-} from "@app-gov/service/relayer";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import { getDiscordWebhooks } from "@app-gov/service/discord";
 import {
@@ -24,6 +19,11 @@ import {
 	getRabbitClient,
 	requeueMessage,
 } from "@app-gov/service/rabbitmq";
+import {
+	getLogger,
+	handleNewProposalMessage,
+	handleProposalActivityMessage,
+} from "@app-gov/service/relayer";
 
 module.exports = {
 	command: "proposal-sub",

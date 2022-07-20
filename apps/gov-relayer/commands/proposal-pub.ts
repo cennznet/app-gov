@@ -1,11 +1,6 @@
 import { AMQPError } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import {
-	getLogger,
-	monitorNewProposal,
-	monitorProposalActivity,
-} from "@app-gov/service/relayer";
 import { getApiInstance } from "@app-gov/service/cennznet";
 import {
 	BLOCK_POLLING_INTERVAL,
@@ -16,6 +11,11 @@ import {
 } from "@app-gov/service/env-vars";
 import { getMongoClient } from "@app-gov/service/mongodb";
 import { getQueueByName, getRabbitClient } from "@app-gov/service/rabbitmq";
+import {
+	getLogger,
+	monitorNewProposal,
+	monitorProposalActivity,
+} from "@app-gov/service/relayer";
 
 module.exports = {
 	command: "proposal-pub",
