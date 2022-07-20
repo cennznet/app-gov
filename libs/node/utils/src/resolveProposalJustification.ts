@@ -11,14 +11,50 @@ import { safeFetch } from "./";
 export const resolveProposalJustification = async (
 	justificationUri: string
 ): Promise<string | void> => {
+	const uriType = determineUriType(justificationUri);
+
+	if (uriType === "unknown") return;
 	const fallback = `Justification details are published [here](${justificationUri})`;
-	if (!justificationUri.includes("pinata")) return fallback;
+
+	if (uriType === "external") return fallback;
 
 	const pinataUri = fixPinataGateway(justificationUri);
-	const response = await safeFetch(pinataUri);
+
+	let response;
+	try {
+		response = await safeFetch(pinataUri);
+	} catch (error) {
+		console.error(error);
+	}
+
 	if (!response) return;
 
 	return (await response.json())?.justification ?? fallback;
+};
+
+type UriType = "external" | "pinata" | "unknown";
+const determineUriType = (justificationUri: string): UriType => {
+	let justificationUrl: URL;
+	try {
+		justificationUrl = new URL(justificationUri);
+	} catch (error) {
+		return "unknown";
+	}
+	const gatewayUrl = new URL(PINATA_GATEWAY);
+
+	const external = ["hackmd.io", "medium.com"].some(
+		(domain) => justificationUrl.host.indexOf(domain) >= 0
+	);
+
+	if (external) return "external";
+
+	const pinata = ["gateway.pinata.cloud", gatewayUrl.host].some(
+		(domain) => justificationUrl.host.indexOf(domain) >= 0
+	);
+
+	if (pinata) return "pinata";
+
+	return "unknown";
 };
 
 const fixPinataGateway = (gatewayUri: string): string => {
