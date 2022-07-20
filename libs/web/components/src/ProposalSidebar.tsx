@@ -84,7 +84,7 @@ const VotesInfo: FC<VotesInfoProps & IntrinsicElements["div"]> = ({
 				<label className="font-display text-hero block font-bold uppercase">
 					Threshold to Pass
 				</label>
-				<span>Current: {votePercentage}% / Require: 50%</span>
+				<span>Current: {votePercentage?.toFixed(2)}% / Require: 50%</span>
 			</div>
 		</>
 	);
@@ -108,7 +108,7 @@ const VetoInfo: FC<VetoInfoProps & IntrinsicElements["div"]> = ({
 				Threshold to Veto
 			</label>
 			<span>
-				Current: {vetoPercentage}% / Require: {vetoThreshold}%
+				Current: {vetoPercentage?.toFixed(2)}% / Require: {vetoThreshold}%
 			</span>
 		</div>
 	);
