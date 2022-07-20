@@ -7,7 +7,7 @@ import {
 	handleProposalActivityMessage,
 } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
-import { getDiscordWebhook } from "@app-gov/service/discord";
+import { getDiscordWebhooks } from "@app-gov/service/discord";
 import {
 	CENNZ_NETWORK,
 	DISCORD_RELAYER_BOT,
@@ -59,14 +59,20 @@ module.exports = {
 							break;
 
 						case "proposal-activity": {
-							const discordWebhook = await getDiscordWebhook(
+							const discordWebhooks = await getDiscordWebhooks(
 								DISCORD_RELAYER_BOT.Token,
-								DISCORD_RELAYER_BOT.ChannelId,
-								DISCORD_RELAYER_BOT.WebhookId
+								[
+									DISCORD_RELAYER_BOT.ProposalChannel,
+									DISCORD_RELAYER_BOT.ReferendumChannel,
+								],
+								[
+									DISCORD_RELAYER_BOT.ProposalWebhookId,
+									DISCORD_RELAYER_BOT.ReferendumWebhookId,
+								]
 							);
 							await handleProposalActivityMessage(
 								cennzApi,
-								discordWebhook,
+								discordWebhooks,
 								mdbClient,
 								body
 							);
