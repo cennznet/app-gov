@@ -9,14 +9,14 @@ interface DiscordMessage {
 	embeds: MessageEmbed[];
 }
 
-export function getDiscordMessage(
+export const getDiscordMessage = async (
 	proposalId: number,
 	proposalInfo: ProposalModel
-): DiscordMessage {
+): Promise<DiscordMessage> => {
 	return {
 		components: [
 			getVoteButtons(proposalId, proposalInfo.status) as MessageActionRow,
 		],
-		embeds: [getProposalEmbed(proposalId, proposalInfo)],
+		embeds: [await getProposalEmbed(proposalId, proposalInfo)],
 	};
-}
+};

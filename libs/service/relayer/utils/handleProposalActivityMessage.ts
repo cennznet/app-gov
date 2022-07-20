@@ -79,10 +79,9 @@ export const handleProposalActivityMessage = async (
 			}
 		}
 
-		const discordMessage = getDiscordMessage(proposalId, proposal);
-
 		let discordProposalMessage = "",
 			discordReferendumMessage = "";
+		const discordMessage = await getDiscordMessage(proposalId, proposal);
 
 		switch (status) {
 			case "Deliberation": {
