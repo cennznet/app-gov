@@ -7,10 +7,7 @@ import {
 	fetchProposalVetoPercentage,
 	fetchProposalVotes,
 } from "@app-gov/service/cennznet";
-import {
-	getDiscordMessage,
-	getDiscordWebhooks,
-} from "@app-gov/service/discord";
+import { DiscordWebhooks, getDiscordMessage } from "@app-gov/service/discord";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
@@ -19,8 +16,6 @@ import { getLogger, TimeoutError, waitForTime } from "./";
 interface MessageBody {
 	proposalId: number;
 }
-
-type DiscordWebhooks = Awaited<ReturnType<typeof getDiscordWebhooks>>;
 
 /**
  * Handle the proposal activity message

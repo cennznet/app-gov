@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Client as DiscordClient, Intents } from "discord.js";
 import type { InteractionWebhook } from "discord.js";
 
@@ -24,6 +25,8 @@ export const getDiscordBot = (token: string): Promise<DiscordClient> =>
 		}
 	});
 
+export type DiscordWebhooks = Awaited<ReturnType<typeof getDiscordWebhooks>>;
+
 export const getDiscordWebhooks = (
 	token: string,
 	channelIds: string[],
@@ -42,17 +45,15 @@ export const getDiscordWebhooks = (
 					[
 						[proposalChannel, webhookIds[0]],
 						[referendumChannel, webhookIds[1]],
-					].map(
-						async ([channel, webhookId]) =>
-							await (channel as any)
-								.fetchWebhooks()
-								.then((hooks: InteractionWebhook[]) =>
-									hooks.find((hook) => hook.id === webhookId)
-								)
-					)
+					].map(async ([channel, webhookId]) => {
+						const webhooks: InteractionWebhook[] = await (
+							channel as any
+						).fetchWebhooks();
+						return webhooks.find((hook) => hook.id === webhookId);
+					})
 				);
 
-				resolve([proposalWebhook, referendumWebhook]);
+				resolve([proposalWebhook, referendumWebhook] as DiscordWebhooks);
 			});
 		} catch (error) {
 			reject(error);

@@ -10,7 +10,9 @@ import { getApiInstance } from "@app-gov/service/cennznet";
 import { getDiscordWebhooks } from "@app-gov/service/discord";
 import {
 	CENNZ_NETWORK,
+	DISCORD_CHANNEL_IDS,
 	DISCORD_RELAYER_BOT,
+	DISCORD_WEBHOOK_IDS,
 	MESSAGE_MAX_RETRY,
 	MONGODB_URI,
 	PROPOSAL_QUEUE,
@@ -61,14 +63,8 @@ module.exports = {
 						case "proposal-activity": {
 							const discordWebhooks = await getDiscordWebhooks(
 								DISCORD_RELAYER_BOT.Token,
-								[
-									DISCORD_RELAYER_BOT.ProposalChannel,
-									DISCORD_RELAYER_BOT.ReferendumChannel,
-								],
-								[
-									DISCORD_RELAYER_BOT.ProposalWebhookId,
-									DISCORD_RELAYER_BOT.ReferendumWebhookId,
-								]
+								DISCORD_CHANNEL_IDS,
+								DISCORD_WEBHOOK_IDS
 							);
 							await handleProposalActivityMessage(
 								cennzApi,
