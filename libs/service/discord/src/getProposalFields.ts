@@ -42,30 +42,29 @@ export const getProposalFields = async (
 		proposalInfo.justificationUri ?? ""
 	);
 
-	if (proposalDetails)
-		return [
-			{
-				name: "Details",
-				value: proposalDetails ?? "",
-			},
-			{
-				name: "Sponsor",
-				value: `_${proposalInfo.sponsor}_`,
-			},
-			{
-				name: "Enactment Delay",
-				value: `${proposalInfo.enactmentDelay} blocks`,
-			},
-		];
-
-	return [
-		{
-			name: "Sponsor",
-			value: `_${proposalInfo.sponsor}_`,
-		},
-		{
-			name: "Enactment Delay",
-			value: `${proposalInfo.enactmentDelay} blocks`,
-		},
-	];
+	return proposalDetails
+		? [
+				{
+					name: "Details",
+					value: proposalDetails,
+				},
+				{
+					name: "Sponsor",
+					value: `_${proposalInfo.sponsor}_`,
+				},
+				{
+					name: "Enactment Delay",
+					value: `${proposalInfo.enactmentDelay} blocks`,
+				},
+		  ]
+		: [
+				{
+					name: "Sponsor",
+					value: `_${proposalInfo.sponsor}_`,
+				},
+				{
+					name: "Enactment Delay",
+					value: `${proposalInfo.enactmentDelay} blocks`,
+				},
+		  ];
 };
