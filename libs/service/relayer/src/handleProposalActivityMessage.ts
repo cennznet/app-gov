@@ -85,8 +85,8 @@ export const handleProposalActivityMessage = async (
 			}
 		}
 
-		let discordProposalMessage = "",
-			discordReferendumMessage = "";
+		if (!Object.keys(updatedData).length) return;
+
 		const discordMessage = getDiscordMessage(
 			proposalId,
 			await resolveProposalJustification(
@@ -101,6 +101,9 @@ export const handleProposalActivityMessage = async (
 				...updatedData,
 			}
 		);
+
+		let discordProposalMessage: string | undefined,
+			discordReferendumMessage: string | undefined;
 
 		switch (status) {
 			case "Deliberation": {
@@ -167,8 +170,6 @@ export const handleProposalActivityMessage = async (
 			discordProposalMessage,
 			discordReferendumMessage,
 		};
-
-		if (!Object.keys(updatedData).length) return;
 
 		logger.info("Proposal #%d: 🗂  file to DB [3/3]", proposalId);
 		await updateProposalRecord(updatedData);
