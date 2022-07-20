@@ -2,12 +2,14 @@ import { Client as DiscordClient, Intents } from "discord.js";
 import type { InteractionWebhook } from "discord.js";
 
 const bot = new DiscordClient({
-	partials: ["CHANNEL"],
+	partials: ["CHANNEL", "MESSAGE"],
 	intents: [
 		Intents.FLAGS.GUILDS,
 		Intents.FLAGS.GUILD_MESSAGES,
 		Intents.FLAGS.GUILD_MEMBERS,
 		Intents.FLAGS.DIRECT_MESSAGES,
+		Intents.FLAGS.GUILD_WEBHOOKS,
+		Intents.FLAGS.GUILD_INTEGRATIONS,
 	],
 });
 
@@ -16,32 +18,41 @@ export const getDiscordBot = (token: string): Promise<DiscordClient> =>
 		try {
 			bot.login(token);
 
-			bot.on("ready", () => resolve(bot));
+			bot.once("ready", () => resolve(bot));
 		} catch (error) {
 			reject(error);
 		}
 	});
 
-export const getDiscordWebhook = (
+export const getDiscordWebhooks = (
 	token: string,
-	channelId: string,
-	webhookId: string
-): Promise<InteractionWebhook> =>
+	channelIds: string[],
+	webhookIds: string[]
+): Promise<[InteractionWebhook, InteractionWebhook]> =>
 	new Promise((resolve, reject) => {
 		try {
 			bot.login(token);
 
-			bot.on("ready", async () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				const channel: any = bot.channels.cache.get(channelId);
+			bot.once("ready", async () => {
+				const [proposalChannel, referendumChannel] = channelIds.map(
+					(channelId) => bot.channels.cache.get(channelId)
+				);
 
-				const webhook = await channel
-					.fetchWebhooks()
-					.then((hooks: InteractionWebhook[]) =>
-						hooks.find((hook) => hook.id === webhookId)
-					);
+				const [proposalWebhook, referendumWebhook] = await Promise.all(
+					[
+						[proposalChannel, webhookIds[0]],
+						[referendumChannel, webhookIds[1]],
+					].map(
+						async ([channel, webhookId]) =>
+							await (channel as any)
+								.fetchWebhooks()
+								.then((hooks: InteractionWebhook[]) =>
+									hooks.find((hook) => hook.id === webhookId)
+								)
+					)
+				);
 
-				resolve(webhook);
+				resolve([proposalWebhook, referendumWebhook]);
 			});
 		} catch (error) {
 			reject(error);
