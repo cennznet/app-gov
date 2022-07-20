@@ -73,7 +73,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 				_id: proposal._id.toString(),
 			},
 			justification,
-			vetoThreshold,
+			vetoThreshold: await fetchProposalVetoThreshold(api),
 		},
 		revalidate: 600,
 	};
