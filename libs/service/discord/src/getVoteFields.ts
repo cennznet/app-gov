@@ -4,28 +4,22 @@ import { PROPOSAL_URL } from "@app-gov/service/env-vars";
 import type { ProposalModel } from "@app-gov/service/mongodb";
 
 export const getVoteFields = ({
-	passVotes,
-	rejectVotes,
 	status,
+	votePercentage,
 	vetoPercentage,
 }: Partial<ProposalModel>): EmbedFieldData[] =>
 	status === "Deliberation"
 		? [
 				{
-					name: "Votes to Pass",
-					value: `_**${passVotes}**_`,
-					inline: true,
-				},
-				{
-					name: "Votes to Reject",
-					value: `_**${rejectVotes}**_`,
-					inline: true,
+					name: "Threshold to Pass",
+					value: `Current: _${votePercentage}%_ / Require: _50%_`,
+					inline: false,
 				},
 		  ]
 		: [
 				{
-					name: "Veto Sum",
-					value: `_**${vetoPercentage} / 33 %**_`,
+					name: "Threshold to Veto",
+					value: `Current: _${vetoPercentage}%_ / Require: _33%_`,
 					inline: false,
 				},
 		  ];

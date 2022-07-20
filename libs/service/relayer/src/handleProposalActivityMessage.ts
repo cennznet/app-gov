@@ -95,8 +95,7 @@ export const handleProposalActivityMessage = async (
 			{
 				status: proposal.status,
 				sponsor: proposal.sponsor,
-				passVotes: proposal.passVotes,
-				rejectVotes: proposal.rejectVotes,
+				vetoPercentage: proposal.vetoPercentage,
 				votePercentage: proposal.votePercentage,
 				enactmentDelay: proposal.enactmentDelay,
 				...updatedData,
