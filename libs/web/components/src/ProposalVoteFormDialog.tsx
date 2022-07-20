@@ -3,16 +3,15 @@ import { Choose, If } from "react-extras";
 
 import { StepProgress } from "@app-gov/web/components";
 import { ProposalNewFormState } from "@app-gov/web/hooks";
-import { DiscordLogo } from "@app-gov/web/vectors";
 
 import { Button, TransactionDialog, TransactionDialogProps } from "./";
 
-interface ProposalNewFormDialogProps extends TransactionDialogProps {
+interface ProposalVoteFormDialogProps extends TransactionDialogProps {
 	formState: ProposalNewFormState;
 	onDismiss: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
+export const ProposalVoteFormDialog: FC<ProposalVoteFormDialogProps> = ({
 	formState,
 	onDismiss,
 	...props
@@ -20,29 +19,18 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 	return (
 		<TransactionDialog {...props}>
 			<StepProgress
-				steps={["Confirm", "Submit", "Process", "Success!"]}
-				stepIndex={["Sign", "Submit", "Process", "Complete"].indexOf(
-					formState.step
-				)}
+				steps={["Confirm", "Submit", "Success!"]}
+				stepIndex={["Sign", "Submit", "Complete"].indexOf(formState.step)}
 				error={formState?.status === "NotOk"}
 			>
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="prose text-center  text-sm">
-							Your proposal has been submitted successfully, [and maybe some
-							message to view the proposal on Discord].
+							Your vote has been submitted
 						</p>
 						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
-							<div className="mb-4">
-								<Button startAdornment={<DiscordLogo className="h-4" />}>
-									View proposal on Discord
-								</Button>
-							</div>
-
 							<div>
-								<Button onClick={onDismiss} variant="white">
-									Submit another
-								</Button>
+								<Button onClick={onDismiss}>Dismiss</Button>
 							</div>
 						</div>
 					</Choose.When>
@@ -71,13 +59,9 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 						</p>
 					</Choose.When>
 
-					<Choose.When
-						condition={
-							formState?.step === "Submit" || formState?.step === "Process"
-						}
-					>
+					<Choose.When condition={formState?.step === "Submit"}>
 						<p className="prose text-center text-sm">
-							Please wait until this proccess completes...
+							Please wait until this process completes...
 						</p>
 					</Choose.When>
 				</Choose>

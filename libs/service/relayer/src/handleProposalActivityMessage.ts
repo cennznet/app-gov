@@ -5,6 +5,7 @@ import { Mongoose } from "mongoose";
 import {
 	fetchProposalStatus,
 	fetchProposalVetoPercentage,
+	fetchProposalVotePercentage,
 	fetchProposalVotes,
 } from "@app-gov/service/cennznet";
 import { DiscordWebhooks, getDiscordMessage } from "@app-gov/service/discord";
@@ -50,19 +51,22 @@ export const handleProposalActivityMessage = async (
 
 		switch (status) {
 			case "Deliberation": {
-				const { passVotes, rejectVotes } = await fetchProposalVotes(
+				const votes = await fetchProposalVotes(api, proposalId);
+				const votePercentage = await fetchProposalVotePercentage(
 					api,
-					proposalId
+					proposalId,
+					votes
 				);
 
 				if (
-					proposal.passVotes === passVotes &&
-					proposal.rejectVotes === rejectVotes
+					proposal.passVotes === votes.passVotes &&
+					proposal.rejectVotes === votes.rejectVotes &&
+					proposal.votePercentage === votePercentage
 				)
 					break;
 
 				logger.info("Proposal #%d: 🗳  update votes [1/3]", proposalId);
-				updatedData = { ...updatedData, passVotes, rejectVotes };
+				updatedData = { ...updatedData, ...votes, votePercentage };
 				break;
 			}
 
@@ -73,6 +77,7 @@ export const handleProposalActivityMessage = async (
 				);
 
 				if (proposal.vetoPercentage === vetoPercentage) break;
+				
 				logger.info("Proposal #%d: 🗳  update veto [1/3]", proposalId);
 				updatedData = { ...updatedData, vetoPercentage };
 				break;

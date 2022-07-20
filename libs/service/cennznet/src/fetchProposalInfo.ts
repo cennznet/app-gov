@@ -28,20 +28,23 @@ export const fetchProposalInfo = async (
 	api: Api,
 	proposalId: number
 ): Promise<ProposalInfo | void> => {
-	const [proposalsResult, proposalCallsResult, proposalStatus] =
-		await Promise.all([
-			api.query.governance.proposals(proposalId),
-			api.query.governance.proposalCalls(proposalId),
-			fetchProposalStatus(api, proposalId),
-		]);
+	const [proposalsResult, proposalCallsResult, status] = await Promise.all([
+		api.query.governance.proposals(proposalId),
+		api.query.governance.proposalCalls(proposalId),
+		fetchProposalStatus(api, proposalId),
+	]);
 
 	const proposalInfo = proposalsResult.toJSON() as unknown as ProposalInfo;
 	const proposalCall: string = proposalCallsResult.toString();
-	let status = proposalStatus.toString() as ProposalStatus;
-	// for "ApprovedEnacted", the response is in JSON form `{"approvedEnacted":false}`
-	if (status.indexOf("approvedEnacted") >= 0) status = "ApprovedEnacted";
 
 	if (!proposalInfo) return;
+
+	const justificationUri = api
+		.createType("Vec<u8>", proposalInfo.justificationUri)
+		.toHuman() as string;
+	const isValidUri = justificationUri.indexOf("https://") === 0;
+
+	if (!isValidUri) return;
 
 	let call;
 
