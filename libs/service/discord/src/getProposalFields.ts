@@ -1,7 +1,6 @@
 import type { ColorResolvable, EmbedFieldData } from "discord.js";
 import { MessageEmbed } from "discord.js";
 
-import { resolveProposalJustification } from "@app-gov/node/utils";
 import type { ProposalModel } from "@app-gov/service/mongodb";
 
 import { getVoteFields } from "./";
@@ -12,12 +11,13 @@ const COLOURS: Record<string, ColorResolvable> = {
 	Reject: "RED",
 };
 
-export const getProposalEmbed = async (
+export const getProposalEmbed = (
 	proposalId: number,
-	proposalInfo: ProposalModel
-): Promise<MessageEmbed> => {
+	justification: string | void,
+	proposalInfo: Partial<ProposalModel>
+): MessageEmbed => {
 	const status = proposalInfo.status;
-	const proposalFields = await getProposalFields(proposalInfo);
+	const proposalFields = getProposalFields(proposalInfo, justification);
 
 	return proposalInfo.status?.includes("Deliberation")
 		? new MessageEmbed()
@@ -35,18 +35,15 @@ export const getProposalEmbed = async (
 				.setTimestamp();
 };
 
-export const getProposalFields = async (
-	proposalInfo: ProposalModel
-): Promise<EmbedFieldData[]> => {
-	const proposalDetails = await resolveProposalJustification(
-		proposalInfo.justificationUri ?? ""
-	);
-
-	return proposalDetails
+export const getProposalFields = (
+	proposalInfo: Partial<ProposalModel>,
+	justification: string | void
+): EmbedFieldData[] => {
+	return justification
 		? [
 				{
-					name: "Details",
-					value: proposalDetails,
+					name: "Justification",
+					value: justification,
 				},
 				{
 					name: "Sponsor",

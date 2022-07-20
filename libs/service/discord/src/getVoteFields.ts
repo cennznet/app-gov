@@ -8,7 +8,7 @@ export const getVoteFields = ({
 	rejectVotes,
 	status,
 	vetoPercentage,
-}: ProposalModel): EmbedFieldData[] =>
+}: Partial<ProposalModel>): EmbedFieldData[] =>
 	status === "Deliberation"
 		? [
 				{

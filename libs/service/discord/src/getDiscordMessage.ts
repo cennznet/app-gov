@@ -9,14 +9,15 @@ interface DiscordMessage {
 	embeds: MessageEmbed[];
 }
 
-export const getDiscordMessage = async (
+export const getDiscordMessage = (
 	proposalId: number,
-	proposalInfo: ProposalModel
-): Promise<DiscordMessage> => {
+	justification: string | void,
+	proposalInfo: Partial<ProposalModel>
+): DiscordMessage => {
 	return {
 		components: [
 			getVoteButtons(proposalId, proposalInfo.status) as MessageActionRow,
 		],
-		embeds: [await getProposalEmbed(proposalId, proposalInfo)],
+		embeds: [getProposalEmbed(proposalId, justification, proposalInfo)],
 	};
 };

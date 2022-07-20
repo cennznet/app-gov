@@ -2,6 +2,7 @@ import { Api } from "@cennznet/api";
 import chalk from "chalk";
 import { Mongoose } from "mongoose";
 
+import { resolveProposalJustification } from "@app-gov/node/utils";
 import {
 	fetchProposalStatus,
 	fetchProposalVetoPercentage,
@@ -86,7 +87,18 @@ export const handleProposalActivityMessage = async (
 
 		let discordProposalMessage = "",
 			discordReferendumMessage = "";
-		const discordMessage = await getDiscordMessage(proposalId, proposal);
+		const discordMessage = getDiscordMessage(
+			proposalId,
+			await resolveProposalJustification(
+				proposal.get("justificationUri") ?? ""
+			),
+			{
+				status: proposal.status,
+				sponsor: proposal.sponsor,
+				enactmentDelay: proposal.enactmentDelay,
+				...updatedData,
+			}
+		);
 
 		switch (status) {
 			case "Deliberation": {
