@@ -4,6 +4,7 @@ import { Mongoose } from "mongoose";
 import {
 	fetchProposalStatus,
 	fetchProposalVetoPercentage,
+	fetchProposalVotePercentage,
 	fetchProposalVotes,
 } from "@app-gov/service/cennznet";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
@@ -47,18 +48,21 @@ export const handleProposalActivityMessage = async (
 
 		switch (status) {
 			case "Deliberation": {
-				const { passVotes, rejectVotes } = await fetchProposalVotes(
+				const votes = await fetchProposalVotes(api, proposalId);
+				const votePercentage = await fetchProposalVotePercentage(
 					api,
-					proposalId
+					proposalId,
+					votes
 				);
 
 				if (
-					proposal.passVotes === passVotes &&
-					proposal.rejectVotes === rejectVotes
+					proposal.passVotes === votes.passVotes &&
+					proposal.rejectVotes === votes.rejectVotes &&
+					proposal.votePercentage === votePercentage
 				)
 					break;
 				logger.info("Proposal #%d: 🗳  update votes [1/2]", proposalId);
-				updatedData = { ...updatedData, passVotes, rejectVotes };
+				updatedData = { ...updatedData, ...votes, votePercentage };
 				break;
 			}
 
