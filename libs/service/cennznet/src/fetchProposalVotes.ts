@@ -38,14 +38,14 @@ export const fetchProposalVotePercentage = async (
 	proposalId: number,
 	votes?: ProposalVotes
 ): Promise<number> => {
-	const [{ passVotes, rejectVotes }, council] = await Promise.all([
+	const [{ passVotes }, council] = await Promise.all([
 		votes ?? fetchProposalVotes(api, proposalId),
 		api.query.governance.council(),
 	]);
 
 	const councilCount = (council.toJSON() as []).length;
 
-	return ((passVotes + rejectVotes) / councilCount) * 100;
+	return (passVotes / councilCount) * 100;
 };
 
 /**
