@@ -11,6 +11,7 @@ import {
 	fetchProposalVotePercentage,
 	fetchProposalVotes,
 	getApiInstance,
+	subscribeFinalizedHeads,
 } from "@app-gov/service/cennznet";
 import {
 	BLOCK_POLLING_INTERVAL,
@@ -170,39 +171,27 @@ const useProposal = (initialProposal: ProposalModel) => {
 	useEffect(() => {
 		if (!api) return;
 		let unsubscribeFn: VoidFn;
-		let lastBlockPolled: number;
-		api.rpc.chain
-			.subscribeFinalizedHeads(async (head) => {
-				const blockNumber = head.number.toNumber();
-				if (
-					lastBlockPolled &&
-					blockNumber < lastBlockPolled + BLOCK_POLLING_INTERVAL
-				)
-					return;
-				lastBlockPolled = blockNumber;
-				const [proposalInfo, proposalVotes, vetoPercentage] = await Promise.all(
-					[
-						fetchProposalInfo(api, proposalId),
-						fetchProposalVotes(api, proposalId),
-						fetchProposalVetoPercentage(api, proposalId),
-					]
-				);
+		subscribeFinalizedHeads(api, BLOCK_POLLING_INTERVAL, async () => {
+			const [proposalInfo, proposalVotes, vetoPercentage] = await Promise.all([
+				fetchProposalInfo(api, proposalId),
+				fetchProposalVotes(api, proposalId),
+				fetchProposalVetoPercentage(api, proposalId),
+			]);
 
-				const votePercentage = await fetchProposalVotePercentage(
-					api,
-					proposalId,
-					proposalVotes
-				);
+			const votePercentage = await fetchProposalVotePercentage(
+				api,
+				proposalId,
+				proposalVotes
+			);
 
-				setProposal({
-					proposalId,
-					...proposalInfo,
-					...proposalVotes,
-					votePercentage,
-					vetoPercentage,
-				});
-			})
-			.then((unsubscribe) => (unsubscribeFn = unsubscribe));
+			setProposal({
+				proposalId,
+				...proposalInfo,
+				...proposalVotes,
+				votePercentage,
+				vetoPercentage,
+			});
+		}).then((unsubscribe) => (unsubscribeFn = unsubscribe));
 
 		return () => unsubscribeFn?.();
 	}, [api, proposalId]);
