@@ -15,5 +15,7 @@ import type { ProposalModel } from "./types";
 			passVotes: { type: Schema.Types.Number },
 			rejectVotes: { type: Schema.Types.Number },
 			vetoPercentage: { type: Schema.Types.Number },
+			discordProposalMessage: { type: Schema.Types.String },
+			discordReferendumMessage: { type: Schema.Types.String },
 		})
 	);

@@ -5,4 +5,6 @@ export interface ProposalModel extends Partial<ProposalInfo> {
 	passVotes?: number;
 	rejectVotes?: number;
 	vetoPercentage?: number;
+	discordProposalMessage?: string;
+	discordReferendumMessage?: string;
 }
