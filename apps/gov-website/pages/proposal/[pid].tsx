@@ -125,8 +125,15 @@ const Proposal: NextPage<ProposalProps> = ({
 			<Header />
 			<Layout.PageContent className="!max-w-4xl lg:!max-w-5xl">
 				<Layout.PageHeader>Proposal #{proposalId}</Layout.PageHeader>
-				<div className="grid grid-cols-3 gap-8">
-					<div className="col-span-2 col-start-1">
+				<div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+					<div className="lg:col-start-3 lg:row-start-1">
+						<ProposalSidebar
+							proposal={proposal}
+							className="sticky top-12"
+							vetoThreshold={vetoThreshold}
+						/>
+					</div>
+					<div className="lg:col-span-2 lg:col-start-1 lg:row-start-1">
 						<ProposalBody.Justification justification={justification} />
 						<ProposalBody.Call call={call} />
 						<If
@@ -140,13 +147,6 @@ const Proposal: NextPage<ProposalProps> = ({
 								onReject={onReject}
 							/>
 						</If>
-					</div>
-					<div className="col-start-3">
-						<ProposalSidebar
-							proposal={proposal}
-							className="sticky top-12"
-							vetoThreshold={vetoThreshold}
-						/>
 					</div>
 				</div>
 				<ProposalVoteFormDialog
