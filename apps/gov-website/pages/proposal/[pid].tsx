@@ -7,10 +7,12 @@ import { resolveProposalJustification } from "@app-gov/node/utils";
 import {
 	fetchProposalInfo,
 	fetchProposalVetoPercentage,
+	fetchProposalVetoThreshold,
 	fetchProposalVotePercentage,
 	fetchProposalVotes,
+	getApiInstance,
 } from "@app-gov/service/cennznet";
-import { MONGODB_URI } from "@app-gov/service/env-vars";
+import { CENNZ_NETWORK, MONGODB_URI } from "@app-gov/service/env-vars";
 import { getMongoClient, ProposalModel } from "@app-gov/service/mongodb";
 import {
 	Header,
@@ -43,6 +45,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 	const {
 		params: { pid },
 	} = context;
+	const api = await getApiInstance(CENNZ_NETWORK.ChainSlug);
 	const mdb = await getMongoClient(MONGODB_URI);
 	const proposal = await mdb
 		.model<ProposalModel>("Proposal")
@@ -52,6 +55,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 	const justification = await resolveProposalJustification(
 		proposal.justificationUri
 	);
+
+	const vetoThreshold = await fetchProposalVetoThreshold(api);
 
 	if (!proposal)
 		return {
@@ -65,6 +70,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 				_id: proposal._id.toString(),
 			},
 			justification,
+			vetoThreshold,
 		},
 		revalidate: 600,
 	};
@@ -73,10 +79,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
 interface ProposalProps {
 	proposal: ProposalModel;
 	justification: string;
+	vetoThreshold: string;
 }
 
 const Proposal: NextPage<ProposalProps> = ({
 	proposal: initialProposal,
+	vetoThreshold,
 	justification,
 }) => {
 	const proposal = useProposal(initialProposal);
@@ -130,7 +138,11 @@ const Proposal: NextPage<ProposalProps> = ({
 						</If>
 					</div>
 					<div className="col-start-3">
-						<ProposalSidebar proposal={proposal} className="sticky top-12" />
+						<ProposalSidebar
+							proposal={proposal}
+							className="sticky top-12"
+							vetoThreshold={vetoThreshold}
+						/>
 					</div>
 				</div>
 				<ProposalVoteFormDialog
