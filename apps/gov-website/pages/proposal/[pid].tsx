@@ -12,7 +12,11 @@ import {
 	fetchProposalVotes,
 	getApiInstance,
 } from "@app-gov/service/cennznet";
-import { CENNZ_NETWORK, MONGODB_URI } from "@app-gov/service/env-vars";
+import {
+	BLOCK_POLLING_INTERVAL,
+	CENNZ_NETWORK,
+	MONGODB_URI,
+} from "@app-gov/service/env-vars";
 import { getMongoClient, ProposalModel } from "@app-gov/service/mongodb";
 import {
 	Header,
@@ -166,8 +170,16 @@ const useProposal = (initialProposal: ProposalModel) => {
 	useEffect(() => {
 		if (!api) return;
 		let unsubscribeFn: VoidFn;
+		let lastBlockPolled: number;
 		api.rpc.chain
-			.subscribeFinalizedHeads(async () => {
+			.subscribeFinalizedHeads(async (head) => {
+				const blockNumber = head.number.toNumber();
+				if (
+					lastBlockPolled &&
+					blockNumber < lastBlockPolled + BLOCK_POLLING_INTERVAL
+				)
+					return;
+				lastBlockPolled = blockNumber;
 				const [proposalInfo, proposalVotes, vetoPercentage] = await Promise.all(
 					[
 						fetchProposalInfo(api, proposalId),
