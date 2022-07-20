@@ -1,6 +1,6 @@
 import { withMethodGuard } from "@app-gov/node/utils";
 import { findProposalId, getApiInstance } from "@app-gov/service/cennznet";
-import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import { CENNZ_NETWORK } from "@app-gov/service/env-vars";
 
 export default withMethodGuard(
 	async function proposalCreateRoute(req, res) {

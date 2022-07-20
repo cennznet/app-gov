@@ -8,7 +8,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface IdentityFormState {
-	step: "Idle" | "Await" | "Submit" | "Process" | "Success";
+	step: "Idle" | "Await" | "Submit" | "Process" | "Complete";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
@@ -77,14 +77,20 @@ export const useIdentityConnectForm = () => {
 				});
 
 				if (!response.ok) {
+					let responseBody;
+					const contentType = response.headers.get("Content-Type");
+
+					if (contentType?.includes("application/json"))
+						responseBody = await response.json();
+
 					throw {
 						code: `APP/${response.status}`,
 						message: response.statusText,
-						details: JSON.parse(await response.text()).message,
+						details: responseBody?.message ?? responseBody?.details,
 					};
 				}
 
-				setFormState({ step: "Success", status: "Ok" });
+				setFormState({ step: "Complete", status: "Ok" });
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
@@ -92,14 +98,14 @@ export const useIdentityConnectForm = () => {
 
 				if (error?.details?.includes("DISCORD"))
 					return setFormState({
-						step: "Success",
+						step: "Complete",
 						status: "Ok",
 						statusMessage: error.details,
 					});
 
 				setFormStatus(
 					"NotOk",
-					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
+					`[${error?.code ?? "UNKNOWN"}] ${error?.details ?? error.message}`
 				);
 			}
 		},

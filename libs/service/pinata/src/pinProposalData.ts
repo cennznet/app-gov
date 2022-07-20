@@ -2,7 +2,7 @@ import {
 	CENNZ_NETWORK,
 	PINATA_GATEWAY,
 	PINATA_JWT,
-} from "@app-gov/service/constants";
+} from "@app-gov/service/env-vars";
 
 export const pinProposalData = async (
 	proposalData: Record<string, unknown>

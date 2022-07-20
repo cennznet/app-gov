@@ -1,7 +1,7 @@
 import { FC, useContext } from "react";
 import { classNames } from "react-extras";
 
-import { IntrinsicElements } from "@app-gov/web/types";
+import { IntrinsicElements } from "@app-gov/web/utils";
 
 import { Button, IdentityFieldSet, Layout } from "./";
 

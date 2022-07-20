@@ -1,16 +1,19 @@
 import { getToken } from "next-auth/jwt";
 
-import { NEXTAUTH_SECRET } from "@app-gov/node/constants";
 import { fetchRequiredRegistrars, withMethodGuard } from "@app-gov/node/utils";
 import {
 	fetchIdentityOf,
 	getApiInstance,
 	getProvideJudgementExtrinsic,
 	isIdentityValueMatched,
-	signAndSendPromise,
+	signAndSend,
 } from "@app-gov/service/cennznet";
-import { CENNZ_NETWORK, DISCORD_BOT } from "@app-gov/service/constants";
 import { getDiscordBot } from "@app-gov/service/discord";
+import {
+	CENNZ_NETWORK,
+	DISCORD_BOT,
+	NEXTAUTH_SECRET,
+} from "@app-gov/service/env-vars";
 
 export default withMethodGuard(
 	async function identityConnectRoute(req, res) {
@@ -62,12 +65,12 @@ export default withMethodGuard(
 			);
 
 			await Promise.all([
-				signAndSendPromise(twitterExtrinsic, twitterRegistrar.signer),
-				signAndSendPromise(discordExtrinsic, discordRegistrar.signer),
+				signAndSend([twitterExtrinsic, twitterRegistrar.signer]),
+				signAndSend([discordExtrinsic, discordRegistrar.signer]),
 			]);
 
 			// 4. Assign user with a special role
-			await assignDiscordRole(discordUsername);
+			if (DISCORD_BOT.Token) await assignDiscordRole(discordUsername);
 
 			return res.json({ ok: true });
 		} catch (error) {
@@ -107,9 +110,9 @@ const assignDiscordRole = async (discordUsername: string) => {
 	await user.roles.add(identityRole);
 	// Send a message to the user letting them know the verification has been successful
 	await user.send(
-		`***Congratulations on completing the steps for verifying your identity.*** \n\n` +
-			`Thank you for supporting CENNZnet and helping to build the blockchain for the Metaverse!\n` +
-			`You have been assigned the ${identityRole.name} role and can now participate in private channels\n` +
+		`***Welcome Citizen ${username}.*** \n\n` +
+			`Thank you for doing your part in governing the CENNZnet blockchain!\n` +
+			`You have been assigned the ${identityRole.name} role and can now participate in private channels.\n` +
 			`Please note that for your safety, we will never ask for private keys, seed phrases or send links via DM.`
 	);
 };

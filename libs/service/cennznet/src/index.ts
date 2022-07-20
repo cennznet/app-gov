@@ -1,5 +1,4 @@
-export * from "./signAndSendTx";
-export * from "./Transaction";
+export * from "./signAndSend";
 export * from "./getSetIdentityExtrinsic";
 export * from "./getApiInstance";
 export * from "./fetchIdentityRegistrars";
@@ -11,3 +10,8 @@ export * from "./getProvideJudgementExtrinsic";
 export * from "./extractCallableExtrinsics";
 export * from "./getSubmitProposalExtrinsic";
 export * from "./findProposalId";
+export * from "./getNetworkDetails";
+export * from "./waitForBlock";
+export * from "./fetchProposalInfo";
+export * from "./fetchProposalVotes";
+export * from "./fetchProposalVetoPercentage";

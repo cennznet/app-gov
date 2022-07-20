@@ -14,7 +14,7 @@ import { If } from "react-extras";
 
 import { useSocialSignIn } from "@app-gov/web/hooks";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
-import { PropsWithChildren } from "@app-gov/web/types";
+import { PropsWithChildren } from "@app-gov/web/utils";
 import { DiscordLogo, TwitterLogo, WarningIcon, X } from "@app-gov/web/vectors";
 
 import { AccountSelect, Button, TextField } from "./";
