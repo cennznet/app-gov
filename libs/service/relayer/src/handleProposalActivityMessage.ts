@@ -1,4 +1,5 @@
 import { Api } from "@cennznet/api";
+import { InteractionWebhook } from "discord.js";
 import { Mongoose } from "mongoose";
 
 import { resolveProposalJustification } from "@app-gov/node/utils";
@@ -8,7 +9,7 @@ import {
 	fetchProposalVotePercentage,
 	fetchProposalVotes,
 } from "@app-gov/service/cennznet";
-import { DiscordWebhooks, getDiscordUpdate } from "@app-gov/service/discord";
+import { getDiscordUpdate } from "@app-gov/service/discord";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
@@ -22,14 +23,14 @@ interface MessageBody {
  * Handle the proposal activity message
  *
  * @param {Api} api
- * @param {DiscordWebhooks} discordWebhooks
+ * @param {InteractionWebhook[]} webhooks
  * @param {Mongoose} mdb
  * @param {MessageBody} body
  * @return {Promise<void>}
  */
 export const handleProposalActivityMessage = async (
 	api: Api,
-	[proposalWebhook, referendumWebhook]: DiscordWebhooks,
+	webhooks: InteractionWebhook[],
 	mdb: Mongoose,
 	body: MessageBody
 ): Promise<void> => {
@@ -118,6 +119,8 @@ export const handleProposalActivityMessage = async (
 
 		let discordProposalMessage: string | undefined,
 			discordReferendumMessage: string | undefined;
+
+		const [proposalWebhook, referendumWebhook] = webhooks;
 
 		switch (status) {
 			case "Deliberation":

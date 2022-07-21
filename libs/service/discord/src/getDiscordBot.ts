@@ -31,31 +31,34 @@ export type DiscordWebhooks = [InteractionWebhook, InteractionWebhook];
 
 export const getDiscordWebhooks = (
 	token: string,
-	channelIds: [string, string],
-	[proposalWebhookId, referendumWebhookId]: [string, string]
-): Promise<DiscordWebhooks> =>
+	channelIds: string[],
+	webhookIds: string[]
+): Promise<InteractionWebhook[]> =>
 	new Promise((resolve, reject) => {
 		try {
 			bot.login(token);
 
 			bot.once("ready", async () => {
-				const [proposalChannel, referendumChannel] = channelIds.map(
-					(channelId) => bot.channels.cache.get(channelId)
+				const webhooks = await Promise.all(
+					channelIds
+						.map((channelId, index) => [
+							bot.channels.cache.get(channelId),
+							webhookIds[index],
+						])
+						.map(async ([channel, webhookId], index) => {
+							const webhooks: InteractionWebhook[] = await (
+								channel as any
+							).fetchWebhooks();
+							const webhook = webhooks.find((hook) => hook.id === webhookId);
+
+							if (!webhook)
+								reject(`Unable to find webhook for channel at index ${index}`);
+
+							return webhook as InteractionWebhook;
+						})
 				);
 
-				const [proposalWebhook, referendumWebhook] = await Promise.all(
-					[
-						[proposalChannel, proposalWebhookId],
-						[referendumChannel, referendumWebhookId],
-					].map(async ([channel, webhookId]) => {
-						const webhooks: InteractionWebhook[] = await (
-							channel as any
-						).fetchWebhooks();
-						return webhooks.find((hook) => hook.id === webhookId);
-					})
-				);
-
-				resolve([proposalWebhook, referendumWebhook] as DiscordWebhooks);
+				resolve(webhooks);
 			});
 
 			bot.once("error", (error) => reject(error));
