@@ -42,7 +42,7 @@ const determineUriType = (justificationUri: string): UriType => {
 	}
 	const gatewayUrl = new URL(PINATA_GATEWAY);
 
-	const external = ["hackmd.io", "medium.com"].some(
+	const external = ["hackmd.io", "medium.com", "github.com"].some(
 		(domain) => justificationUrl.host.indexOf(domain) >= 0
 	);
 
