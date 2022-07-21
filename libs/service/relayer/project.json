@@ -1,30 +1,30 @@
 {
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/service/discord/src",
+  "sourceRoot": "libs/service/relayer/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/service/discord",
-        "main": "libs/service/discord/src/index.ts",
-        "tsConfig": "libs/service/discord/tsconfig.lib.json",
-        "assets": ["libs/service/discord/*.md"]
+        "outputPath": "dist/libs/service/relayer",
+        "main": "libs/service/relayer/src/index.ts",
+        "tsConfig": "libs/service/relayer/tsconfig.lib.json",
+        "assets": ["libs/service/relayer/*.md"]
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/service/discord/**/*.ts"]
+        "lintFilePatterns": ["libs/service/relayer/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/service/discord"],
+      "outputs": ["coverage/libs/service/relayer"],
       "options": {
-        "jestConfig": "libs/service/discord/jest.config.ts",
+        "jestConfig": "libs/service/relayer/jest.config.ts",
         "passWithNoTests": true
       }
     }

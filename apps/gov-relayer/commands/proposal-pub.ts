@@ -1,15 +1,7 @@
 import { AMQPError } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import {
-	getLogger,
-	monitorNewProposal,
-	monitorProposalActivity,
-} from "@app-gov/node/utils";
-import {
-	getApiInstance,
-	subscribeFinalizedHeads,
-} from "@app-gov/service/cennznet";
+import { getApiInstance, waitForBlock } from "@app-gov/service/cennznet";
 import {
 	BLOCK_POLLING_INTERVAL,
 	CENNZ_NETWORK,
@@ -19,6 +11,11 @@ import {
 } from "@app-gov/service/env-vars";
 import { getMongoClient } from "@app-gov/service/mongodb";
 import { getQueueByName, getRabbitClient } from "@app-gov/service/rabbitmq";
+import {
+	getLogger,
+	monitorNewProposal,
+	monitorProposalActivity,
+} from "@app-gov/service/relayer";
 
 module.exports = {
 	command: "proposal-pub",
@@ -43,28 +40,21 @@ module.exports = {
 				PROPOSAL_QUEUE
 			);
 
-			subscribeFinalizedHeads(
-				cennzApi,
-				BLOCK_POLLING_INTERVAL,
-				async (blockNumber) => {
-					logger.info(
-						`Health check: 👌 ${chalk.green("ok")} @ ${chalk.gray("%s")}`,
-						blockNumber
-					);
-
-					await monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
-						proposalQueue.publish(JSON.stringify({ proposalId }), {
-							type: "proposal-new",
-						});
+			do {
+				await monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
+					proposalQueue.publish(JSON.stringify({ proposalId }), {
+						type: "proposal-new",
 					});
+				});
 
-					await monitorProposalActivity(mdbClient, (proposalId) => {
-						proposalQueue.publish(JSON.stringify({ proposalId }), {
-							type: "proposal-activity",
-						});
+				await monitorProposalActivity(mdbClient, (proposalId) => {
+					proposalQueue.publish(JSON.stringify({ proposalId }), {
+						type: "proposal-activity",
 					});
-				}
-			);
+				});
+
+				await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
+			} while (true);
 		} catch (error) {
 			if (error instanceof AMQPError) error?.connection?.close();
 			logger.error("%s", error);

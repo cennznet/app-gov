@@ -14,7 +14,7 @@ export const resolveProposalJustification = async (
 	const uriType = determineUriType(justificationUri);
 
 	if (uriType === "unknown") return;
-	const fallback = `Justification details is published [here](${justificationUri})`;
+	const fallback = `Justification details are published [here](${justificationUri})`;
 
 	if (uriType === "external") return fallback;
 

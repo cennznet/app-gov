@@ -22,6 +22,7 @@
       "@app-gov/service/mongodb": ["libs/service/mongodb/src/index.ts"],
       "@app-gov/service/pinata": ["libs/service/pinata/src/index.ts"],
       "@app-gov/service/rabbitmq": ["libs/service/rabbitmq/src/index.ts"],
+      "@app-gov/service/relayer": ["libs/service/relayer/src/index.ts"],
       "@app-gov/web/bitmaps": ["libs/web/bitmaps/src/index.ts"],
       "@app-gov/web/components": ["libs/web/components/src/index.ts"],
       "@app-gov/web/hooks": ["libs/web/hooks/src/index.ts"],

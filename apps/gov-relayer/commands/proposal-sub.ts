@@ -1,14 +1,13 @@
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import {
-	getLogger,
-	handleNewProposalMessage,
-	handleProposalActivityMessage,
-} from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
+import { getDiscordWebhooks } from "@app-gov/service/discord";
 import {
 	CENNZ_NETWORK,
+	DISCORD_CHANNEL_IDS,
+	DISCORD_RELAYER_BOT,
+	DISCORD_WEBHOOK_IDS,
 	MESSAGE_MAX_RETRY,
 	MONGODB_URI,
 	PROPOSAL_QUEUE,
@@ -20,6 +19,11 @@ import {
 	getRabbitClient,
 	requeueMessage,
 } from "@app-gov/service/rabbitmq";
+import {
+	getLogger,
+	handleNewProposalMessage,
+	handleProposalActivityMessage,
+} from "@app-gov/service/relayer";
 
 module.exports = {
 	command: "proposal-sub",
@@ -44,6 +48,12 @@ module.exports = {
 				PROPOSAL_QUEUE
 			);
 
+			const discordWebhooks = await getDiscordWebhooks(
+				DISCORD_RELAYER_BOT.Token,
+				DISCORD_CHANNEL_IDS,
+				DISCORD_WEBHOOK_IDS
+			);
+
 			const onMessage = async (message: AMQPMessage) => {
 				const bodyString = message.bodyString();
 				const { type } = message.properties;
@@ -55,8 +65,14 @@ module.exports = {
 						case "proposal-new":
 							await handleNewProposalMessage(cennzApi, mdbClient, body);
 							break;
+
 						case "proposal-activity":
-							await handleProposalActivityMessage(cennzApi, mdbClient, body);
+							await handleProposalActivityMessage(
+								cennzApi,
+								discordWebhooks,
+								mdbClient,
+								body
+							);
 							break;
 					}
 				} catch (error) {
