@@ -1,10 +1,7 @@
 import { AMQPError } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
-import {
-	getApiInstance,
-	waitForBlock,
-} from "@app-gov/service/cennznet";
+import { getApiInstance, waitForBlock } from "@app-gov/service/cennznet";
 import {
 	BLOCK_POLLING_INTERVAL,
 	CENNZ_NETWORK,

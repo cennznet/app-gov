@@ -66,7 +66,7 @@ module.exports = {
 							await handleNewProposalMessage(cennzApi, mdbClient, body);
 							break;
 
-						case "proposal-activity": {
+						case "proposal-activity":
 							await handleProposalActivityMessage(
 								cennzApi,
 								discordWebhooks,
@@ -74,7 +74,6 @@ module.exports = {
 								body
 							);
 							break;
-						}
 					}
 				} catch (error) {
 					logger.error("%s", error);
