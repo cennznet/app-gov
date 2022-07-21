@@ -15,10 +15,15 @@ export const getProposalEmbed = (
 	proposalId: number,
 	channel: DiscordChannel,
 	justification: string | void,
+	enactmentDelayInHours: number,
 	proposalInfo: Partial<ProposalModel>
 ): MessageEmbed => {
 	const status = proposalInfo.status;
-	const proposalFields = getProposalFields(proposalInfo, justification);
+	const proposalFields = getProposalFields(
+		proposalInfo,
+		justification,
+		enactmentDelayInHours
+	);
 
 	const baseMessage = new MessageEmbed()
 		.setTitle(`Proposal ID: _#${proposalId}_`)
@@ -59,7 +64,8 @@ export const getProposalEmbed = (
 
 export const getProposalFields = (
 	proposalInfo: Partial<ProposalModel>,
-	justification: string | void
+	justification: string | void,
+	enactmentDelayInHours: number
 ): EmbedFieldData[] => {
 	return justification
 		? [
@@ -83,7 +89,7 @@ export const getProposalFields = (
 				},
 				{
 					name: "Enactment Delay",
-					value: `${proposalInfo.enactmentDelay} blocks`,
+					value: `_${proposalInfo.enactmentDelay}_ blocks / _${enactmentDelayInHours}_ hours`,
 				},
 		  ];
 };

@@ -15,6 +15,7 @@ export const getDiscordUpdate = (
 	proposalId: number,
 	channel: DiscordChannel,
 	justification: string | void,
+	enactmentDelayInHours: number,
 	proposalInfo: Partial<ProposalModel>
 ): DiscordUpdate => {
 	const voteButton = getVoteButton(proposalId, channel, proposalInfo.status);
@@ -22,7 +23,13 @@ export const getDiscordUpdate = (
 	return {
 		...(voteButton && { components: [voteButton] }),
 		embeds: [
-			getProposalEmbed(proposalId, channel, justification, proposalInfo),
+			getProposalEmbed(
+				proposalId,
+				channel,
+				justification,
+				enactmentDelayInHours,
+				proposalInfo
+			),
 		],
 	};
 };
