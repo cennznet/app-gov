@@ -20,44 +20,36 @@ export const getProposalEmbed = (
 	const status = proposalInfo.status;
 	const proposalFields = getProposalFields(proposalInfo, justification);
 
-	const title = `Proposal ID: _#${proposalId}_`;
-	const footer = { text: `Status: ${status}` };
-
-	const withVoteFields = new MessageEmbed()
-		.setColor(COLOURS.Vote)
-		.setTitle(title)
+	const baseMessage = new MessageEmbed()
+		.setTitle(`Proposal ID: _#${proposalId}_`)
 		.setFields(proposalFields)
-		.addFields(getVoteFields(proposalInfo))
-		.setFooter(footer)
+		.setFooter({ text: `Status: ${status}` })
 		.setTimestamp();
 
 	let messageEmbed: MessageEmbed | undefined;
 	switch (status) {
 		case "Deliberation": {
-			messageEmbed = withVoteFields;
+			messageEmbed = baseMessage
+				.setColor(COLOURS.Vote)
+				.addFields(getVoteFields(proposalInfo));
 			break;
 		}
 
 		case "ReferendumDeliberation": {
-			if (channel === "referendum") messageEmbed = withVoteFields;
+			if (channel === "referendum")
+				messageEmbed = baseMessage
+					.setColor(COLOURS.Vote)
+					.addFields(getVoteFields(proposalInfo));
 
 			if (channel === "proposal")
-				messageEmbed = new MessageEmbed()
-					.setColor(COLOURS.Pass)
-					.setTitle(title)
-					.setFields(proposalFields)
-					.setFooter(footer)
-					.setTimestamp();
+				messageEmbed = baseMessage.setColor(COLOURS.Pass);
 			break;
 		}
 
 		default: {
-			messageEmbed = new MessageEmbed()
-				.setColor(status === "Disapproved" ? COLOURS.Reject : COLOURS.Pass)
-				.setTitle(title)
-				.setFields(proposalFields)
-				.setFooter(footer)
-				.setTimestamp();
+			messageEmbed = baseMessage.setColor(
+				status === "Disapproved" ? COLOURS.Reject : COLOURS.Pass
+			);
 			break;
 		}
 	}

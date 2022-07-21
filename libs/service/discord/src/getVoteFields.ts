@@ -21,7 +21,7 @@ export const getVoteFields = ({
 		: [
 				{
 					name: "Threshold to Veto",
-					value: `Current: _${vetoPercentage?.toFixed(2)}%_ / Required: _33%_`,
+					value: `Current: _${vetoPercentage?.toFixed(2)}%_ / Required: _33%_`, //TODO: fetchVetoThreshold
 					inline: false,
 				},
 		  ];
@@ -35,23 +35,23 @@ export const getVoteButton = (
 ): VoteButton => {
 	let voteButton: VoteButton;
 
+	const baseButton = new MessageButton()
+					.setURL(`${PROPOSAL_URL}/${proposalId}`)
+					.setStyle("LINK");
+
 	switch (proposalStatus) {
 		case "Deliberation":
 			voteButton = new MessageActionRow().addComponents(
-				new MessageButton()
-					.setURL(`${PROPOSAL_URL}/${proposalId}`)
+				baseButton
 					.setLabel("Vote!")
-					.setStyle("LINK")
 			);
 			break;
 
 		case "ReferendumDeliberation":
 			if (channel === "referendum")
 				voteButton = new MessageActionRow().addComponents(
-					new MessageButton()
-						.setURL(`${PROPOSAL_URL}/${proposalId}`)
+					baseButton
 						.setLabel("Veto!")
-						.setStyle("LINK")
 				);
 			break;
 	}
