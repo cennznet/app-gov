@@ -19,16 +19,19 @@ export const getProposalEmbed = (
 ): MessageEmbed => {
 	const status = proposalInfo.status;
 	const proposalFields = getProposalFields(proposalInfo, justification);
-	let messageEmbed: MessageEmbed | undefined;
+
+	const title = `Proposal ID: _#${proposalId}_`;
+	const footer = { text: `Status: ${status}` };
 
 	const withVoteFields = new MessageEmbed()
 		.setColor(COLOURS.Vote)
-		.setTitle(`Proposal ID: _#${proposalId}_`)
+		.setTitle(title)
 		.setFields(proposalFields)
 		.addFields(getVoteFields(proposalInfo))
-		.setFooter({ text: `Status: ${status}` })
+		.setFooter(footer)
 		.setTimestamp();
 
+	let messageEmbed: MessageEmbed | undefined;
 	switch (status) {
 		case "Deliberation": {
 			messageEmbed = withVoteFields;
@@ -41,9 +44,9 @@ export const getProposalEmbed = (
 			if (channel === "proposal")
 				messageEmbed = new MessageEmbed()
 					.setColor(COLOURS.Pass)
-					.setTitle(`Proposal ID: _#${proposalId}_`)
+					.setTitle(title)
 					.setFields(proposalFields)
-					.setFooter({ text: `Status: ${status}` })
+					.setFooter(footer)
 					.setTimestamp();
 			break;
 		}
@@ -51,9 +54,9 @@ export const getProposalEmbed = (
 		default: {
 			messageEmbed = new MessageEmbed()
 				.setColor(status === "Disapproved" ? COLOURS.Reject : COLOURS.Pass)
-				.setTitle(`Proposal ID: _#${proposalId}_`)
+				.setTitle(title)
 				.setFields(proposalFields)
-				.setFooter({ text: `Status: ${status}` })
+				.setFooter(footer)
 				.setTimestamp();
 			break;
 		}

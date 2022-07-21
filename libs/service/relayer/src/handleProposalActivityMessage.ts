@@ -8,11 +8,7 @@ import {
 	fetchProposalVotePercentage,
 	fetchProposalVotes,
 } from "@app-gov/service/cennznet";
-import {
-	DiscordUpdate,
-	DiscordWebhooks,
-	getDiscordUpdate,
-} from "@app-gov/service/discord";
+import { DiscordWebhooks, getDiscordUpdate } from "@app-gov/service/discord";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
@@ -26,6 +22,7 @@ interface MessageBody {
  * Handle the proposal activity message
  *
  * @param {Api} api
+ * @param {DiscordWebhooks} discordWebhooks
  * @param {Mongoose} mdb
  * @param {MessageBody} body
  * @return {Promise<void>}
@@ -55,6 +52,7 @@ export const handleProposalActivityMessage = async (
 
 		switch (status) {
 			case "Deliberation": {
+				logger.info("Proposal #%d: 🗳  update votes [1/3]", proposalId);
 				const votes = await fetchProposalVotes(api, proposalId);
 				const votePercentage = await fetchProposalVotePercentage(
 					api,
@@ -69,12 +67,12 @@ export const handleProposalActivityMessage = async (
 				)
 					break;
 
-				logger.info("Proposal #%d: 🗳  update votes [1/3]", proposalId);
 				updatedData = { ...updatedData, ...votes, votePercentage };
 				break;
 			}
 
 			case "ReferendumDeliberation": {
+				logger.info("Proposal #%d: 🗳  update veto [1/3]", proposalId);
 				const vetoPercentage = await fetchProposalVetoPercentage(
 					api,
 					proposalId
@@ -82,18 +80,17 @@ export const handleProposalActivityMessage = async (
 
 				if (proposal.vetoPercentage === vetoPercentage) break;
 
-				logger.info("Proposal #%d: 🗳  update veto [1/3]", proposalId);
 				updatedData = { ...updatedData, vetoPercentage };
 				break;
 			}
 		}
 
 		if (!Object.keys(updatedData).length) return;
+		logger.info("Proposal #%d: 💬  update Discord [2/3]", proposalId);
 
 		const proposalJustification = await resolveProposalJustification(
-			proposal.get("justificationUri") ?? ""
+			proposal.justificationUri ?? ""
 		);
-
 		const discordProposalUpdate = getDiscordUpdate(
 			proposalId,
 			"proposal",
@@ -106,7 +103,6 @@ export const handleProposalActivityMessage = async (
 				...updatedData,
 			}
 		);
-
 		const discordReferendumUpdate = getDiscordUpdate(
 			proposalId,
 			"referendum",
@@ -144,14 +140,11 @@ export const handleProposalActivityMessage = async (
 				proposal.discordProposalMessage,
 				discordProposalUpdate
 			);
-
 		if (!discordReferendumMessage && proposal.discordReferendumMessage)
 			await referendumWebhook.editMessage(
 				proposal.discordReferendumMessage,
 				discordReferendumUpdate
 			);
-
-		logger.info("Proposal #%d: 💬  update Discord [2/3]", proposalId);
 
 		updatedData = {
 			...updatedData,
