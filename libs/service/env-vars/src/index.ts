@@ -30,6 +30,21 @@ export const DISCORD_WEBSITE_BOT = {
 	ServerId: process.env.DISCORD_SERVER_ID ?? "",
 	IdentityRoleId: process.env.DISCORD_IDENTITY_ROLE_ID ?? "",
 };
+export const DISCORD_RELAYER_BOT = {
+	Token: process.env.DISCORD_BOT_TOKEN ?? "",
+	ProposalChannelId: process.env.DISCORD_PROPOSAL_CHANNEL_ID ?? "",
+	ReferendumChannelId: process.env.DISCORD_REFERENDUM_CHANNEL_ID ?? "",
+	ProposalWebhookId: process.env.DISCORD_PROPOSAL_WEBHOOK_ID ?? "",
+	ReferendumWebhookId: process.env.DISCORD_REFERENDUM_WEBHOOK_ID ?? "",
+};
+export const DISCORD_CHANNEL_IDS: [string, string] = [
+	DISCORD_RELAYER_BOT.ProposalChannelId,
+	DISCORD_RELAYER_BOT.ReferendumChannelId,
+];
+export const DISCORD_WEBHOOK_IDS: [string, string] = [
+	DISCORD_RELAYER_BOT.ProposalWebhookId,
+	DISCORD_RELAYER_BOT.ReferendumWebhookId,
+];
 
 // GOV-WEBSITE
 export const DISCORD_CLIENT: Pick<
@@ -55,20 +70,5 @@ export const BLOCK_POLLING_INTERVAL = Number(
 export const PROPOSAL_QUEUE = `${CENNZ_NETWORK.ChainSlug}_AppGov_Proposal`;
 export const MESSAGE_TIMEOUT = Number(process.env.MESSAGE_TIMEOUT || 10000);
 export const MESSAGE_MAX_RETRY = Number(process.env.MESSAGE_MAX_RETRY || 5);
-export const DISCORD_RELAYER_BOT = {
-	Token: process.env.DISCORD_BOT_TOKEN ?? "",
-	ProposalChannelId: process.env.DISCORD_PROPOSAL_CHANNEL_ID ?? "",
-	ReferendumChannelId: process.env.DISCORD_REFERENDUM_CHANNEL_ID ?? "",
-	ProposalWebhookId: process.env.DISCORD_PROPOSAL_WEBHOOK_ID ?? "",
-	ReferendumWebhookId: process.env.DISCORD_REFERENDUM_WEBHOOK_ID ?? "",
-};
-export const DISCORD_CHANNEL_IDS: [string, string] = [
-	DISCORD_RELAYER_BOT.ProposalChannelId,
-	DISCORD_RELAYER_BOT.ReferendumChannelId,
-];
-export const DISCORD_WEBHOOK_IDS: [string, string] = [
-	DISCORD_RELAYER_BOT.ProposalWebhookId,
-	DISCORD_RELAYER_BOT.ReferendumWebhookId,
-];
 export const PROPOSAL_URL: string =
 	process.env.NX_PROPOSAL_URL ?? "http://localhost:4200";
