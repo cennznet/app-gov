@@ -18,3 +18,4 @@ export * from "./fetchProposalVetoPercentage";
 export * from "./getVoteOnProposalExtrinsic";
 export * from "./getVoteAgainstReferendumExtrinsic";
 export * from "./subscribeFinalizedHeads";
+export * from "./constants";
