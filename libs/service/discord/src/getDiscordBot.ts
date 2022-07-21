@@ -20,6 +20,8 @@ export const getDiscordBot = (token: string): Promise<DiscordClient> =>
 			bot.login(token);
 
 			bot.once("ready", () => resolve(bot));
+
+			bot.once("error", (error) => reject(error));
 		} catch (error) {
 			reject(error);
 		}
@@ -55,6 +57,8 @@ export const getDiscordWebhooks = (
 
 				resolve([proposalWebhook, referendumWebhook] as DiscordWebhooks);
 			});
+
+			bot.once("error", (error) => reject(error));
 		} catch (error) {
 			reject(error);
 		}
