@@ -36,22 +36,20 @@ export const getVoteButton = (
 	let voteButton: VoteButton;
 
 	const baseButton = new MessageButton()
-					.setURL(`${PROPOSAL_URL}/${proposalId}`)
-					.setStyle("LINK");
+		.setURL(`${PROPOSAL_URL}/${proposalId}`)
+		.setStyle("LINK");
 
 	switch (proposalStatus) {
 		case "Deliberation":
 			voteButton = new MessageActionRow().addComponents(
-				baseButton
-					.setLabel("Vote!")
+				baseButton.setLabel("Vote!")
 			);
 			break;
 
 		case "ReferendumDeliberation":
 			if (channel === "referendum")
 				voteButton = new MessageActionRow().addComponents(
-					baseButton
-						.setLabel("Veto!")
+					baseButton.setLabel("Veto!")
 				);
 			break;
 	}

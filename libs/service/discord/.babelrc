@@ -1,4 +1,10 @@
 {
-	"presets": ["@nrwl/next/babel"],
-	"plugins": []
+	"presets": [
+		[
+			"@nrwl/web/babel",
+			{
+				"useBuiltIns": "usage"
+			}
+		]
+	]
 }
