@@ -1,6 +1,7 @@
 import { Api } from "@cennznet/api";
 import { useCallback, useState } from "react";
 
+import { getHourInBlocks } from "@app-gov/node/utils";
 import {
 	findProposalId,
 	getSubmitProposalExtrinsic,
@@ -154,8 +155,8 @@ const transformFormData = (
 	api: Api,
 	formData: ProposalFormData
 ): PropsalData => {
-	const blocksInHour =
-		(60 * 60) / ((api.consts.babe.expectedBlockTime.toJSON() as number) / 1000);
+	const hourInBlocks = getHourInBlocks(api);
+
 	return Array.from(formData).reduce(
 		(data, [key, value]) => {
 			switch (key) {
@@ -164,7 +165,7 @@ const transformFormData = (
 					data[key] = value.toString();
 					break;
 				case "enactmentDelay":
-					data.enactmentDelay = Number(value) * blocksInHour;
+					data.enactmentDelay = Number(value) * hourInBlocks;
 					break;
 
 				case "callSection":
