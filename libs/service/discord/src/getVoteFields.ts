@@ -3,6 +3,8 @@ import { EmbedFieldData, MessageActionRow, MessageButton } from "discord.js";
 import { PROPOSAL_URL } from "@app-gov/service/env-vars";
 import type { ProposalModel } from "@app-gov/service/mongodb";
 
+import { DiscordChannel } from "./";
+
 export const getVoteFields = ({
 	status,
 	votePercentage,
@@ -19,22 +21,23 @@ export const getVoteFields = ({
 		: [
 				{
 					name: "Threshold to Veto",
-					value: `Current: _${vetoPercentage}%_ / Required: _33%_`,
+					value: `Current: _${vetoPercentage?.toFixed(2)}%_ / Required: _33%_`,
 					inline: false,
 				},
 		  ];
 
-type VoteButtons = MessageActionRow | undefined;
+type VoteButton = MessageActionRow | undefined;
 
-export const getVoteButtons = (
+export const getVoteButton = (
 	proposalId: number,
+	channel: DiscordChannel,
 	proposalStatus: ProposalModel["status"]
-): VoteButtons => {
-	let voteButtons: VoteButtons;
+): VoteButton => {
+	let voteButton: VoteButton;
 
 	switch (proposalStatus) {
 		case "Deliberation":
-			voteButtons = new MessageActionRow().addComponents(
+			voteButton = new MessageActionRow().addComponents(
 				new MessageButton()
 					.setURL(`${PROPOSAL_URL}/${proposalId}`)
 					.setLabel("Vote!")
@@ -43,17 +46,15 @@ export const getVoteButtons = (
 			break;
 
 		case "ReferendumDeliberation":
-			voteButtons = new MessageActionRow().addComponents(
-				new MessageButton()
-					.setURL(`${PROPOSAL_URL}/${proposalId}`)
-					.setLabel("Veto!")
-					.setStyle("LINK")
-			);
-			break;
-
-		default:
+			if (channel === "referendum")
+				voteButton = new MessageActionRow().addComponents(
+					new MessageButton()
+						.setURL(`${PROPOSAL_URL}/${proposalId}`)
+						.setLabel("Veto!")
+						.setStyle("LINK")
+				);
 			break;
 	}
 
-	return voteButtons;
+	return voteButton;
 };

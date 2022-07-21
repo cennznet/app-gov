@@ -1,4 +1,4 @@
 export * from "./getDiscordBot";
-export * from "./getDiscordMessage";
+export * from "./getDiscordUpdate";
 export * from "./getProposalFields";
 export * from "./getVoteFields";

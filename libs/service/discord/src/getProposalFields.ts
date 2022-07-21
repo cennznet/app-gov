@@ -3,7 +3,7 @@ import { MessageEmbed } from "discord.js";
 
 import type { ProposalModel } from "@app-gov/service/mongodb";
 
-import { getVoteFields } from "./";
+import { DiscordChannel, getVoteFields } from "./";
 
 const COLOURS: Record<string, ColorResolvable> = {
 	Pass: "#05b210",
@@ -13,26 +13,53 @@ const COLOURS: Record<string, ColorResolvable> = {
 
 export const getProposalEmbed = (
 	proposalId: number,
+	channel: DiscordChannel,
 	justification: string | void,
 	proposalInfo: Partial<ProposalModel>
 ): MessageEmbed => {
 	const status = proposalInfo.status;
 	const proposalFields = getProposalFields(proposalInfo, justification);
+	let messageEmbed: MessageEmbed | undefined;
 
-	return proposalInfo.status?.includes("Deliberation")
-		? new MessageEmbed()
-				.setColor(COLOURS.Vote)
-				.setTitle(`Proposal ID: _#${proposalId}_`)
-				.setFields(proposalFields)
-				.addFields(getVoteFields(proposalInfo))
-				.setFooter({ text: `Status: ${status}` })
-				.setTimestamp()
-		: new MessageEmbed()
+	const withVoteFields = new MessageEmbed()
+		.setColor(COLOURS.Vote)
+		.setTitle(`Proposal ID: _#${proposalId}_`)
+		.setFields(proposalFields)
+		.addFields(getVoteFields(proposalInfo))
+		.setFooter({ text: `Status: ${status}` })
+		.setTimestamp();
+
+	switch (status) {
+		case "Deliberation": {
+			messageEmbed = withVoteFields;
+			break;
+		}
+
+		case "ReferendumDeliberation": {
+			if (channel === "referendum") messageEmbed = withVoteFields;
+
+			if (channel === "proposal")
+				messageEmbed = new MessageEmbed()
+					.setColor(COLOURS.Pass)
+					.setTitle(`Proposal ID: _#${proposalId}_`)
+					.setFields(proposalFields)
+					.setFooter({ text: `Status: ${status}` })
+					.setTimestamp();
+			break;
+		}
+
+		default: {
+			messageEmbed = new MessageEmbed()
 				.setColor(status === "Disapproved" ? COLOURS.Reject : COLOURS.Pass)
 				.setTitle(`Proposal ID: _#${proposalId}_`)
 				.setFields(proposalFields)
 				.setFooter({ text: `Status: ${status}` })
 				.setTimestamp();
+			break;
+		}
+	}
+
+	return messageEmbed as MessageEmbed;
 };
 
 export const getProposalFields = (
