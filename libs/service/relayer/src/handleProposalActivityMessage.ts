@@ -52,7 +52,6 @@ export const handleProposalActivityMessage = async (
 
 		switch (status) {
 			case "Deliberation": {
-				logger.info("Proposal #%d: 🗳  update votes [1/3]", proposalId);
 				const votes = await fetchProposalVotes(api, proposalId);
 				const votePercentage = await fetchProposalVotePercentage(
 					api,
@@ -67,12 +66,12 @@ export const handleProposalActivityMessage = async (
 				)
 					break;
 
+				logger.info("Proposal #%d: 🗳  update votes [1/3]", proposalId);
 				updatedData = { ...updatedData, ...votes, votePercentage };
 				break;
 			}
 
 			case "ReferendumDeliberation": {
-				logger.info("Proposal #%d: 🗳  update veto [1/3]", proposalId);
 				const vetoPercentage = await fetchProposalVetoPercentage(
 					api,
 					proposalId
@@ -80,6 +79,7 @@ export const handleProposalActivityMessage = async (
 
 				if (proposal.vetoPercentage === vetoPercentage) break;
 
+				logger.info("Proposal #%d: 🗳  update veto [1/3]", proposalId);
 				updatedData = { ...updatedData, vetoPercentage };
 				break;
 			}
