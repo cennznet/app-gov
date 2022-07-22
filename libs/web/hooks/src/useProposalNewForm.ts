@@ -155,8 +155,6 @@ const transformFormData = (
 	api: Api,
 	formData: ProposalFormData
 ): PropsalData => {
-	const hourInBlocks = getHourInBlocks(api);
-
 	return Array.from(formData).reduce(
 		(data, [key, value]) => {
 			switch (key) {
@@ -165,7 +163,7 @@ const transformFormData = (
 					data[key] = value.toString();
 					break;
 				case "enactmentDelay":
-					data.enactmentDelay = Number(value) * hourInBlocks;
+					data.enactmentDelay = Number(value) * getHourInBlocks(api);
 					break;
 
 				case "callSection":
