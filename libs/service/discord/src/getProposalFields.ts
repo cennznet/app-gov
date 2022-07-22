@@ -9,7 +9,10 @@ const COLOURS: Record<string, ColorResolvable> = {
 	Pass: "#05b210",
 	Vote: "#9847FF",
 	Reject: "RED",
+	Pending: "ORANGE",
 };
+
+type ProposalEmbed = MessageEmbed | undefined;
 
 export const getProposalEmbed = (
 	proposalId: number,
@@ -17,7 +20,7 @@ export const getProposalEmbed = (
 	justification: string | void,
 	enactmentDelayInHours: number,
 	proposalInfo: Partial<ProposalModel>
-): MessageEmbed => {
+): ProposalEmbed => {
 	const status = proposalInfo.status;
 	const proposalFields = getProposalFields(
 		proposalInfo,
@@ -31,7 +34,7 @@ export const getProposalEmbed = (
 		.setFooter({ text: `Status: ${status}` })
 		.setTimestamp();
 
-	let messageEmbed: MessageEmbed | undefined;
+	let messageEmbed: ProposalEmbed;
 	switch (status) {
 		case "Deliberation": {
 			messageEmbed = baseMessage
@@ -51,15 +54,23 @@ export const getProposalEmbed = (
 			break;
 		}
 
+		case "ApprovedWaitingEnactment": {
+			if (channel === "referendum")
+				messageEmbed = baseMessage.setColor(COLOURS.Pending);
+			break;
+		}
+
 		default: {
 			messageEmbed = baseMessage.setColor(
-				status === "Disapproved" ? COLOURS.Reject : COLOURS.Pass
+				status === "Disapproved" || status === "ReferendumVetoed"
+					? COLOURS.Reject
+					: COLOURS.Pass
 			);
 			break;
 		}
 	}
 
-	return messageEmbed as MessageEmbed;
+	return messageEmbed;
 };
 
 export const getProposalFields = (
