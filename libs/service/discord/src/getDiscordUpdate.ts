@@ -6,7 +6,7 @@ import { getProposalEmbed, getVoteButton } from "./";
 
 export interface DiscordUpdate {
 	components?: MessageActionRow[];
-	embeds: MessageEmbed[];
+	embeds?: MessageEmbed[];
 }
 
 export type DiscordChannel = "proposal" | "referendum";
@@ -19,17 +19,16 @@ export const getDiscordUpdate = (
 	proposalInfo: Partial<ProposalModel>
 ): DiscordUpdate => {
 	const voteButton = getVoteButton(proposalId, channel, proposalInfo.status);
+	const proposalEmbed = getProposalEmbed(
+		proposalId,
+		channel,
+		justification,
+		enactmentDelayInHours,
+		proposalInfo
+	);
 
 	return {
-		...(voteButton && { components: [voteButton] }),
-		embeds: [
-			getProposalEmbed(
-				proposalId,
-				channel,
-				justification,
-				enactmentDelayInHours,
-				proposalInfo
-			),
-		],
+		components: voteButton ? [voteButton] : [],
+		...(proposalEmbed && { embeds: [proposalEmbed] }),
 	};
 };
