@@ -2,7 +2,10 @@ import { Api } from "@cennznet/api";
 import { InteractionWebhook } from "discord.js";
 import { Mongoose } from "mongoose";
 
-import { resolveProposalJustification } from "@app-gov/node/utils";
+import {
+	getHourInBlocks,
+	resolveProposalJustification,
+} from "@app-gov/node/utils";
 import {
 	fetchProposalStatus,
 	fetchProposalVetoPercentage,
@@ -92,10 +95,13 @@ export const handleProposalActivityMessage = async (
 		const proposalJustification = await resolveProposalJustification(
 			proposal.justificationUri ?? ""
 		);
+		const enactmentDelayInHours =
+			proposal.get("enactmentDelay") / getHourInBlocks(api);
 		const discordProposalUpdate = getDiscordUpdate(
 			proposalId,
 			"proposal",
 			proposalJustification,
+			enactmentDelayInHours,
 			{
 				status,
 				sponsor: proposal.sponsor,
@@ -108,6 +114,7 @@ export const handleProposalActivityMessage = async (
 			proposalId,
 			"referendum",
 			proposalJustification,
+			enactmentDelayInHours,
 			{
 				status,
 				sponsor: proposal.sponsor,

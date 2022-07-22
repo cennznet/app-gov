@@ -62,6 +62,7 @@ export const ProposalNewForm: FC<
 					name="enactmentDelay"
 					id="enactmentDelay"
 				>
+					<option value="48">48 hours</option>
 					<option value="24">24 hours</option>
 					<option value="12">12 hours</option>
 					<option value="6">6 hours</option>

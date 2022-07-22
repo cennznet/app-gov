@@ -1,6 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useMemo } from "react";
 import { classNames, If } from "react-extras";
 
+import { getHourInBlocks } from "@app-gov/node/utils";
 import { ProposalModel } from "@app-gov/service/mongodb";
 import { useCENNZApi } from "@app-gov/web/providers";
 import { IntrinsicElements } from "@app-gov/web/utils";
@@ -36,12 +37,7 @@ export const ProposalSidebar: FC<
 			<If condition={status === "ReferendumDeliberation"}>
 				<VetoInfo proposal={proposal} vetoThreshold={vetoThreshold} />
 			</If>
-			<div>
-				<label className="font-display text-hero block font-bold uppercase">
-					Enactment Delay
-				</label>
-				<span>{enactmentDelay} blocks</span>
-			</div>
+			<DelayInfo enactmentDelay={enactmentDelay} />
 			<div>
 				<label className="font-display text-hero block font-bold uppercase">
 					Sponsor
@@ -110,6 +106,33 @@ const VetoInfo: FC<VetoInfoProps & IntrinsicElements["div"]> = ({
 			<span>
 				Current: {vetoPercentage?.toFixed(2)}% / Required: {vetoThreshold}%
 			</span>
+		</div>
+	);
+};
+
+interface DelayInfoProps {
+	enactmentDelay: number | undefined;
+}
+
+const DelayInfo: FC<DelayInfoProps & IntrinsicElements["div"]> = ({
+	enactmentDelay,
+	...props
+}) => {
+	const { api } = useCENNZApi();
+
+	const enactmentDelayInHours = useMemo(() => {
+		if (!api || !enactmentDelay) return;
+
+		return enactmentDelay / getHourInBlocks(api);
+	}, [api, enactmentDelay]);
+
+	return (
+		<div {...props}>
+			<label className="font-display text-hero block font-bold uppercase">
+				Enactment Delay
+			</label>
+			<span>{enactmentDelay} blocks</span>
+			{enactmentDelayInHours && <span> / {enactmentDelayInHours} hours</span>}
 		</div>
 	);
 };
