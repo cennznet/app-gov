@@ -67,29 +67,24 @@ export const getProposalFields = (
 	justification: string | void,
 	enactmentDelayInHours: number
 ): EmbedFieldData[] => {
+	const baseFields = [
+		{
+			name: "Sponsor",
+			value: `_${proposalInfo.sponsor}_`,
+		},
+		{
+			name: "Enactment Delay",
+			value: `_${proposalInfo.enactmentDelay}_ blocks / _${enactmentDelayInHours}_ hours`,
+		},
+	];
+
 	return justification
 		? [
 				{
 					name: "Justification",
 					value: justification,
 				},
-				{
-					name: "Sponsor",
-					value: `_${proposalInfo.sponsor}_`,
-				},
-				{
-					name: "Enactment Delay",
-					value: `${proposalInfo.enactmentDelay} blocks`,
-				},
+				...baseFields,
 		  ]
-		: [
-				{
-					name: "Sponsor",
-					value: `_${proposalInfo.sponsor}_`,
-				},
-				{
-					name: "Enactment Delay",
-					value: `_${proposalInfo.enactmentDelay}_ blocks / _${enactmentDelayInHours}_ hours`,
-				},
-		  ];
+		: baseFields;
 };
