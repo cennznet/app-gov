@@ -2,17 +2,20 @@ import { AMQPError } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
 import { getApiInstance, waitForBlock } from "@app-gov/service/cennznet";
+import { getDiscordWebhooks } from "@app-gov/service/discord";
 import {
 	BLOCK_POLLING_INTERVAL,
 	CENNZ_NETWORK,
+	DISCORD_CHANNEL_IDS,
+	DISCORD_RELAYER_BOT,
+	DISCORD_WEBHOOK_IDS,
 	MONGODB_URI,
-	PROPOSAL_QUEUE,
-	RABBITMQ_URI,
 } from "@app-gov/service/env-vars";
 import { getMongoClient } from "@app-gov/service/mongodb";
-import { getQueueByName, getRabbitClient } from "@app-gov/service/rabbitmq";
 import {
 	getLogger,
+	handleNewProposalMessage,
+	handleProposalActivityMessage,
 	monitorNewProposal,
 	monitorProposalActivity,
 } from "@app-gov/service/relayer";
@@ -28,29 +31,28 @@ module.exports = {
 		);
 
 		try {
-			const [cennzApi, amqClient, mdbClient] = await Promise.all([
+			const [cennzApi, mdbClient, discordWebhooks] = await Promise.all([
 				getApiInstance(CENNZ_NETWORK.ChainSlug),
-				getRabbitClient(RABBITMQ_URI),
 				getMongoClient(MONGODB_URI),
+				getDiscordWebhooks(
+					DISCORD_RELAYER_BOT.Token,
+					DISCORD_CHANNEL_IDS,
+					DISCORD_WEBHOOK_IDS
+				),
 			]);
 
-			const proposalQueue = await getQueueByName(
-				amqClient,
-				"Producer",
-				PROPOSAL_QUEUE
-			);
-
 			do {
-				await monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
-					proposalQueue.publish(JSON.stringify({ proposalId }), {
-						type: "proposal-new",
-					});
+				await monitorNewProposal(cennzApi, mdbClient, async (proposalId) => {
+					await handleNewProposalMessage(cennzApi, mdbClient, { proposalId });
 				});
 
-				await monitorProposalActivity(mdbClient, (proposalId) => {
-					proposalQueue.publish(JSON.stringify({ proposalId }), {
-						type: "proposal-activity",
-					});
+				await monitorProposalActivity(mdbClient, async (proposalId) => {
+					await handleProposalActivityMessage(
+						cennzApi,
+						discordWebhooks,
+						mdbClient,
+						{ proposalId }
+					);
 				});
 
 				await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
