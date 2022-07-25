@@ -33,6 +33,10 @@ const NextApp: FC<AppProps> = ({
 			>
 				<Head>
 					<title>CENNZnet | Governance Platform</title>
+					<meta
+						name="description"
+						content="The CENNZnet Decentralised Autonomous Organisation (DAO) gives the community the ability to govern and participate in decisions regarding the network at the protocol level."
+					/>
 					<link rel="icon" href={FaviconSVG} />
 				</Head>
 				<Component {...pageProps} />
