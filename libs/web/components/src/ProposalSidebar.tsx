@@ -131,8 +131,10 @@ const DelayInfo: FC<DelayInfoProps & IntrinsicElements["div"]> = ({
 			<label className="font-display text-hero block font-bold uppercase">
 				Enactment Delay
 			</label>
-			<span>{enactmentDelay} blocks</span>
-			{enactmentDelayInHours && <span> / {enactmentDelayInHours} hours</span>}
+			<span>{enactmentDelay} blocks</span>{" "}
+			{enactmentDelayInHours && (
+				<span>/ {enactmentDelayInHours.toFixed()} hours</span>
+			)}
 		</div>
 	);
 };
