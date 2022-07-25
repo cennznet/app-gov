@@ -7,7 +7,7 @@ export async function waitForBlock(
 ): Promise<void> {
 	let firstBlock: number;
 	let unsubscribeFn: () => void;
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		api.derive.chain
 			.subscribeNewHeads((header) => {
 				const headerBlock = header.number.toNumber();
@@ -21,5 +21,10 @@ export async function waitForBlock(
 			.then((unsubscribe) => {
 				unsubscribeFn = unsubscribe;
 			});
+
+		setInterval(() => {
+			if (api.isConnected) return;
+			reject(new Error("‼️  API is disconnected"));
+		}, 1000);
 	});
 }
