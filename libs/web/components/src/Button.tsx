@@ -27,10 +27,10 @@ export const Button: FC<IntrinsicElements["button"] & ButtonProps> = ({
 				className,
 				"font-display relative inline-flex items-center transition-colors duration-150 disabled:translate-x-0 disabled:translate-y-0 disabled:border-slate-600 disabled:bg-slate-100 disabled:text-slate-600 disabled:shadow-none",
 				{
-					hero: "bg-hero border-hero shadow-sharp shadow-dark hover:text-hero translate-y-[-3px] translate-x-[-3px] border-2 uppercase text-white hover:bg-white active:translate-y-0 active:translate-x-0 active:shadow-none",
+					hero: "bg-hero border-hero shadow-sharp shadow-hero/40 hover:text-hero translate-y-[-3px] translate-x-[-3px] border-2 uppercase text-white hover:bg-white active:translate-y-0 active:translate-x-0 active:shadow-none",
 
 					white:
-						"shadow-sharp shadow-dark text-hero hover:border-hero translate-y-[-3px] translate-x-[-3px] border-2 border-white bg-white uppercase hover:bg-white active:translate-y-0 active:translate-x-0 active:shadow-none ",
+						"shadow-sharp shadow-hero/40 text-hero hover:border-hero translate-y-[-3px] translate-x-[-3px] border-2 border-white bg-white uppercase hover:bg-white active:translate-y-0 active:translate-x-0 active:shadow-none ",
 				}[variant],
 
 				{
