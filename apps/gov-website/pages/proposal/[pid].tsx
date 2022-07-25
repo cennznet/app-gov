@@ -35,7 +35,7 @@ export const getStaticPaths = async () => {
 	const mdb = await getMongoClient(MONGODB_URI);
 	const proposals = await mdb
 		.model<ProposalModel>("Proposal")
-		.find()
+		.find({ status: { $ne: null } })
 		.sort("-proposalId");
 
 	return {
