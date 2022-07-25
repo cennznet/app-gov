@@ -90,7 +90,7 @@ export const handleProposalActivityMessage = async (
 		}
 
 		if (!Object.keys(updatedData).length) return;
-		logger.info("Proposal #%d: 💬  update Discord [2/3]", proposalId);
+		logger.info("Proposal #%d: 💬 update Discord [2/3]", proposalId);
 
 		const proposalJustification = await resolveProposalJustification(
 			proposal.justificationUri ?? ""
