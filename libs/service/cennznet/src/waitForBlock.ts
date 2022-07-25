@@ -2,7 +2,8 @@ import { Api } from "@cennznet/api";
 
 export async function waitForBlock(
 	api: Api,
-	numberOfBlocks: number
+	numberOfBlocks: number,
+	callback?: (blockNumber: number) => void
 ): Promise<void> {
 	let firstBlock: number;
 	let unsubscribeFn: () => void;
@@ -12,6 +13,8 @@ export async function waitForBlock(
 				const headerBlock = header.number.toNumber();
 				if (!firstBlock) firstBlock = header.number.toNumber();
 				if (headerBlock < firstBlock + numberOfBlocks) return;
+				
+				callback?.(headerBlock);
 				unsubscribeFn?.();
 				resolve();
 			})
