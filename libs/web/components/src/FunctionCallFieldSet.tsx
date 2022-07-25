@@ -168,6 +168,7 @@ const Args: FC<Omit<IntrinsicElements["ul"], "children"> & ArgsProps> = ({
 
 export const FunctionCallFieldSet = {
 	Provider,
+	Context,
 	Section,
 	Method,
 	Args,

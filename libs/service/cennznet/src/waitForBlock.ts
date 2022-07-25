@@ -13,7 +13,7 @@ export async function waitForBlock(
 				const headerBlock = header.number.toNumber();
 				if (!firstBlock) firstBlock = header.number.toNumber();
 				if (headerBlock < firstBlock + numberOfBlocks) return;
-				
+
 				callback?.(headerBlock);
 				unsubscribeFn?.();
 				resolve();
