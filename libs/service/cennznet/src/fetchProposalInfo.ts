@@ -62,6 +62,7 @@ export const fetchProposalInfo = async (
 				method: "setCode",
 				args: { code: "<omitted>" },
 			};
+		else throw error;
 	}
 
 	if (!call) return;
