@@ -57,6 +57,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 		.findOne({ proposalId: pid })
 		.lean();
 
+	if (!proposal?.justificationUri)
+		return {
+			notFound: true,
+		};
+
 	const justification = await resolveProposalJustification(
 		proposal.justificationUri
 	);
