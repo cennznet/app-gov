@@ -82,7 +82,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 			justification,
 			vetoThreshold,
 		},
-		revalidate: 600,
+		revalidate: 300,
 	};
 };
 
