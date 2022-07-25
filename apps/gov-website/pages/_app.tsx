@@ -14,6 +14,7 @@ import {
 	UserAgentProvider,
 } from "@app-gov/web/providers";
 
+import FaviconSVG from "../favicon.svg";
 import "../globals.css";
 
 const NextApp: FC<AppProps> = ({
@@ -32,6 +33,7 @@ const NextApp: FC<AppProps> = ({
 			>
 				<Head>
 					<title>CENNZnet | Governance Platform</title>
+					<link rel="icon" href={FaviconSVG} />
 				</Head>
 				<Component {...pageProps} />
 				<BrowsersDialog />
