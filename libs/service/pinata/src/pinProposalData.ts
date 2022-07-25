@@ -1,3 +1,4 @@
+import { safeFetch } from "@app-gov/node/utils";
 import {
 	CENNZ_NETWORK,
 	PINATA_GATEWAY,
@@ -7,7 +8,7 @@ import {
 export const pinProposalData = async (
 	proposalData: Record<string, unknown>
 ): Promise<{ pinHash: string; pinUrl: string }> => {
-	const response = await fetch(
+	const response = await safeFetch(
 		"https://api.pinata.cloud/pinning/pinJSONToIPFS",
 		{
 			method: "POST",
@@ -45,7 +46,7 @@ export const updateProposalPinName = async (
 	pinHash: string,
 	proposalId: number
 ): Promise<void> => {
-	const response = await fetch(
+	const response = await safeFetch(
 		"https://api.pinata.cloud/pinning/hashMetadata",
 		{
 			method: "PUT",

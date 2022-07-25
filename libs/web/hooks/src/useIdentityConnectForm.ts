@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 
+import { safeFetch } from "@app-gov/node/utils";
 import {
 	getRequestJudgementExtrinsic,
 	getSetIdentityExtrinsic,
@@ -68,7 +69,7 @@ export const useIdentityConnectForm = () => {
 
 				setFormState({ step: "Process" });
 
-				const response = await fetch("/api/identity/judgement", {
+				const response = await safeFetch("/api/identity/judgement", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
