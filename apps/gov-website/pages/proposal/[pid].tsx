@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 		.lean();
 
 	const justification = await resolveProposalJustification(
-		proposal.justificationUri
+		proposal?.justificationUri ?? ""
 	);
 
 	const vetoThreshold = await fetchProposalVetoThreshold(api);
