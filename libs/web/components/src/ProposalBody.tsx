@@ -31,13 +31,11 @@ const Call: FC<CallProps & IntrinsicElements["div"]> = ({ call, ...props }) => {
 		const { section, method, args } = call;
 		const values = Object.values(args as Record<string, unknown>);
 
-		if (!values?.length || values.includes("omitted"))
-			return {
-				section,
-				method,
-			};
-
-		return { section, method, args };
+		return {
+			section,
+			method,
+			...(values?.length && { args }),
+		};
 	}, [call]);
 
 	return (
