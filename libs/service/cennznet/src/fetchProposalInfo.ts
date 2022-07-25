@@ -55,11 +55,7 @@ export const fetchProposalInfo = async (
 		>;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
-		if (
-			error?.message.includes(
-				"Unable to find Call with index [123, 34]/[123,34]"
-			)
-		)
+		if (error?.message.includes("[123, 34]")) // Catch error creating type for `system.setCode`
 			call = {
 				section: "system",
 				method: "setCode",
