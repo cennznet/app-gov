@@ -46,8 +46,8 @@ const Context = createContext({} as ContextType);
 const Provider: FC<ProviderProps> = ({
 	children,
 	extrinsics,
-	defaultSection = "system",
-	defaultMethod = "remark",
+	defaultSection = "baseFee",
+	defaultMethod = "setBaseFeePerGas",
 }) => {
 	const [selectedSection, setSelectedSection] =
 		useState<string>(defaultSection);
