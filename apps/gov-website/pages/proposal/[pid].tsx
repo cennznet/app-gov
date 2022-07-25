@@ -35,7 +35,7 @@ export const getStaticPaths = async () => {
 	const mdb = await getMongoClient(MONGODB_URI);
 	const proposals = await mdb
 		.model<ProposalModel>("Proposal")
-		.find()
+		.find({ status: { $ne: null } })
 		.sort("-proposalId");
 
 	return {
@@ -56,6 +56,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 		.model<ProposalModel>("Proposal")
 		.findOne({ proposalId: pid })
 		.lean();
+
+	if (!proposal?.justificationUri)
+		return {
+			notFound: true,
+		};
 
 	const justification = await resolveProposalJustification(
 		proposal.justificationUri

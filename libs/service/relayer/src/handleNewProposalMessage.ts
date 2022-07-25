@@ -31,6 +31,11 @@ export const handleNewProposalMessage = async (
 		{ proposalId }
 	);
 	const handleMessage = async () => {
+		// Create a record in the `proposals` collection to ack that it has been processed
+		await updateProposalRecord({
+			proposalId,
+		});
+
 		logger.info("Proposal #%d: 🎾 fetch info [1/2]", proposalId);
 		const proposalInfo = await fetchProposalInfo(api, proposalId);
 		if (!proposalInfo) return;
