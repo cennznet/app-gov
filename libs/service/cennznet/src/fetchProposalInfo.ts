@@ -53,8 +53,19 @@ export const fetchProposalInfo = async (
 			string,
 			unknown
 		>;
-		// eslint-disable-next-line no-empty
-	} catch (error) {}
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		if (
+			error?.message.includes(
+				"Unable to find Call with index [123, 34]/[123,34]"
+			)
+		)
+			call = {
+				section: "system",
+				method: "setCode",
+				args: { code: "omitted" },
+			};
+	}
 
 	if (!call) return;
 
