@@ -60,7 +60,7 @@ export const fetchProposalInfo = async (
 			call = {
 				section: "system",
 				method: "setCode",
-				args: { code: "omitted" },
+				args: { code: "<omitted>" },
 			};
 	}
 
