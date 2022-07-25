@@ -53,7 +53,12 @@ module.exports = {
 					});
 				});
 
-				await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
+				await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL, (blockNumber) => {
+					logger.info(
+						`Health check: 👌 ${chalk.green("ok")} @ ${chalk.gray("%s")}`,
+						blockNumber
+					);
+				});
 			} while (true);
 		} catch (error) {
 			if (error instanceof AMQPError) error?.connection?.close();
