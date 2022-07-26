@@ -5,8 +5,8 @@ import { getApiInstance } from "@app-gov/service/cennznet";
 import { getDiscordWebhooks } from "@app-gov/service/discord";
 import {
 	CENNZ_NETWORK,
-	DISCORD_RELAYER_BOT,
 	DISCORD_CHANNEL_IDS,
+	DISCORD_RELAYER_BOT,
 	DISCORD_WEBHOOK_IDS,
 	MESSAGE_MAX_RETRY,
 	MONGODB_URI,
