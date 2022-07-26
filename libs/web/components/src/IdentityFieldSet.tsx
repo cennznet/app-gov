@@ -45,6 +45,8 @@ interface ProviderProps extends PropsWithChildren {
 
 const Context = createContext({} as ContextType);
 
+export const useIdentity = () => useContext(Context);
+
 const Provider: FC<ProviderProps> = ({
 	twitterRegistrarIndex,
 	discordRegistrarIndex,
@@ -111,7 +113,7 @@ const Provider: FC<ProviderProps> = ({
 
 const Discord: FC = () => {
 	const { discordUsername, clearDiscordUsername, onDiscordSignInClick } =
-		useContext(Context);
+		useIdentity();
 	const onNoop = useOnNoop();
 
 	return (
@@ -148,7 +150,7 @@ const Discord: FC = () => {
 
 const Twitter: FC = () => {
 	const { twitterUsername, clearTwitterUsername, onTwitterSignInClick } =
-		useContext(Context);
+		useIdentity();
 	const onNoop = useOnNoop();
 
 	return (
@@ -184,7 +186,7 @@ const Twitter: FC = () => {
 };
 
 const Account: FC = () => {
-	const { identityCheck } = useContext(Context);
+	const { identityCheck } = useIdentity();
 
 	return (
 		<>
@@ -218,7 +220,6 @@ const useOnNoop = () => {
 
 export const IdentityFieldSet = {
 	Provider,
-	Context,
 	Account,
 	Discord,
 	Twitter,
