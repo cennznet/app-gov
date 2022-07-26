@@ -39,7 +39,6 @@ module.exports = {
 				const proposal = await mdbClient
 					.model<ProposalModel>("Proposal")
 					.findOne({ proposalId });
-				//
 				if (proposal?.status) {
 					logger.info(
 						"Proposal #%d: 🔴 ignored, status `%s`",
