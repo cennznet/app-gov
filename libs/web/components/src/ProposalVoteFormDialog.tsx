@@ -26,8 +26,15 @@ export const ProposalVoteFormDialog: FC<ProposalVoteFormDialogProps> = ({
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="prose text-center  text-sm">
-							Your vote has been submitted
+							Your vote has been submitted!
 						</p>
+
+						<If condition={!!formState?.statusMessage}>
+							<p className="prose mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
+								{formState?.statusMessage}
+							</p>
+						</If>
+
 						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
 							<div>
 								<Button onClick={onDismiss}>Dismiss</Button>

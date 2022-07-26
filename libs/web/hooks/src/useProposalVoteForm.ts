@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 
 import {
+	fetchProposalStatus,
 	getVoteAgainstReferendumExtrinsic,
 	getVoteOnProposalExtrinsic,
 	signAndSend,
@@ -50,7 +51,15 @@ export const useProposalVoteForm = (proposalId: number) => {
 						},
 					}
 				);
-				setFormState({ step: "Complete", status: "Ok" });
+				const proposalStatus = await fetchProposalStatus(api, proposalId);
+				setFormState({
+					step: "Complete",
+					status: "Ok",
+					...(proposalStatus === "Disapproved" && {
+						statusMessage:
+							"This proposal has now been disapproved. You will be redirected to the proposal submission page.",
+					}),
+				});
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
 				console.info(error);
@@ -79,7 +88,10 @@ export const useProposalVoteForm = (proposalId: number) => {
 					},
 				}
 			);
-			setFormState({ step: "Complete", status: "Ok" });
+			setFormState({
+				step: "Complete",
+				status: "Ok",
+			});
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.info(error);
