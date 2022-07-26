@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { safeFetch } from "@app-gov/node/utils";
+import { HttpError, safeFetch } from "@app-gov/node/utils";
 import {
 	getRequestJudgementExtrinsic,
 	getSetIdentityExtrinsic,
@@ -69,7 +69,7 @@ export const useIdentityConnectForm = () => {
 
 				setFormState({ step: "Process" });
 
-				const response = await safeFetch("/api/identity/judgement", {
+				await safeFetch("/api/identity/judgement", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -77,36 +77,26 @@ export const useIdentityConnectForm = () => {
 					body: JSON.stringify(Object.fromEntries(data.entries())),
 				});
 
-				if (!response.ok) {
-					let responseBody;
-					const contentType = response.headers.get("Content-Type");
-
-					if (contentType?.includes("application/json"))
-						responseBody = await response.json();
-
-					throw {
-						code: `APP/${response.status}`,
-						message: response.statusText,
-						details: responseBody?.message ?? responseBody?.details,
-					};
-				}
-
 				setFormState({ step: "Complete", status: "Ok" });
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
 				console.info(error);
 
-				if (error?.details?.includes("DISCORD"))
+				if (error instanceof HttpError) {
+					const responseText = await error.response.text();
+					if (!responseText.includes("Discord"))
+						return setFormStatus("NotOk", `[${error.code}] ${error.message}`);
 					return setFormState({
 						step: "Complete",
 						status: "Ok",
-						statusMessage: error.details,
+						statusMessage: JSON.parse(responseText)?.message,
 					});
+				}
 
 				setFormStatus(
 					"NotOk",
-					`[${error?.code ?? "UNKNOWN"}] ${error?.details ?? error.message}`
+					`[${error?.code ?? "UNKNOWN"}] ${error.message}`
 				);
 			}
 		},
