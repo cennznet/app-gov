@@ -57,7 +57,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 		.findOne({ proposalId: pid })
 		.lean();
 
-	if (!proposal?.justificationUri)
+	if (
+		!proposal?.justificationUri ||
+		proposal?.status === "Disapproved" ||
+		proposal?.status === "ReferendumVetoed"
+	)
 		return {
 			notFound: true,
 		};
@@ -100,7 +104,7 @@ const Proposal: NextPage<ProposalProps> = ({
 	const proposal = useProposal(initialProposal);
 	const { proposalId, call, status } = proposal;
 
-	const { open, openDialog, closeDialog } = useTransactionDialog();
+	const { open, openDialog, closeDialog } = useTransactionDialog(proposalId);
 	const { onVote, onVeto, formState } = useProposalVoteForm(proposalId);
 
 	const onPass = useCallback(() => {
