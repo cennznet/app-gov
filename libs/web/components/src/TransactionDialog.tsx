@@ -1,5 +1,7 @@
 import { ComponentProps, FC, useCallback, useRef, useState } from "react";
 
+import { useRedirect } from "@app-gov/web/hooks";
+
 import { Dialog } from "./";
 
 export interface TransactionDialogProps extends ComponentProps<typeof Dialog> {}
@@ -22,16 +24,18 @@ export const TransactionDialog: FC<TransactionDialogProps> = ({
 	);
 };
 
-export const useTransactionDialog = () => {
+export const useTransactionDialog = (proposalId: number) => {
 	const [open, setOpen] = useState<boolean>(false);
+	const { redirectOnDisapproval } = useRedirect();
 
 	const openDialog = useCallback(() => {
 		setOpen(true);
 	}, []);
 
-	const closeDialog = useCallback(() => {
+	const closeDialog = useCallback(async () => {
+		await redirectOnDisapproval(proposalId);
 		setOpen(false);
-	}, []);
+	}, [proposalId, redirectOnDisapproval]);
 
 	return { open, openDialog, closeDialog };
 };
