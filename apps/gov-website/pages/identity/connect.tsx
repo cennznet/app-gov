@@ -3,7 +3,6 @@ import {
 	FC,
 	FormEventHandler,
 	useCallback,
-	useContext,
 	useEffect,
 	useState,
 } from "react";
@@ -17,6 +16,7 @@ import {
 	IdentityForm,
 	IdentityFormDialog,
 	Layout,
+	useIdentity,
 	useTransactionDialog,
 } from "@app-gov/web/components";
 import { useIdentityConnectForm } from "@app-gov/web/hooks";
@@ -60,9 +60,7 @@ export default Connect;
 const ConnectPage: FC = () => {
 	const { submitForm, formState, resetFormState } = useIdentityConnectForm();
 	const { open, openDialog, closeDialog } = useTransactionDialog();
-	const { clearTwitterUsername, clearDiscordUsername } = useContext(
-		IdentityFieldSet.Context
-	);
+	const { clearTwitterUsername, clearDiscordUsername } = useIdentity()
 
 	const [formKey, setFormKey] = useState<string>(`IdentityForm${Date.now()}`);
 	const resetForm = () => setFormKey(`IdentityForm${Date.now()}`);

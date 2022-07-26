@@ -1,9 +1,9 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { classNames } from "react-extras";
 
 import { IntrinsicElements } from "@app-gov/web/utils";
 
-import { Button, IdentityFieldSet, Layout } from "./";
+import { Button, IdentityFieldSet, Layout, useIdentity } from "./";
 
 interface IdentityFormProps {
 	open: boolean;
@@ -13,7 +13,7 @@ export const IdentityForm: FC<
 	Omit<IntrinsicElements["form"], "parent"> & IdentityFormProps
 > = ({ open, ...props }) => {
 	const { twitterRegistrarIndex, discordRegistrarIndex, identityCheck } =
-		useContext(IdentityFieldSet.Context);
+		useIdentity();
 
 	return (
 		<form {...props}>
