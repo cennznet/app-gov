@@ -2,6 +2,7 @@ import { Api } from "@cennznet/api";
 import { useCallback, useState } from "react";
 
 import { getHourInBlocks } from "@app-gov/node/utils";
+import { safeFetch } from "@app-gov/node/utils";
 import {
 	findProposalId,
 	getSubmitProposalExtrinsic,
@@ -110,7 +111,7 @@ export const useProposalNewForm = () => {
 
 				// 4. Post a request to API to process the proposal data
 				setFormStep("Process");
-				const response = await fetch("/api/proposal/create", {
+				await safeFetch("/api/proposal/create", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -121,14 +122,6 @@ export const useProposalNewForm = () => {
 						justificationUri: pinUrl,
 					}),
 				});
-
-				if (!response.ok) {
-					throw {
-						code: `APP/${response.status}`,
-						message: response.statusText,
-						details: await response.text(),
-					};
-				}
 
 				setFormState({ step: "Complete", status: "Ok" });
 
