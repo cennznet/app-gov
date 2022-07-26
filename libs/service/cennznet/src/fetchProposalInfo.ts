@@ -9,6 +9,13 @@ type ProposalStatus =
 	| "Disapproved" // The council voted against this proposal
 	| "ReferendumVetoed"; // The proposal was voted against during the referendum phase
 
+export const FINALIZED_STATES = [
+	"Disapproved",
+	"ReferendumVetoed",
+	"ApprovedEnactmentCancelled",
+	"ApprovedEnacted",
+];
+
 export interface ProposalInfo {
 	sponsor: string;
 	justificationUri: string;
