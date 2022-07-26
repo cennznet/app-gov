@@ -56,13 +56,12 @@ export const fetchProposalInfo = async (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
 		// Catch error creating type for `system.setCode`
-		if (error?.message.includes("[123, 34]"))
-			call = {
-				section: "system",
-				method: "setCode",
-				args: { code: "<omitted>" },
-			};
-		else throw error;
+		if (!error?.message.includes("[123, 34]")) throw error;
+		call = {
+			section: "system",
+			method: "setCode",
+			args: { code: "<omitted>" },
+		};
 	}
 
 	if (!call) return;
