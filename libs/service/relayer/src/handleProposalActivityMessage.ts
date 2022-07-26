@@ -12,7 +12,7 @@ import {
 	fetchProposalVotePercentage,
 	fetchProposalVotes,
 } from "@app-gov/service/cennznet";
-import { getDiscordUpdate } from "@app-gov/service/discord";
+import { handleDiscordMessaging } from "@app-gov/service/discord";
 import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
@@ -91,77 +91,16 @@ export const handleProposalActivityMessage = async (
 
 		if (!Object.keys(updatedData).length) return;
 		logger.info("Proposal #%d: 💬 update Discord [2/3]", proposalId);
-
-		const proposalJustification = await resolveProposalJustification(
-			proposal.justificationUri ?? ""
-		);
-		const enactmentDelayInHours =
-			proposal.get("enactmentDelay") / getHourInBlocks(api);
-		const discordProposalUpdate = getDiscordUpdate(
+		updatedData = await handleDiscordMessaging(
+			api,
+			proposal,
+			webhooks,
 			proposalId,
-			"proposal",
-			proposalJustification,
-			enactmentDelayInHours,
-			{
-				status,
-				sponsor: proposal.sponsor,
-				votePercentage: proposal.votePercentage,
-				enactmentDelay: proposal.enactmentDelay,
-				...updatedData,
-			}
-		);
-		const discordReferendumUpdate = getDiscordUpdate(
-			proposalId,
-			"referendum",
-			proposalJustification,
-			enactmentDelayInHours,
-			{
-				status,
-				sponsor: proposal.sponsor,
-				vetoPercentage: proposal.vetoPercentage,
-				enactmentDelay: proposal.enactmentDelay,
-				...updatedData,
-			}
+			status,
+			updatedData
 		);
 
-		let discordProposalMessage: string | undefined,
-			discordReferendumMessage: string | undefined;
-
-		const [proposalWebhook, referendumWebhook] = webhooks;
-
-		switch (status) {
-			case "Deliberation":
-				if (!proposal.discordProposalMessage) {
-					const { id } = await proposalWebhook.send(discordProposalUpdate);
-					discordProposalMessage = id;
-				}
-				break;
-			case "ReferendumDeliberation": {
-				if (!proposal.discordReferendumMessage) {
-					const { id } = await referendumWebhook.send(discordReferendumUpdate);
-					discordReferendumMessage = id;
-				}
-				break;
-			}
-		}
-
-		if (!discordProposalMessage && proposal.discordProposalMessage)
-			await proposalWebhook.editMessage(
-				proposal.discordProposalMessage,
-				discordProposalUpdate
-			);
-		if (!discordReferendumMessage && proposal.discordReferendumMessage)
-			await referendumWebhook.editMessage(
-				proposal.discordReferendumMessage,
-				discordReferendumUpdate
-			);
-
-		updatedData = {
-			...updatedData,
-			discordProposalMessage,
-			discordReferendumMessage,
-		};
-
+		if (!Object.keys(updatedData).length) return;
 		logger.info("Proposal #%d: 🗂  file to DB [3/3]", proposalId);
 		await updateProposalRecord(updatedData);
 	};
