@@ -1,5 +1,11 @@
 import type { GetStaticProps, NextPage } from "next";
-import { FC, FormEventHandler, useCallback, useEffect, useState } from "react";
+import {
+	FC,
+	FormEventHandler,
+	useCallback,
+	useEffect,
+	useState,
+} from "react";
 
 import { fetchRequiredRegistrars } from "@app-gov/node/utils";
 import { getApiInstance } from "@app-gov/service/cennznet";
@@ -54,7 +60,7 @@ export default Connect;
 const ConnectPage: FC = () => {
 	const { submitForm, formState, resetFormState } = useIdentityConnectForm();
 	const { open, openDialog, closeDialog } = useTransactionDialog();
-	const { clearTwitterUsername, clearDiscordUsername } = useIdentity();
+	const { clearTwitterUsername, clearDiscordUsername } = useIdentity()
 
 	const [formKey, setFormKey] = useState<string>(`IdentityForm${Date.now()}`);
 	const resetForm = () => setFormKey(`IdentityForm${Date.now()}`);
