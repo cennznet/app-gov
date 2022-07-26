@@ -28,13 +28,20 @@ interface CallProps {
 
 const Call: FC<CallProps & IntrinsicElements["div"]> = ({ call, ...props }) => {
 	const callDisplay = useMemo<CallProps["call"]>(() => {
-		const values = Object.values((call?.args as Record<string, unknown>) ?? {});
+		try {
+			const { section, method, args } = call;
+			const values = Object.values(args as Record<string, unknown>);
 
-		return {
-			section: call?.section,
-			method: call?.method,
-			...(values?.length && { args: call?.args }),
-		};
+			return {
+				section,
+				method,
+				...(values?.length && { args }),
+			};
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			console.warn("Error formatting Function Call", error.message);
+			return {};
+		}
 	}, [call]);
 
 	return (
