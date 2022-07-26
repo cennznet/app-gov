@@ -50,7 +50,10 @@ export const useProposalVoteForm = (proposalId: number) => {
 						},
 					}
 				);
-				setFormState({ step: "Complete", status: "Ok" });
+				setFormState({
+					step: "Complete",
+					status: "Ok",
+				});
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
 				console.info(error);
@@ -79,7 +82,10 @@ export const useProposalVoteForm = (proposalId: number) => {
 					},
 				}
 			);
-			setFormState({ step: "Complete", status: "Ok" });
+			setFormState({
+				step: "Complete",
+				status: "Ok",
+			});
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.info(error);
