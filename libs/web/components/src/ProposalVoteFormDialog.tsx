@@ -26,8 +26,9 @@ export const ProposalVoteFormDialog: FC<ProposalVoteFormDialogProps> = ({
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="prose text-center  text-sm">
-							Your vote has been submitted
+							Your vote has been submitted!
 						</p>
+
 						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
 							<div>
 								<Button onClick={onDismiss}>Dismiss</Button>

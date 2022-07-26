@@ -10,6 +10,7 @@ import {
 	FunctionCallFieldSet,
 	MarkdownField,
 	Select,
+	useFunctionCall,
 } from "./";
 
 interface ProposalNewFormProps {}
@@ -17,6 +18,8 @@ interface ProposalNewFormProps {}
 export const ProposalNewForm: FC<
 	Omit<IntrinsicElements["form"], "parent"> & ProposalNewFormProps
 > = (props) => {
+	const { argList } = useFunctionCall();
+
 	const copyInput = useControlledInput<string, HTMLTextAreaElement>("");
 	const delayInput = useControlledInput<string, HTMLSelectElement>("24");
 	const callToggle = useControlledCheckbox(false);
@@ -99,10 +102,14 @@ export const ProposalNewForm: FC<
 						<label className="mb-1 block text-base font-bold">Method</label>
 						<FunctionCallFieldSet.Method name="callMethod" />
 					</div>
-					<div className="col-span-full">
-						<label className="mb-1 block text-base font-bold">Arguments</label>
-						<FunctionCallFieldSet.Args name="callArgs[]" />
-					</div>
+					<If condition={!!argList?.length}>
+						<div className="col-span-full">
+							<label className="mb-1 block text-base font-bold">
+								Arguments
+							</label>
+							<FunctionCallFieldSet.Args name="callArgs[]" />
+						</div>
+					</If>
 				</fieldset>
 			</If>
 
