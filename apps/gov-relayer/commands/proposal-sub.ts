@@ -5,8 +5,8 @@ import { getApiInstance } from "@app-gov/service/cennznet";
 import { getDiscordWebhooks } from "@app-gov/service/discord";
 import {
 	CENNZ_NETWORK,
-	DISCORD_CHANNEL_IDS,
 	DISCORD_RELAYER_BOT,
+	DISCORD_RELAYER_CHANNEL_IDS,
 	DISCORD_WEBHOOK_IDS,
 	MESSAGE_MAX_RETRY,
 	MONGODB_URI,
@@ -50,7 +50,7 @@ module.exports = {
 
 			const discordWebhooks = await getDiscordWebhooks(
 				DISCORD_RELAYER_BOT.Token,
-				DISCORD_CHANNEL_IDS,
+				DISCORD_RELAYER_CHANNEL_IDS,
 				DISCORD_WEBHOOK_IDS
 			);
 
