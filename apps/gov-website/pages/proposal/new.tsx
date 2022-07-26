@@ -69,13 +69,13 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 			<Layout.PageContent>
 				<Layout.PageHeader>Submit a Proposal</Layout.PageHeader>
 
-				<div className="mb-[1.5em] space-y-2">
+				<div className="mb-6 space-y-2">
 					<p className="prose text-lg">
 						Councillors are allowed to submit proposals, which are made up of
 						three sections.
 					</p>
 
-					<ol className="prose -ml-2 list-decimal text-lg">
+					<ol className="prose list-inside list-decimal px-2 text-base">
 						<li>
 							<em className="pr-px">Justification:</em> Flexible space for brief
 							descriptions, partial or full code changes, links to external
