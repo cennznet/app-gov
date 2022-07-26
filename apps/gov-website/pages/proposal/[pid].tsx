@@ -6,10 +6,12 @@ import { If } from "react-extras";
 import { resolveProposalJustification } from "@app-gov/node/utils";
 import {
 	fetchProposalInfo,
+	fetchProposalStatus,
 	fetchProposalVetoPercentage,
 	fetchProposalVetoThreshold,
 	fetchProposalVotePercentage,
 	fetchProposalVotes,
+	FINALIZED_STATES,
 	getApiInstance,
 	subscribeFinalizedHeads,
 } from "@app-gov/service/cennznet";
@@ -177,6 +179,14 @@ const useProposal = (initialProposal: ProposalModel) => {
 		if (!api) return;
 		let unsubscribeFn: VoidFn;
 		subscribeFinalizedHeads(api, BLOCK_POLLING_INTERVAL, async () => {
+			const proposalStatus = await fetchProposalStatus(api, proposalId);
+
+			if (FINALIZED_STATES.includes(proposalStatus))
+				return setProposal((proposal) => ({
+					...proposal,
+					status: proposalStatus,
+				}));
+
 			const [proposalInfo, proposalVotes, vetoPercentage] = await Promise.all([
 				fetchProposalInfo(api, proposalId),
 				fetchProposalVotes(api, proposalId),
