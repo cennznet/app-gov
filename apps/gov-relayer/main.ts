@@ -4,4 +4,5 @@ require("yargs")
 	.scriptName("gov-relayer")
 	.command(require("./commands/proposal-pub"))
 	.command(require("./commands/proposal-sub"))
+	.command(require("./commands/proposal-patch"))
 	.help().argv;
