@@ -28,13 +28,12 @@ interface CallProps {
 
 const Call: FC<CallProps & IntrinsicElements["div"]> = ({ call, ...props }) => {
 	const callDisplay = useMemo<CallProps["call"]>(() => {
-		const { section, method, args } = call;
-		const values = Object.values(args as Record<string, unknown>);
+		const values = Object.values((call?.args as Record<string, unknown>) ?? {});
 
 		return {
-			section,
-			method,
-			...(values?.length && { args }),
+			section: call?.section,
+			method: call?.method,
+			...(values?.length && { args: call?.args }),
 		};
 	}, [call]);
 
