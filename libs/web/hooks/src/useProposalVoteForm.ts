@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 
 import {
-	fetchProposalStatus,
 	getVoteAgainstReferendumExtrinsic,
 	getVoteOnProposalExtrinsic,
 	signAndSend,
@@ -51,14 +50,9 @@ export const useProposalVoteForm = (proposalId: number) => {
 						},
 					}
 				);
-				const proposalStatus = await fetchProposalStatus(api, proposalId);
 				setFormState({
 					step: "Complete",
 					status: "Ok",
-					...(proposalStatus === "Disapproved" && {
-						statusMessage:
-							"This proposal has now been disapproved. You will be redirected to the proposal submission page.",
-					}),
 				});
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {

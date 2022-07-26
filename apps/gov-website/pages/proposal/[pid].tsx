@@ -5,13 +5,13 @@ import { If } from "react-extras";
 
 import { resolveProposalJustification } from "@app-gov/node/utils";
 import {
-	FINALIZED_STATES,
 	fetchProposalInfo,
 	fetchProposalStatus,
 	fetchProposalVetoPercentage,
 	fetchProposalVetoThreshold,
 	fetchProposalVotePercentage,
 	fetchProposalVotes,
+	FINALIZED_STATES,
 	getApiInstance,
 	subscribeFinalizedHeads,
 } from "@app-gov/service/cennznet";
