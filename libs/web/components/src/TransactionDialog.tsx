@@ -24,7 +24,7 @@ export const TransactionDialog: FC<TransactionDialogProps> = ({
 	);
 };
 
-export const useTransactionDialog = (proposalId: number) => {
+export const useTransactionDialog = (proposalId?: number) => {
 	const [open, setOpen] = useState<boolean>(false);
 	const { redirectOnDisapproval } = useRedirect();
 
@@ -33,7 +33,8 @@ export const useTransactionDialog = (proposalId: number) => {
 	}, []);
 
 	const closeDialog = useCallback(async () => {
-		await redirectOnDisapproval(proposalId);
+		if (proposalId) await redirectOnDisapproval(proposalId);
+
 		setOpen(false);
 	}, [proposalId, redirectOnDisapproval]);
 
