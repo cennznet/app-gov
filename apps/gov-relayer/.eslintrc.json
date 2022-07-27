@@ -1,5 +1,5 @@
 {
-  "extends": ["../../.eslintrc.json", "oclif", "oclif-typescript"],
+  "extends": ["../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {

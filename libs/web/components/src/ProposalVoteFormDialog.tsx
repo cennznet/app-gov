@@ -6,11 +6,15 @@ import {
 	DISCORD_CHANNEL_IDS,
 	DISCORD_WEBSITE_BOT,
 } from "@app-gov/service/env-vars";
-import { StepProgress } from "@app-gov/web/components";
 import { ProposalNewFormState } from "@app-gov/web/hooks";
 import { DiscordLogo } from "@app-gov/web/vectors";
 
-import { Button, TransactionDialog, TransactionDialogProps } from "./";
+import {
+	Button,
+	StepProgress,
+	TransactionDialog,
+	TransactionDialogProps,
+} from "./";
 
 interface ProposalVoteFormDialogProps extends TransactionDialogProps {
 	formState: ProposalNewFormState;
