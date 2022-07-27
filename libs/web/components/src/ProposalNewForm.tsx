@@ -119,8 +119,8 @@ export const ProposalNewForm: FC<
 
 			<fieldset className="mb-6">
 				<p className="prose mb-[1em] text-base">
-					Ex consequat occaecat id nulla voluptate anim eu velit et laboris
-					reprehenderit ut dolor magna ut minim voluptate labore non adipisicing
+					Only wallets associated with the `councillor` role may submit
+					proposals
 				</p>
 				<AccountSelect required name="sponsor" />
 			</fieldset>

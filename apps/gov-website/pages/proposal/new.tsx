@@ -69,12 +69,30 @@ const NewProposal: NextPage<NewProposalProps> = ({ extrinsics }) => {
 			<Layout.PageContent>
 				<Layout.PageHeader>Submit a Proposal</Layout.PageHeader>
 
-				<p className="prose mb-[1.5em] text-lg">
-					To submit a proposal you must be a CENNZnet Councillor. Lorem laborum
-					dolor minim mollit eu reprehenderit culpa dolore labore dolor mollit
-					commodo do anim incididunt sunt id pariatur elit tempor nostrud nulla
-					eu proident ut id qui incididunt.
-				</p>
+				<div className="mb-6 space-y-2">
+					<p className="prose text-lg">
+						Councillors are allowed to submit proposals, which are made up of
+						three sections.
+					</p>
+
+					<ol className="prose list-inside list-decimal px-2 text-base">
+						<li>
+							<em className="pr-px">Justification:</em> Flexible space for brief
+							descriptions, partial or full code changes, links to external
+							material
+						</li>
+						<li>
+							<em className="pr-px">Enactment delay:</em> The amount of time
+							that must pass after the referendum stage, before changes are
+							enacted
+						</li>
+						<li>
+							<em className="pr-px">Function call (optional):</em> Use one of
+							the preset function calls for quick commands
+						</li>
+					</ol>
+				</div>
+
 				<FunctionCallFieldSet.Provider extrinsics={extrinsics}>
 					<ProposalNewForm onSubmit={onFormSubmit} key={formKey} />
 				</FunctionCallFieldSet.Provider>
