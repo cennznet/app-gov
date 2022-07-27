@@ -40,6 +40,8 @@ module.exports = {
 				PROPOSAL_QUEUE
 			);
 
+			const polling = true;
+
 			do {
 				await monitorNewProposal(cennzApi, mdbClient, (proposalId) => {
 					proposalQueue.publish(JSON.stringify({ proposalId }), {
@@ -59,7 +61,7 @@ module.exports = {
 						blockNumber
 					);
 				});
-			} while (true);
+			} while (polling);
 		} catch (error) {
 			if (error instanceof AMQPError) error?.connection?.close();
 			logger.error("%s", error);

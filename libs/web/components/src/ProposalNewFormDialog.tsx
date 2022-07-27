@@ -1,11 +1,15 @@
 import { FC, MouseEventHandler } from "react";
 import { Choose, If } from "react-extras";
 
-import { StepProgress } from "@app-gov/web/components";
 import { ProposalNewFormState } from "@app-gov/web/hooks";
 import { DiscordLogo } from "@app-gov/web/vectors";
 
-import { Button, TransactionDialog, TransactionDialogProps } from "./";
+import {
+	Button,
+	StepProgress,
+	TransactionDialog,
+	TransactionDialogProps,
+} from "./";
 
 interface ProposalNewFormDialogProps extends TransactionDialogProps {
 	formState: ProposalNewFormState;
