@@ -1,6 +1,10 @@
 import { FC, MouseEventHandler } from "react";
 import { Choose, If } from "react-extras";
 
+import {
+	DISCORD_CHANNEL_IDS,
+	DISCORD_WEBSITE_BOT,
+} from "@app-gov/service/env-vars";
 import { StepProgress } from "@app-gov/web/components";
 import { ProposalNewFormState } from "@app-gov/web/hooks";
 import { DiscordLogo } from "@app-gov/web/vectors";
@@ -29,14 +33,19 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="prose text-center  text-sm">
-							Your proposal has been submitted successfully, [and maybe some
-							message to view the proposal on Discord].
+							Your proposal has been submitted successfully!
 						</p>
 						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
 							<div className="mb-4">
-								<Button startAdornment={<DiscordLogo className="h-4" />}>
-									View proposal on Discord
-								</Button>
+								<a
+									href={`https://discord.com/channels/${DISCORD_WEBSITE_BOT.ServerId}/${DISCORD_CHANNEL_IDS[0]}`}
+									target="_blank"
+									rel="noreferrer"
+								>
+									<Button startAdornment={<DiscordLogo className="h-4" />}>
+										View proposal on Discord
+									</Button>
+								</a>
 							</div>
 
 							<div>

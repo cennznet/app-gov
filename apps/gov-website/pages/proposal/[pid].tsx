@@ -162,6 +162,7 @@ const Proposal: NextPage<ProposalProps> = ({
 					formState={formState}
 					onClose={onDialogClose}
 					onDismiss={onDialogDismiss}
+					proposalStatus={status}
 				/>
 			</Layout.PageContent>
 		</Layout.PageWrapper>
