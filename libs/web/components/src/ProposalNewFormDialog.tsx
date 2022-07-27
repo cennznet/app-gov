@@ -1,11 +1,19 @@
 import { FC, MouseEventHandler } from "react";
 import { Choose, If } from "react-extras";
 
-import { StepProgress } from "@app-gov/web/components";
+import {
+	DISCORD_CHANNEL_IDS,
+	DISCORD_WEBSITE_BOT,
+} from "@app-gov/service/env-vars";
 import { ProposalNewFormState } from "@app-gov/web/hooks";
 import { DiscordLogo } from "@app-gov/web/vectors";
 
-import { Button, TransactionDialog, TransactionDialogProps } from "./";
+import {
+	Button,
+	StepProgress,
+	TransactionDialog,
+	TransactionDialogProps,
+} from "./";
 
 interface ProposalNewFormDialogProps extends TransactionDialogProps {
 	formState: ProposalNewFormState;
@@ -20,8 +28,8 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 	return (
 		<TransactionDialog {...props}>
 			<StepProgress
-				steps={["Confirming", "Submitting", "Processing", "Success!"]}
-				stepIndex={["Await", "Submit", "Process", "Success"].indexOf(
+				steps={["Confirm", "Submit", "Process", "Success!"]}
+				stepIndex={["Sign", "Submit", "Process", "Complete"].indexOf(
 					formState.step
 				)}
 				error={formState?.status === "NotOk"}
@@ -29,14 +37,19 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 				<Choose>
 					<Choose.When condition={formState?.status === "Ok"}>
 						<p className="prose text-center  text-sm">
-							Your proposal has been submitted successfully, [and maybe some
-							message to view the proposal on Discord].
+							Your proposal has been submitted successfully!
 						</p>
 						<div className="mt-8 flex w-full flex-col items-center justify-center text-center">
 							<div className="mb-4">
-								<Button startAdornment={<DiscordLogo className="h-4" />}>
-									View proposal on Discord
-								</Button>
+								<a
+									href={`https://discord.com/channels/${DISCORD_WEBSITE_BOT.ServerId}/${DISCORD_CHANNEL_IDS[0]}`}
+									target="_blank"
+									rel="noreferrer"
+								>
+									<Button startAdornment={<DiscordLogo className="h-4" />}>
+										View proposal on Discord
+									</Button>
+								</a>
 							</div>
 
 							<div>
@@ -53,7 +66,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 						</p>
 
 						<If condition={!!formState?.statusMessage}>
-							<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
+							<p className="prose mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
 								{formState?.statusMessage}
 							</p>
 						</If>
@@ -65,7 +78,7 @@ export const ProposalNewFormDialog: FC<ProposalNewFormDialogProps> = ({
 						</div>
 					</Choose.When>
 
-					<Choose.When condition={formState?.step === "Await"}>
+					<Choose.When condition={formState?.step === "Sign"}>
 						<p className="prose text-center text-sm">
 							Please sign the transaction when prompted...
 						</p>

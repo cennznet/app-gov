@@ -22,8 +22,9 @@ export const AccountSelect = forwardRef<HTMLSelectElement, SelectProps>(
 				ref={ref}
 				placeholder="Connect CENNZnet Wallet"
 				inputClassName="!py-[0.875rem]"
-				defaultValue={selectedAccount}
+				value={selectedAccount}
 				onChange={onAccountSelect}
+				required
 				endAdornment={
 					<Button
 						active={!!selectedAccount}

@@ -1,14 +1,10 @@
 import { FC } from "react";
+import { classNames } from "react-extras";
 
-import type { IntrinsicElements, PropsWithChildren } from "@app-gov/web/types";
+import type { IntrinsicElements } from "@app-gov/web/utils";
 import { BackdropSrc } from "@app-gov/web/vectors";
 
-interface LayoutProps extends PropsWithChildren {}
-
-const PageWrapper: FC<IntrinsicElements["div"] & LayoutProps> = ({
-	children,
-	...props
-}) => {
+const PageWrapper: FC<IntrinsicElements["div"]> = ({ children, ...props }) => {
 	return (
 		<>
 			<div className="bg-mid fixed inset-0">
@@ -26,14 +22,34 @@ const PageWrapper: FC<IntrinsicElements["div"] & LayoutProps> = ({
 	);
 };
 
-const PageContent: FC<PropsWithChildren> = ({ children }) => (
-	<div className="w-full max-w-2xl flex-1 self-center px-8 pb-12 lg:max-w-3xl">
+const PageContent: FC<IntrinsicElements["div"]> = ({
+	children,
+	className,
+	...props
+}) => (
+	<div
+		className={classNames(
+			className,
+			"w-full max-w-2xl flex-1 self-center px-8 pb-12 lg:max-w-3xl"
+		)}
+		{...props}
+	>
 		{children}
 	</div>
 );
 
-const PageHeader: FC<PropsWithChildren> = ({ children }) => (
-	<h1 className="font-display text-hero mb-[0.4em] text-center text-8xl uppercase">
+const PageHeader: FC<IntrinsicElements["heading"]> = ({
+	children,
+	className,
+	...props
+}) => (
+	<h1
+		className={classNames(
+			className,
+			"font-display text-hero mb-[1em] text-center text-8xl uppercase"
+		)}
+		{...props}
+	>
 		{children}
 	</h1>
 );

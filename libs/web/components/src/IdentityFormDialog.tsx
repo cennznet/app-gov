@@ -1,11 +1,15 @@
 import { FC, MouseEventHandler } from "react";
 import { Choose, If } from "react-extras";
 
-import { Button, StepProgress } from "@app-gov/web/components";
 import { IdentityFormState } from "@app-gov/web/hooks";
 import { DiscordLogo } from "@app-gov/web/vectors";
 
-import { TransactionDialog, TransactionDialogProps } from "./";
+import {
+	Button,
+	StepProgress,
+	TransactionDialog,
+	TransactionDialogProps,
+} from "./";
 
 interface IdentityFormDialogProps extends TransactionDialogProps {
 	formState: IdentityFormState;
@@ -24,8 +28,8 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 	return (
 		<TransactionDialog {...props}>
 			<StepProgress
-				steps={["Confirming", "Submitting", "Processing", "Success!"]}
-				stepIndex={["Await", "Submit", "Process", "Success"].indexOf(
+				steps={["Confirm", "Submit", "Judgement", "Success!"]}
+				stepIndex={["Sign", "Submit", "Process", "Complete"].indexOf(
 					formState?.step
 				)}
 				error={formState?.status === "NotOk"}
@@ -77,7 +81,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 						</p>
 
 						<If condition={!!formState?.statusMessage}>
-							<p className="mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
+							<p className="prose mt-2 bg-white/50 px-8 py-4 font-mono text-xs">
 								{formState?.statusMessage}
 							</p>
 						</If>
@@ -89,7 +93,7 @@ export const IdentityFormDialog: FC<IdentityFormDialogProps> = ({
 						</div>
 					</Choose.When>
 
-					<Choose.When condition={formState?.step === "Await"}>
+					<Choose.When condition={formState?.step === "Sign"}>
 						<p className="prose text-center text-sm">
 							Please sign the transaction when prompted...
 						</p>

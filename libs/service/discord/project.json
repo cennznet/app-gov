@@ -2,13 +2,22 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/service/discord/src",
   "projectType": "library",
-  "tags": [],
   "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/service/discord",
+        "main": "libs/service/discord/src/index.ts",
+        "tsConfig": "libs/service/discord/tsconfig.lib.json",
+        "assets": ["libs/service/discord/*.md"]
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/service/discord/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/service/discord/**/*.ts"]
       }
     },
     "test": {
@@ -19,5 +28,6 @@
         "passWithNoTests": true
       }
     }
-  }
+  },
+  "tags": []
 }

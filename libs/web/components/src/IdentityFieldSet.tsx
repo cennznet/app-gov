@@ -14,7 +14,7 @@ import { If } from "react-extras";
 
 import { useSocialSignIn } from "@app-gov/web/hooks";
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
-import { PropsWithChildren } from "@app-gov/web/types";
+import { PropsWithChildren } from "@app-gov/web/utils";
 import { DiscordLogo, TwitterLogo, WarningIcon, X } from "@app-gov/web/vectors";
 
 import { AccountSelect, Button, TextField } from "./";
@@ -44,6 +44,8 @@ interface ProviderProps extends PropsWithChildren {
 }
 
 const Context = createContext({} as ContextType);
+
+export const useIdentity = () => useContext(Context);
 
 const Provider: FC<ProviderProps> = ({
 	twitterRegistrarIndex,
@@ -111,7 +113,7 @@ const Provider: FC<ProviderProps> = ({
 
 const Discord: FC = () => {
 	const { discordUsername, clearDiscordUsername, onDiscordSignInClick } =
-		useContext(Context);
+		useIdentity();
 	const onNoop = useOnNoop();
 
 	return (
@@ -148,7 +150,7 @@ const Discord: FC = () => {
 
 const Twitter: FC = () => {
 	const { twitterUsername, clearTwitterUsername, onTwitterSignInClick } =
-		useContext(Context);
+		useIdentity();
 	const onNoop = useOnNoop();
 
 	return (
@@ -184,7 +186,7 @@ const Twitter: FC = () => {
 };
 
 const Account: FC = () => {
-	const { identityCheck } = useContext(Context);
+	const { identityCheck } = useIdentity();
 
 	return (
 		<>
@@ -218,7 +220,6 @@ const useOnNoop = () => {
 
 export const IdentityFieldSet = {
 	Provider,
-	Context,
 	Account,
 	Discord,
 	Twitter,

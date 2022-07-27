@@ -1,16 +1,19 @@
 import { getToken } from "next-auth/jwt";
 
-import { NEXTAUTH_SECRET } from "@app-gov/node/constants";
 import { fetchRequiredRegistrars, withMethodGuard } from "@app-gov/node/utils";
 import {
 	fetchIdentityOf,
 	getApiInstance,
 	getProvideJudgementExtrinsic,
 	isIdentityValueMatched,
-	signAndSendPromise,
+	signAndSend,
 } from "@app-gov/service/cennznet";
-import { CENNZ_NETWORK, DISCORD_BOT } from "@app-gov/service/constants";
-import { getDiscordBot } from "@app-gov/service/discord";
+import { assignDiscordRole } from "@app-gov/service/discord";
+import {
+	CENNZ_NETWORK,
+	DISCORD_WEBSITE_BOT,
+	NEXTAUTH_SECRET,
+} from "@app-gov/service/env-vars";
 
 export default withMethodGuard(
 	async function identityConnectRoute(req, res) {
@@ -62,54 +65,26 @@ export default withMethodGuard(
 			);
 
 			await Promise.all([
-				signAndSendPromise(twitterExtrinsic, twitterRegistrar.signer),
-				signAndSendPromise(discordExtrinsic, discordRegistrar.signer),
+				signAndSend([twitterExtrinsic, twitterRegistrar.signer]),
+				signAndSend([discordExtrinsic, discordRegistrar.signer]),
 			]);
 
 			// 4. Assign user with a special role
-			await assignDiscordRole(discordUsername);
+			if (DISCORD_WEBSITE_BOT.Token)
+				await assignDiscordRole(
+					discordUsername,
+					DISCORD_WEBSITE_BOT.Token,
+					DISCORD_WEBSITE_BOT.ServerId,
+					DISCORD_WEBSITE_BOT.IdentityRoleId
+				);
 
 			return res.json({ ok: true });
 		} catch (error) {
 			return res.status(error?.httpStatus ?? 500).json({
-				message:
-					error?.code === 50007
-						? "DISCORD_MESSAGES_NOT_ALLOWED"
-						: error?.message,
+				code: error?.code,
+				message: error?.message,
 			});
 		}
 	},
 	["POST"]
 );
-
-const assignDiscordRole = async (discordUsername: string) => {
-	const [username, discriminator] = discordUsername.split("#");
-
-	const discordBot = await getDiscordBot(DISCORD_BOT.Token);
-
-	const guildCache = discordBot.guilds.cache.get(DISCORD_BOT.ServerId);
-	if (!guildCache) throw { message: "DISCORD_SERVER_NOT_FOUND" };
-	await guildCache.members.fetch();
-
-	const user = guildCache.members.cache.find((user) => {
-		return (
-			user.user.username === username &&
-			user.user.discriminator === discriminator
-		);
-	});
-	if (!user) throw { message: "DISCORD_USER_NOT_FOUND" };
-
-	const identityRole = guildCache.roles.cache.find(
-		(role) => role.id === DISCORD_BOT.IdentityRoleId
-	);
-	if (!identityRole) throw { message: "DISCORD_IDENTITY_ROLE_NOT_FOUND" };
-
-	await user.roles.add(identityRole);
-	// Send a message to the user letting them know the verification has been successful
-	await user.send(
-		`***Congratulations on completing the steps for verifying your identity.*** \n\n` +
-			`Thank you for supporting CENNZnet and helping to build the blockchain for the Metaverse!\n` +
-			`You have been assigned the ${identityRole.name} role and can now participate in private channels\n` +
-			`Please note that for your safety, we will never ask for private keys, seed phrases or send links via DM.`
-	);
-};

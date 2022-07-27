@@ -13,7 +13,7 @@ import {
 	useState,
 } from "react";
 
-import type { PropsWithChildren } from "@app-gov/web/types";
+import type { PropsWithChildren } from "@app-gov/web/utils";
 
 import { useUserAgent } from "./UserAgentProvider";
 

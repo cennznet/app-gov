@@ -14,7 +14,7 @@ export const TransactionDialog: FC<TransactionDialogProps> = ({
 		<Dialog {...props} initialFocus={focusElement} panelClassName="min-w-fit">
 			<div
 				ref={focusElement}
-				className="border-hero bg-light shadow-sharp shadow-dark flex  h-full flex-col items-center justify-center border-4 p-8"
+				className="border-hero bg-light shadow-sharp shadow-hero/40 flex  h-full flex-col items-center justify-center border-4 p-8"
 			>
 				{children}
 			</div>

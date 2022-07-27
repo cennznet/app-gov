@@ -35,5 +35,5 @@ input::-webkit-input-placeholder {
 }
 
 .markdown pre code {
-	@apply p-4 text-inherit;
+	@apply w-full bg-transparent p-4 text-inherit;
 }

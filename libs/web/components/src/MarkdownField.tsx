@@ -2,7 +2,7 @@
 import { forwardRef, useCallback, useMemo, useState } from "react";
 import { classNames } from "react-extras";
 
-import { IntrinsicElements } from "@app-gov/web/types";
+import { IntrinsicElements } from "@app-gov/web/utils";
 
 import { Markdown } from "./";
 
@@ -78,9 +78,10 @@ export const MarkdownField = forwardRef<
 			<span className="flex bg-slate-100 p-2">
 				<p className="markdown flex-1 text-xs">
 					Supported markdown: <strong>**bold**</strong>, <em>*italic*</em>,{" "}
-					<a href="#">[link]()</a>, <code className="!text-xs">`code`</code> and{" "}
+					<a href="#">[link]()</a>,{" "}
+					<code className="!text-[0.9em]">`code`</code> and{" "}
 					<span className="mb-4 inline whitespace-pre-wrap bg-slate-50">
-						<code className="!p-0 !text-xs !text-inherit">
+						<code className="!p-0 !text-[0.9em] !text-inherit">
 							```multiline code```
 						</code>
 					</span>

@@ -15,21 +15,20 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app-gov/node/constants": ["libs/node/constants/src/index.ts"],
-      "@app-gov/node/models": ["libs/node/models/src/index.ts"],
-      "@app-gov/node/types": ["libs/node/types/src/index.ts"],
       "@app-gov/node/utils": ["libs/node/utils/src/index.ts"],
       "@app-gov/service/cennznet": ["libs/service/cennznet/src/index.ts"],
-      "@app-gov/service/constants": ["libs/service/constants/src/index.ts"],
       "@app-gov/service/discord": ["libs/service/discord/src/index.ts"],
+      "@app-gov/service/env-vars": ["libs/service/env-vars/src/index.ts"],
+      "@app-gov/service/mongodb": ["libs/service/mongodb/src/index.ts"],
       "@app-gov/service/pinata": ["libs/service/pinata/src/index.ts"],
+      "@app-gov/service/rabbitmq": ["libs/service/rabbitmq/src/index.ts"],
+      "@app-gov/service/relayer": ["libs/service/relayer/src/index.ts"],
       "@app-gov/web/bitmaps": ["libs/web/bitmaps/src/index.ts"],
       "@app-gov/web/components": ["libs/web/components/src/index.ts"],
       "@app-gov/web/hooks": ["libs/web/hooks/src/index.ts"],
       "@app-gov/web/providers": ["libs/web/providers/src/index.ts"],
-      "@app-gov/web/types": ["libs/web/types/src/index.ts"],
-      "@app-gov/web/vectors": ["libs/web/vectors/src/index.ts"],
-      "@app-gov/website/*": ["apps/gov-website/*"]
+      "@app-gov/web/utils": ["libs/web/utils/src/index.ts"],
+      "@app-gov/web/vectors": ["libs/web/vectors/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

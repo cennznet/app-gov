@@ -17,7 +17,7 @@ import {
 	extractCallableExtrinsics,
 	ExtrinsicArg,
 } from "@app-gov/service/cennznet";
-import { IntrinsicElements, PropsWithChildren } from "@app-gov/web/types";
+import { IntrinsicElements, PropsWithChildren } from "@app-gov/web/utils";
 
 import { Select, TextField } from "./";
 
@@ -43,11 +43,13 @@ interface ProviderProps extends PropsWithChildren {
 
 const Context = createContext({} as ContextType);
 
+export const useFunctionCall = () => useContext(Context);
+
 const Provider: FC<ProviderProps> = ({
 	children,
 	extrinsics,
-	defaultSection = "system",
-	defaultMethod = "remark",
+	defaultSection = "baseFee",
+	defaultMethod = "setBaseFeePerGas",
 }) => {
 	const [selectedSection, setSelectedSection] =
 		useState<string>(defaultSection);
@@ -90,7 +92,7 @@ const Provider: FC<ProviderProps> = ({
 
 const Section: FC<Omit<SelectProps, "children">> = (props) => {
 	const { selectedSection, setSelectedSection, sectionList } =
-		useContext(Context);
+		useFunctionCall();
 	const onChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
 		(event) => {
 			if (!setSelectedSection) return;
@@ -111,7 +113,7 @@ const Section: FC<Omit<SelectProps, "children">> = (props) => {
 };
 
 const Method: FC<Omit<SelectProps, "children">> = (props) => {
-	const { selectedMethod, setSelectedMethod, methodList } = useContext(Context);
+	const { selectedMethod, setSelectedMethod, methodList } = useFunctionCall();
 
 	const onChange: ChangeEventHandler<HTMLSelectElement> = useCallback(
 		(event) => {
@@ -140,7 +142,7 @@ const Args: FC<Omit<IntrinsicElements["ul"], "children"> & ArgsProps> = ({
 	name,
 	...props
 }) => {
-	const { argList, selectedSection, selectedMethod } = useContext(Context);
+	const { argList, selectedSection, selectedMethod } = useFunctionCall();
 
 	return (
 		<ul {...props}>

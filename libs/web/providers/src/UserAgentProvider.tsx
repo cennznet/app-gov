@@ -1,7 +1,7 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import type { IBrowser, IDevice, IOS } from "ua-parser-js";
 
-import { PropsWithChildren } from "@app-gov/web/types";
+import { PropsWithChildren } from "@app-gov/web/utils";
 
 type RuntimeMode = "ReadOnly" | "ReadWrite";
 

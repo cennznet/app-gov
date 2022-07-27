@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 
+import { HttpError, safeFetch } from "@app-gov/node/utils";
 import {
 	getRequestJudgementExtrinsic,
 	getSetIdentityExtrinsic,
@@ -8,7 +9,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface IdentityFormState {
-	step: "Idle" | "Await" | "Submit" | "Process" | "Success";
+	step: "Idle" | "Sign" | "Submit" | "Process" | "Complete";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
@@ -35,7 +36,7 @@ export const useIdentityConnectForm = () => {
 	const submitForm = useCallback(
 		async (data: FormData) => {
 			if (!api || !wallet) return;
-			setFormStep("Await");
+			setFormStep("Sign");
 
 			try {
 				const {
@@ -68,7 +69,7 @@ export const useIdentityConnectForm = () => {
 
 				setFormState({ step: "Process" });
 
-				const response = await fetch("/api/identity/judgement", {
+				await safeFetch("/api/identity/judgement", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -76,30 +77,26 @@ export const useIdentityConnectForm = () => {
 					body: JSON.stringify(Object.fromEntries(data.entries())),
 				});
 
-				if (!response.ok) {
-					throw {
-						code: `APP/${response.status}`,
-						message: response.statusText,
-						details: JSON.parse(await response.text()).message,
-					};
-				}
-
-				setFormState({ step: "Success", status: "Ok" });
+				setFormState({ step: "Complete", status: "Ok" });
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
 				console.info(error);
 
-				if (error?.details?.includes("DISCORD"))
+				if (error instanceof HttpError) {
+					const responseText = await error.response.text();
+					if (!responseText.includes("Discord"))
+						return setFormStatus("NotOk", `[${error.code}] ${error.message}`);
 					return setFormState({
-						step: "Success",
+						step: "Complete",
 						status: "Ok",
-						statusMessage: error.details,
+						statusMessage: JSON.parse(responseText)?.message,
 					});
+				}
 
 				setFormStatus(
 					"NotOk",
-					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
+					`[${error?.code ?? "UNKNOWN"}] ${error.message}`
 				);
 			}
 		},

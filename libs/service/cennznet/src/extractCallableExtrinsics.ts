@@ -1,5 +1,7 @@
 import { Api } from "@cennznet/api";
 
+import { ALLOWED_EXTRINSICS } from "./";
+
 export interface ExtrinsicArg {
 	name: string;
 	type: string;
@@ -18,11 +20,14 @@ export const extractCallableExtrinsics = async (
 ): Promise<CallableExtrinsics> => {
 	const sections = Object.keys(api.tx)
 		.sort()
-		.filter((name): number => Object.keys(api.tx[name]).length);
+		.filter((name) => ALLOWED_EXTRINSICS.Sections.includes(name));
 
 	const extrinsics = sections.reduce((extrinsics, section) => {
-		const methods = Object.keys(api.tx[section]);
+		const methods = Object.keys(api.tx[section]).filter((name: string) =>
+			ALLOWED_EXTRINSICS.Methods[section].includes(name)
+		);
 		if (!methods.length) return extrinsics;
+
 		extrinsics[section] = methods.reduce((methods, method) => {
 			const args = api.tx[section][method].meta.args
 				.map((arg) => {
@@ -35,9 +40,7 @@ export const extractCallableExtrinsics = async (
 				})
 				.filter(Boolean) as { name: string; type: string }[];
 
-			if (!args.length) return methods;
-
-			methods[method] = args;
+			methods[method] = args ?? [];
 
 			return methods;
 		}, {} as Extrinsic);

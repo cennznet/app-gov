@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { Choose, classNames, If } from "react-extras";
 
-import { PropsWithChildren } from "@app-gov/web/types";
+import { PropsWithChildren } from "@app-gov/web/utils";
 import {
 	CheckCircleFilled,
 	ExclamationCircle,

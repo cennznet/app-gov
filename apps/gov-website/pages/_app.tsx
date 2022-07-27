@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { FC } from "react";
 
-import { CENNZ_NETWORK } from "@app-gov/service/constants";
+import { CENNZ_NETWORK } from "@app-gov/service/env-vars";
 import { BrowsersDialog } from "@app-gov/web/components";
 import {
 	CENNZApiProvider,
@@ -14,6 +14,7 @@ import {
 	UserAgentProvider,
 } from "@app-gov/web/providers";
 
+import FaviconSVG from "../favicon.svg";
 import "../globals.css";
 
 const NextApp: FC<AppProps> = ({
@@ -32,6 +33,11 @@ const NextApp: FC<AppProps> = ({
 			>
 				<Head>
 					<title>CENNZnet | Governance Platform</title>
+					<meta
+						name="description"
+						content="The CENNZnet Decentralised Autonomous Organisation (DAO) gives the community the ability to govern and participate in decisions regarding the network at the protocol level."
+					/>
+					<link rel="icon" href={FaviconSVG} />
 				</Head>
 				<Component {...pageProps} />
 				<BrowsersDialog />

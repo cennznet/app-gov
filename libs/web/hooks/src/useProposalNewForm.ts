@@ -1,6 +1,8 @@
 import { Api } from "@cennznet/api";
 import { useCallback, useState } from "react";
 
+import { getHourInBlocks } from "@app-gov/node/utils";
+import { safeFetch } from "@app-gov/node/utils";
 import {
 	findProposalId,
 	getSubmitProposalExtrinsic,
@@ -13,7 +15,7 @@ import {
 import { useCENNZApi, useCENNZWallet } from "@app-gov/web/providers";
 
 export interface ProposalNewFormState {
-	step: "Idle" | "Await" | "Submit" | "Process" | "Success";
+	step: "Idle" | "Sign" | "Submit" | "Process" | "Complete";
 	status?: "Cancelled" | "Ok" | "NotOk";
 	statusMessage?: string;
 }
@@ -61,7 +63,7 @@ export const useProposalNewForm = () => {
 	const submitForm = useCallback(
 		async (data: FormData) => {
 			if (!api || !wallet) return;
-			setFormStep("Await");
+			setFormStep("Sign");
 
 			const proposalData = transformFormData(
 				api,
@@ -109,7 +111,7 @@ export const useProposalNewForm = () => {
 
 				// 4. Post a request to API to process the proposal data
 				setFormStep("Process");
-				const response = await fetch("/api/proposal/create", {
+				await safeFetch("/api/proposal/create", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -121,15 +123,7 @@ export const useProposalNewForm = () => {
 					}),
 				});
 
-				if (!response.ok) {
-					throw {
-						code: `APP/${response.status}`,
-						message: response.statusText,
-						details: await response.text(),
-					};
-				}
-
-				setFormState({ step: "Success", status: "Ok" });
+				setFormState({ step: "Complete", status: "Ok" });
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
@@ -154,8 +148,6 @@ const transformFormData = (
 	api: Api,
 	formData: ProposalFormData
 ): PropsalData => {
-	const blocksInHour =
-		(60 * 60) / ((api.consts.babe.expectedBlockTime.toJSON() as number) / 1000);
 	return Array.from(formData).reduce(
 		(data, [key, value]) => {
 			switch (key) {
@@ -164,7 +156,7 @@ const transformFormData = (
 					data[key] = value.toString();
 					break;
 				case "enactmentDelay":
-					data.enactmentDelay = Number(value) * blocksInHour;
+					data.enactmentDelay = Number(value) * getHourInBlocks(api);
 					break;
 
 				case "callSection":

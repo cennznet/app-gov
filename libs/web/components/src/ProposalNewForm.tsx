@@ -2,7 +2,7 @@ import { FC, useEffect, useRef } from "react";
 import { If } from "react-extras";
 
 import { useControlledCheckbox, useControlledInput } from "@app-gov/web/hooks";
-import { IntrinsicElements } from "@app-gov/web/types";
+import { IntrinsicElements } from "@app-gov/web/utils";
 
 import {
 	AccountSelect,
@@ -10,6 +10,7 @@ import {
 	FunctionCallFieldSet,
 	MarkdownField,
 	Select,
+	useFunctionCall,
 } from "./";
 
 interface ProposalNewFormProps {}
@@ -17,6 +18,8 @@ interface ProposalNewFormProps {}
 export const ProposalNewForm: FC<
 	Omit<IntrinsicElements["form"], "parent"> & ProposalNewFormProps
 > = (props) => {
+	const { argList } = useFunctionCall();
+
 	const copyInput = useControlledInput<string, HTMLTextAreaElement>("");
 	const delayInput = useControlledInput<string, HTMLSelectElement>("24");
 	const callToggle = useControlledCheckbox(false);
@@ -28,7 +31,7 @@ export const ProposalNewForm: FC<
 
 	return (
 		<form {...props}>
-			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-3xl uppercase">
 				Proposal Details
 			</h2>
 
@@ -62,6 +65,7 @@ export const ProposalNewForm: FC<
 					name="enactmentDelay"
 					id="enactmentDelay"
 				>
+					<option value="48">48 hours</option>
 					<option value="24">24 hours</option>
 					<option value="12">12 hours</option>
 					<option value="6">6 hours</option>
@@ -80,12 +84,12 @@ export const ProposalNewForm: FC<
 						id="proposalCallToggle"
 						{...callToggle}
 					/>
-					This proposal require a function call
+					This proposal requires a function call
 				</label>
 			</fieldset>
 
 			<If condition={callToggle.checked}>
-				<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+				<h2 className="font-display border-hero mb-4 border-b-2 text-3xl uppercase">
 					Function Call
 				</h2>
 
@@ -98,30 +102,32 @@ export const ProposalNewForm: FC<
 						<label className="mb-1 block text-base font-bold">Method</label>
 						<FunctionCallFieldSet.Method name="callMethod" />
 					</div>
-					<div className="col-span-full">
-						<label className="mb-1 block text-base font-bold">Arguments</label>
-						<FunctionCallFieldSet.Args name="callArgs[]" />
-					</div>
+					<If condition={!!argList?.length}>
+						<div className="col-span-full">
+							<label className="mb-1 block text-base font-bold">
+								Arguments
+							</label>
+							<FunctionCallFieldSet.Args name="callArgs[]" />
+						</div>
+					</If>
 				</fieldset>
 			</If>
 
-			<h2 className="font-display border-hero mb-4 border-b-2 text-2xl uppercase">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-3xl uppercase">
 				Signing Wallet
 			</h2>
 
 			<fieldset className="mb-6">
 				<p className="prose mb-[1em] text-base">
-					Ex consequat occaecat id nulla voluptate anim eu velit et laboris
-					reprehenderit ut dolor magna ut minim voluptate labore non adipisicing
+					Only wallets associated with the `councillor` role may submit
+					proposals
 				</p>
 				<AccountSelect required name="sponsor" />
 			</fieldset>
 
 			<fieldset className="mt-16 text-center">
 				<Button type="submit" className="w-1/3 text-center">
-					<div className="flex items-center justify-center">
-						<span>Sign and Submit</span>
-					</div>
+					<span>Sign and Submit</span>
 				</Button>
 				<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
 			</fieldset>
