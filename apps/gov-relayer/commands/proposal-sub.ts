@@ -35,8 +35,6 @@ module.exports = {
 			CENNZ_NETWORK.ChainName
 		);
 
-		console.log(JSON.stringify(process.env))
-
 		try {
 			const [cennzApi, amqClient, mdbClient] = await Promise.all([
 				getApiInstance(CENNZ_NETWORK.ChainSlug),
