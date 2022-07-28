@@ -9,15 +9,15 @@
       "dependencies": "*",
       "devDependencies": "*"
     },
-    ".eslintrc.json": "*",
-    ".env": "*"
+    ".eslintrc.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "NGU0N2E2NWYtOTdiZC00NDczLWExNDMtNmYzYTljY2ZiODFkfHJlYWQtd3JpdGU="
+        "accessToken": "NGU0N2E2NWYtOTdiZC00NDczLWExNDMtNmYzYTljY2ZiODFkfHJlYWQtd3JpdGU=",
+        "runtimeCacheInputs": ["node -v", "cat .env | sha256sum"]
       }
     }
   },
