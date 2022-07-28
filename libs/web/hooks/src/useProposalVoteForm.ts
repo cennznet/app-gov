@@ -59,7 +59,7 @@ export const useProposalVoteForm = (proposalId: number) => {
 				console.info(error);
 				setFormStatus(
 					"NotOk",
-					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
+					error?.message ?? error?.code ?? "Unknown error"
 				);
 			}
 		},
@@ -89,7 +89,7 @@ export const useProposalVoteForm = (proposalId: number) => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.info(error);
-			setFormStatus("NotOk", `[${error?.code ?? "UNKNOWN"}] ${error?.message}`);
+			setFormStatus("NotOk", error?.message ?? error?.code ?? "Unknown error");
 		}
 	}, [api, proposalId, selectedAccount, wallet]);
 

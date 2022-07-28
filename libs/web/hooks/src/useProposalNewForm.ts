@@ -130,7 +130,7 @@ export const useProposalNewForm = () => {
 				console.info(error);
 				setFormStatus(
 					"NotOk",
-					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
+					error?.message ?? error?.code ?? "Unknown error"
 				);
 			}
 		},
