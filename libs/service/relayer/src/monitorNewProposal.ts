@@ -9,6 +9,8 @@ export const monitorNewProposal = async (
 	callback: (proposalId: number) => void
 ): Promise<void> => {
 	const nextProposalId = await api.query.governance.nextProposalId();
+	if (nextProposalId.toString() === "0") return;
+
 	const proposal = mdb.model<ProposalModel>("Proposal");
 	const lastKnownId =
 		Number(
