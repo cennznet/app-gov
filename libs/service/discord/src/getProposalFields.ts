@@ -85,7 +85,9 @@ export const getProposalFields = (
 		},
 		{
 			name: "Enactment Delay",
-			value: `_${proposalInfo.enactmentDelay}_ blocks / _${enactmentDelayInHours}_ hours`,
+			value: `_${
+				proposalInfo.enactmentDelay
+			}_ blocks / _${enactmentDelayInHours.toFixed()}_ hours`,
 		},
 	];
 

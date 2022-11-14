@@ -1,11 +1,15 @@
 import { FC, MouseEventHandler } from "react";
 import { Choose, If } from "react-extras";
 
-import { Button, StepProgress } from "@app-gov/web/components";
 import { IdentityFormState } from "@app-gov/web/hooks";
 import { DiscordLogo } from "@app-gov/web/vectors";
 
-import { TransactionDialog, TransactionDialogProps } from "./";
+import {
+	Button,
+	StepProgress,
+	TransactionDialog,
+	TransactionDialogProps,
+} from "./";
 
 interface IdentityFormDialogProps extends TransactionDialogProps {
 	formState: IdentityFormState;

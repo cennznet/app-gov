@@ -77,12 +77,19 @@ module.exports = {
 					}
 				} catch (error) {
 					logger.error("%s", error);
-					const result = await requeueMessage(
-						proposalQueue,
-						message,
-						MESSAGE_MAX_RETRY
-					);
-					logger.info(`Proposal #%d: ${result}`, body.proposalId);
+					const { type } = message.properties;
+					if (type === "proposal-new") {
+						const result = await requeueMessage(
+							proposalQueue,
+							message,
+							MESSAGE_MAX_RETRY
+						);
+						logger.info(`Proposal #%d: ${result}`, body.proposalId);
+					}
+
+					if (type === "proposal-activity") {
+						logger.info(`Proposal #%d: ❌ skipped`, body.proposalId);
+					}
 				}
 				await message.ack();
 			};

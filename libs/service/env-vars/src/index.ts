@@ -27,19 +27,17 @@ export const PINATA_GATEWAY: string = process.env.NX_PINATA_GATEWAY ?? "";
 // DISCORD
 export const DISCORD_WEBSITE_BOT = {
 	Token: process.env.DISCORD_BOT_TOKEN ?? "",
-	ServerId: process.env.DISCORD_SERVER_ID ?? "",
+	ServerId: process.env.NX_DISCORD_SERVER_ID ?? "",
 	IdentityRoleId: process.env.DISCORD_IDENTITY_ROLE_ID ?? "",
 };
 export const DISCORD_RELAYER_BOT = {
 	Token: process.env.DISCORD_BOT_TOKEN ?? "",
-	ProposalChannelId: process.env.DISCORD_PROPOSAL_CHANNEL_ID ?? "",
-	ReferendumChannelId: process.env.DISCORD_REFERENDUM_CHANNEL_ID ?? "",
 	ProposalWebhookId: process.env.DISCORD_PROPOSAL_WEBHOOK_ID ?? "",
 	ReferendumWebhookId: process.env.DISCORD_REFERENDUM_WEBHOOK_ID ?? "",
 };
 export const DISCORD_CHANNEL_IDS: string[] = [
-	DISCORD_RELAYER_BOT.ProposalChannelId,
-	DISCORD_RELAYER_BOT.ReferendumChannelId,
+	process.env.NX_DISCORD_PROPOSAL_CHANNEL_ID ?? "",
+	process.env.NX_DISCORD_REFERENDUM_CHANNEL_ID ?? "",
 ];
 export const DISCORD_WEBHOOK_IDS: string[] = [
 	DISCORD_RELAYER_BOT.ProposalWebhookId,

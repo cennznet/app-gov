@@ -1,6 +1,6 @@
 {
   "name": "@cennznet/app-gov",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "build": "nx build",
@@ -17,6 +17,7 @@
     "test": "nx test",
     "relayer:proposal-pub": "node dist/apps/gov-relayer/main.js proposal-pub",
     "relayer:proposal-sub": "node dist/apps/gov-relayer/main.js proposal-sub",
+    "relayer:proposal-patch": "node dist/apps/gov-relayer/main.js proposal-patch",
     "relayer:run": "run-p relayer:proposal-pub relayer:proposal-sub relayer:proposal-sub"
   },
   "private": true,

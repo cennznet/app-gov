@@ -11,7 +11,7 @@ export const safeFetch = async (...args: FetchParams) => {
 export class HttpError extends Error {
 	status: number;
 	statusText: string;
-	body: string | Record<string, unknown> | void = undefined;
+	code: string;
 	response: Response;
 
 	constructor(response: Response) {
@@ -20,10 +20,6 @@ export class HttpError extends Error {
 		this.response = response;
 		this.status = response.status;
 		this.statusText = response.statusText;
-		response
-			.json()
-			.then((json) => (this.body = json))
-			.catch(() => response.text())
-			.then((text) => (this.body = text));
+		this.code = `HTTP/${response.status}`;
 	}
 }

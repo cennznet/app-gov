@@ -50,13 +50,16 @@ export const useProposalVoteForm = (proposalId: number) => {
 						},
 					}
 				);
-				setFormState({ step: "Complete", status: "Ok" });
+				setFormState({
+					step: "Complete",
+					status: "Ok",
+				});
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
 				console.info(error);
 				setFormStatus(
 					"NotOk",
-					`[${error?.code ?? "UNKNOWN"}] ${error?.message}`
+					error?.message ?? error?.code ?? "Unknown error"
 				);
 			}
 		},
@@ -79,11 +82,14 @@ export const useProposalVoteForm = (proposalId: number) => {
 					},
 				}
 			);
-			setFormState({ step: "Complete", status: "Ok" });
+			setFormState({
+				step: "Complete",
+				status: "Ok",
+			});
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.info(error);
-			setFormStatus("NotOk", `[${error?.code ?? "UNKNOWN"}] ${error?.message}`);
+			setFormStatus("NotOk", error?.message ?? error?.code ?? "Unknown error");
 		}
 	}, [api, proposalId, selectedAccount, wallet]);
 

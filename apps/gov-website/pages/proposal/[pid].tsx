@@ -6,10 +6,12 @@ import { If } from "react-extras";
 import { resolveProposalJustification } from "@app-gov/node/utils";
 import {
 	fetchProposalInfo,
+	fetchProposalStatus,
 	fetchProposalVetoPercentage,
 	fetchProposalVetoThreshold,
 	fetchProposalVotePercentage,
 	fetchProposalVotes,
+	FINALIZED_STATES,
 	getApiInstance,
 	subscribeFinalizedHeads,
 } from "@app-gov/service/cennznet";
@@ -35,7 +37,7 @@ export const getStaticPaths = async () => {
 	const mdb = await getMongoClient(MONGODB_URI);
 	const proposals = await mdb
 		.model<ProposalModel>("Proposal")
-		.find()
+		.find({ status: { $ne: null } })
 		.sort("-proposalId");
 
 	return {
@@ -57,6 +59,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 		.findOne({ proposalId: pid })
 		.lean();
 
+	if (!proposal?.justificationUri)
+		return {
+			notFound: true,
+		};
+
 	const justification = await resolveProposalJustification(
 		proposal.justificationUri
 	);
@@ -77,7 +84,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 			justification,
 			vetoThreshold,
 		},
-		revalidate: 600,
+		revalidate: 300,
 	};
 };
 
@@ -155,6 +162,7 @@ const Proposal: NextPage<ProposalProps> = ({
 					formState={formState}
 					onClose={onDialogClose}
 					onDismiss={onDialogDismiss}
+					proposalStatus={status}
 				/>
 			</Layout.PageContent>
 		</Layout.PageWrapper>
@@ -172,6 +180,14 @@ const useProposal = (initialProposal: ProposalModel) => {
 		if (!api) return;
 		let unsubscribeFn: VoidFn;
 		subscribeFinalizedHeads(api, BLOCK_POLLING_INTERVAL, async () => {
+			const proposalStatus = await fetchProposalStatus(api, proposalId);
+
+			if (FINALIZED_STATES.includes(proposalStatus))
+				return setProposal((proposal) => ({
+					...proposal,
+					status: proposalStatus,
+				}));
+
 			const [proposalInfo, proposalVotes, vetoPercentage] = await Promise.all([
 				fetchProposalInfo(api, proposalId),
 				fetchProposalVotes(api, proposalId),
