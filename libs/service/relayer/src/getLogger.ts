@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { createLogger, format, Logger, transports } from "winston";
 
-type LoggerService = "ProposalPub" | "ProposalSub" | "ProposalPatch";
+type LoggerService = "ProposalMonitor" | "ProposalPatch";
 
 const instances = {} as Record<LoggerService, Logger>;
 

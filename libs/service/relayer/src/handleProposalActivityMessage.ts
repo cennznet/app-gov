@@ -3,10 +3,6 @@ import { InteractionWebhook } from "discord.js";
 import { Mongoose } from "mongoose";
 
 import {
-	getHourInBlocks,
-	resolveProposalJustification,
-} from "@app-gov/node/utils";
-import {
 	fetchProposalStatus,
 	fetchProposalVetoPercentage,
 	fetchProposalVotePercentage,
@@ -37,7 +33,7 @@ export const handleProposalActivityMessage = async (
 	mdb: Mongoose,
 	body: MessageBody
 ): Promise<void> => {
-	const logger = getLogger("ProposalSub");
+	const logger = getLogger("ProposalMonitor");
 	const { proposalId } = body;
 	const updateProposalRecord = createModelUpdater<ProposalModel>(
 		mdb.model<ProposalModel>("Proposal"),

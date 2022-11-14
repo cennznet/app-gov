@@ -1,4 +1,3 @@
-import { AMQPError } from "@cloudamqp/amqp-client";
 import chalk from "chalk";
 
 import { getApiInstance, waitForBlock } from "@app-gov/service/cennznet";
@@ -21,10 +20,10 @@ import {
 } from "@app-gov/service/relayer";
 
 module.exports = {
-	command: "proposal-pub",
-	desc: "Start a [ProposalPub] process",
+	command: "proposal-monitor",
+	desc: "Start a [ProposalMonitor] process",
 	async handler() {
-		const logger = getLogger("ProposalPub");
+		const logger = getLogger("ProposalMonitor");
 		logger.info(
 			`Start process on ${chalk.magenta("%s")}...`,
 			CENNZ_NETWORK.ChainName
@@ -61,9 +60,9 @@ module.exports = {
 						blockNumber
 					);
 				});
-			} while (polling);
+				// eslint-disable-next-line no-constant-condition
+			} while (true);
 		} catch (error) {
-			if (error instanceof AMQPError) error?.connection?.close();
 			logger.error("%s", error);
 			process.exit(1);
 		}
