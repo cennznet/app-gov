@@ -1571,7 +1571,6 @@ __metadata:
   resolution: "@cennznet/app-gov@workspace:."
   dependencies:
     "@cennznet/api": ^2.1.1-alpha.4
-    "@cloudamqp/amqp-client": ^2.0.3
     "@headlessui/react": ^1.6.5
     "@nrwl/cli": 14.3.6
     "@nrwl/cypress": 14.3.6
@@ -1651,13 +1650,6 @@ __metadata:
     "@polkadot/util": ^8.3.3
     "@polkadot/util-crypto": ^8.3.3
   checksum: ce01a3a2955413ae0fede69902dc489e081ea8f28dcd1c188e62c3641e1456ae3fd8672d0df25a76267daf7b6b515f2ada9b36177cc9f7bb30d6f3d6538ce5a0
-  languageName: node
-  linkType: hard
-
-"@cloudamqp/amqp-client@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "@cloudamqp/amqp-client@npm:2.0.3"
-  checksum: 8f25a795ebdc5a378013f2826f0145c5cf0cc63cc00396a8dc6308f2c60628e0d259a059f4128b8fc7232cd7522d4a5c458748feba137fec7bbb90c35641ed37
   languageName: node
   linkType: hard
 

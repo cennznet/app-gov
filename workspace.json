@@ -10,7 +10,6 @@
     "service-env-vars": "libs/service/env-vars",
     "service-mongodb": "libs/service/mongodb",
     "service-pinata": "libs/service/pinata",
-    "service-rabbitmq": "libs/service/rabbitmq",
     "service-relayer": "libs/service/relayer",
     "web-bitmaps": "libs/web/bitmaps",
     "web-components": "libs/web/components",
