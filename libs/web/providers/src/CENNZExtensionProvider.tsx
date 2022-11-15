@@ -17,6 +17,15 @@ import type { PropsWithChildren } from "@app-gov/web/utils";
 
 import { useUserAgent } from "./UserAgentProvider";
 
+declare global {
+	interface Window {
+		injectedWeb3: {
+			"polkadot-js"?: { version: string };
+			"cennznet-extension"?: { version: string };
+		};
+	}
+}
+
 interface CENNZExtensionContextType {
 	accounts?: InjectedAccountWithMeta[];
 	promptInstallExtension: () => void;
