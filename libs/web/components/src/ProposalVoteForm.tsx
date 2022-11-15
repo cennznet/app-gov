@@ -24,19 +24,31 @@ export const ProposalVoteForm: FC<
 		onCall();
 	}, []);
 
+	const canVote = ["Deliberation", "ReferendumDeliberation"].includes(
+		status as string
+	);
+
 	return (
 		<form {...props} ref={ref}>
-			<h2 className="font-display border-hero mb-4 border-b-2 text-3xl uppercase">
-				Signing Wallet
-			</h2>
+			<If condition={canVote}>
+				<h2 className="font-display border-hero mb-4 border-b-2 text-3xl uppercase">
+					Signing Wallet
+				</h2>
 
-			<fieldset className="mb-6">
-				<p className="prose mb-[1em] text-base">
-					Ex consequat occaecat id nulla voluptate anim eu velit et laboris
-					reprehenderit ut dolor magna ut minim voluptate labore non adipisicing
-				</p>
-				<AccountSelect required name="sponsor" />
-			</fieldset>
+				<fieldset className="mb-6">
+					<p className="prose mb-[1em] text-base">
+						<If condition={status === "Deliberation"}>
+							Only wallets associated with the `councillor` role may vote on a
+							proposal in `Deliberation`
+						</If>
+						<If condition={status === "ReferendumDeliberation"}>
+							Only wallets associated with the `citizen` role may veto a
+							proposal in `ReferendumDeliberation`
+						</If>
+					</p>
+					<AccountSelect required name="sponsor" />
+				</fieldset>
+			</If>
 
 			<fieldset className="mt-16 text-center">
 				<If condition={status === "Deliberation"}>
@@ -71,7 +83,9 @@ export const ProposalVoteForm: FC<
 					</Button>
 				</If>
 
-				<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
+				<If condition={canVote}>
+					<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
+				</If>
 			</fieldset>
 		</form>
 	);
