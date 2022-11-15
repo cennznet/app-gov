@@ -24,7 +24,7 @@ export const handleNewProposalMessage = async (
 	mdb: Mongoose,
 	body: MessageBody
 ): Promise<void> => {
-	const logger = getLogger("ProposalSub");
+	const logger = getLogger("ProposalMonitor");
 	const { proposalId } = body;
 	const updateProposalRecord = createModelUpdater<ProposalModel>(
 		mdb.model<ProposalModel>("Proposal"),

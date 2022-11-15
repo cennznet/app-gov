@@ -1,8 +1,8 @@
 {
   "license": "MIT",
   "scripts": {
-    "relayer:proposal-pub": "node ./main.js proposal-pub",
-    "relayer:proposal-sub": "node ./main.js proposal-sub"
+    "relayer:proposal-patch": "node ./main.js proposal-patch",
+    "relayer:proposal-monitor": "node ./main.js proposal-monitor"
   },
   "dependencies": {
     "@cennznet/api": "^2.1.1-alpha.4",

@@ -15,15 +15,12 @@
     "gov-relayer:webpack": "nx run gov-relayer:serve",
     "gov-relayer:docker": "docker compose up",
     "test": "nx test",
-    "relayer:proposal-pub": "node dist/apps/gov-relayer/main.js proposal-pub",
-    "relayer:proposal-sub": "node dist/apps/gov-relayer/main.js proposal-sub",
     "relayer:proposal-patch": "node dist/apps/gov-relayer/main.js proposal-patch",
-    "relayer:run": "run-p relayer:proposal-pub relayer:proposal-sub relayer:proposal-sub"
+    "relayer:proposal-monitor": "node dist/apps/gov-relayer/main.js proposal-monitor"
   },
   "private": true,
   "dependencies": {
     "@cennznet/api": "^2.1.1-alpha.4",
-    "@cloudamqp/amqp-client": "^2.0.3",
     "@headlessui/react": "^1.6.5",
     "@nrwl/next": "14.3.6",
     "chalk": "^4",
