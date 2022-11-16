@@ -17,6 +17,15 @@ import type { PropsWithChildren } from "@app-gov/web/utils";
 
 import { useUserAgent } from "./UserAgentProvider";
 
+declare global {
+	interface Window {
+		injectedWeb3: {
+			"polkadot-js"?: { version: string };
+			"cennznet-extension"?: { version: string };
+		};
+	}
+}
+
 interface CENNZExtensionContextType {
 	accounts?: InjectedAccountWithMeta[];
 	promptInstallExtension: () => void;
@@ -72,6 +81,11 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 
 		const fetchAccounts = async () => {
 			const { web3Enable, web3Accounts, web3AccountsSubscribe } = module;
+
+			if (window.injectedWeb3?.["polkadot-js"])
+				return alert(
+					"Please turn off polkadot{.js} extension, enable CENNZnet extension, and refresh the page before continuing."
+				);
 
 			await web3Enable(appName);
 			const accounts = (await web3Accounts()) || [];
