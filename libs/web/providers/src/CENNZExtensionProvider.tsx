@@ -48,19 +48,6 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	const [module, setModule] = useState<typeof Extension>();
 	const [accounts, setAccounts] = useState<Array<InjectedAccountWithMeta>>();
 
-	const promptDisableExtension = useCallback(() => {
-		const url =
-			"https://support.google.com/chrome_webstore/answer/2664769?p=enable_extensions&rd=1#extensionpermissions";
-
-		const confirmed = window.confirm(
-			"Please turn off polkadot{.js} extension, enable CENNZnet extension, and refresh the page before continuing."
-		);
-
-		if (!confirmed) return;
-
-		window.open(url, "_blank");
-	}, []);
-
 	const promptInstallExtension = useCallback(() => {
 		const url =
 			"https://chrome.google.com/webstore/detail/cennznet-extension/feckpephlmdcjnpoclagmaogngeffafk";
@@ -95,9 +82,10 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		const fetchAccounts = async () => {
 			const { web3Enable, web3Accounts, web3AccountsSubscribe } = module;
 
-			if (window.injectedWeb3?.["polkadot-js"]) {
-				return promptDisableExtension?.();
-			}
+			if (window.injectedWeb3?.["polkadot-js"])
+				return alert(
+					"Please turn off polkadot{.js} extension, enable CENNZnet extension, and refresh the page before continuing."
+				);
 
 			await web3Enable(appName);
 			const accounts = (await web3Accounts()) || [];
@@ -116,7 +104,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		void fetchAccounts();
 
 		return () => unsubscribe?.();
-	}, [appName, module, runtimeMode, promptDisableExtension]);
+	}, [appName, module, runtimeMode]);
 
 	return (
 		<CENNZExtensionContext.Provider
