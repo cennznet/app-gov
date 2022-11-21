@@ -28,7 +28,6 @@ module.exports = {
 			`Start process on ${chalk.magenta("%s")}...`,
 			CENNZ_NETWORK.ChainName
 		);
-		logger.debug("CENNZ Network", CENNZ_NETWORK.ChainSlug);
 
 		try {
 			const [cennzApi, mdbClient, discordWebhooks] = await Promise.all([
