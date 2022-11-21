@@ -25,7 +25,7 @@ export const handleDiscordMessaging = async (
 	);
 	const enactmentDelayInHours = proposal.enactmentDelay / getHourInBlocks(api);
 
-	const baseProposalInfo = {
+	const proposalInfo = {
 		status,
 		sponsor: proposal.sponsor,
 		enactmentDelay: proposal.enactmentDelay,
@@ -37,20 +37,14 @@ export const handleDiscordMessaging = async (
 		"proposal",
 		proposalJustification,
 		enactmentDelayInHours,
-		{
-			...baseProposalInfo,
-			votePercentage: proposal.votePercentage,
-		}
+		proposalInfo
 	);
 	const discordReferendumUpdate = getDiscordUpdate(
 		proposalId,
 		"referendum",
 		proposalJustification,
 		enactmentDelayInHours,
-		{
-			...baseProposalInfo,
-			vetoPercentage: proposal.vetoPercentage,
-		}
+		proposalInfo
 	);
 
 	let discordProposalMessage: string | undefined,
