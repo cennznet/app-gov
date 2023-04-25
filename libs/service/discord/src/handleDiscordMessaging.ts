@@ -12,7 +12,7 @@ import { getDiscordUpdate } from "./";
 export const handleDiscordMessaging = async (
 	api: Api,
 	proposal: ProposalModel,
-	webhooks: InteractionWebhook[],
+	[proposalWebhook, referendumWebhook]: InteractionWebhook[],
 	proposalId: number,
 	status: ProposalModel["status"],
 	updatedData: Partial<ProposalModel>
@@ -49,8 +49,6 @@ export const handleDiscordMessaging = async (
 
 	let discordProposalMessage: string | undefined,
 		discordReferendumMessage: string | undefined;
-
-	const [proposalWebhook, referendumWebhook] = webhooks;
 
 	switch (status) {
 		case "Deliberation":
