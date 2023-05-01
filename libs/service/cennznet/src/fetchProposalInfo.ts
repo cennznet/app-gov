@@ -2,7 +2,7 @@ import { Api } from "@cennznet/api";
 
 import type { ProposalStatus, ProposalStatusRaw } from "@app-gov/node/utils";
 
-export const FINALIZED_STATES = [
+export const FINALIZED_STATES: Array<ProposalStatus> = [
 	"Disapproved",
 	"ReferendumVetoed",
 	"ApprovedEnactmentCancelled",
