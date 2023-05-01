@@ -1,6 +1,18 @@
 import { Api } from "@cennznet/api";
 
-import type { ProposalStatus, ProposalStatusRaw } from "@app-gov/node/utils";
+type ProposalStatusRaw =
+	| "Deliberation" // Council is deliberating
+	| "ReferendumDeliberation" // Referendum is in progress, CENNZ holders deliberating
+	| "ApprovedWaitingEnactment" // referendum approved, awaiting enactment
+	| "ApprovedEnactmentCancelled" // Proposal was approved but enactment cancelled
+	| `{"approvedEnacted":${boolean}}` // Proposal approved and enacted (success/fail)
+	| "Disapproved" // The council voted against this proposal
+	| "ReferendumVetoed"; // The proposal was voted against during the referendum phase
+
+type ProposalStatus =
+	| Omit<ProposalStatusRaw, `{"approvedEnacted":${boolean}}`>
+	| "ApprovedEnacted"
+	| "ApprovedFailedEnactment";
 
 export const FINALIZED_STATES: Array<ProposalStatus> = [
 	"Disapproved",
