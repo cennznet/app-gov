@@ -1,5 +1,3 @@
-import type { ProposalStatusInfo } from "@cennznet/types";
-
 export interface ProposalDetails {
 	title: string;
 	description: string;
@@ -24,9 +22,19 @@ export interface ProposalInterface {
 	status: "Pending" | "Failed" | "Skipped" | "Aborted" | ProposalStatus;
 }
 
+export type ProposalStatusRaw =
+	| "Deliberation" // Council is deliberating
+	| "ReferendumDeliberation" // Referendum is in progress, CENNZ holders deliberating
+	| "ApprovedWaitingEnactment" // referendum approved, awaiting enactment
+	| "ApprovedEnactmentCancelled" // Proposal was approved but enactment cancelled
+	| `{"approvedEnacted":${boolean}}` // Proposal approved and enacted (success/fail)
+	| "Disapproved" // The council voted against this proposal
+	| "ReferendumVetoed"; // The proposal was voted against during the referendum phase
+
 export type ProposalStatus =
-	| ProposalStatusInfo["type"]
-	| "ReferendumDeliberation";
+	| Omit<ProposalStatusRaw, `{"approvedEnacted":${boolean}}`>
+	| "ApprovedEnacted"
+	| "ApprovedFailedEnactment";
 
 export interface ProposalCall {
 	method: string;

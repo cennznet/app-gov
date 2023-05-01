@@ -1,6 +1,7 @@
 import type { ColorResolvable, EmbedFieldData } from "discord.js";
 import { MessageEmbed } from "discord.js";
 
+import type { ProposalStatus } from "@app-gov/node/utils";
 import type { ProposalModel } from "@app-gov/service/mongodb";
 
 import { DiscordChannel, getVoteFields } from "./";
@@ -12,6 +13,13 @@ const COLOURS: Record<string, ColorResolvable> = {
 	Pending: "ORANGE",
 };
 
+const REJECTED_STATES: Array<ProposalStatus> = [
+	"Disapproved",
+	"ReferendumVetoed",
+	"ApprovedEnactmentCancelled",
+	"ApprovedFailedEnactment",
+];
+
 type ProposalEmbed = MessageEmbed | undefined;
 
 export const getProposalEmbed = (
@@ -21,7 +29,8 @@ export const getProposalEmbed = (
 	enactmentDelayInHours: number,
 	proposalInfo: Partial<ProposalModel>
 ): ProposalEmbed => {
-	const status = proposalInfo.status;
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const status = proposalInfo.status!;
 	const proposalFields = getProposalFields(
 		proposalInfo,
 		justification,
@@ -62,9 +71,7 @@ export const getProposalEmbed = (
 
 		default: {
 			messageEmbed = baseMessage.setColor(
-				status === "Disapproved" || status === "ReferendumVetoed"
-					? COLOURS.Reject
-					: COLOURS.Pass
+				REJECTED_STATES.includes(status) ? COLOURS.Reject : COLOURS.Pass
 			);
 			break;
 		}
