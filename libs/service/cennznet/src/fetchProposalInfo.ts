@@ -1,19 +1,25 @@
 import { Api } from "@cennznet/api";
 
-type ProposalStatus =
+type ProposalStatusRaw =
 	| "Deliberation" // Council is deliberating
 	| "ReferendumDeliberation" // Referendum is in progress, CENNZ holders deliberating
 	| "ApprovedWaitingEnactment" // referendum approved, awaiting enactment
-	| "ApprovedEnacted" // Proposal approved and enacted (success/fail)
 	| "ApprovedEnactmentCancelled" // Proposal was approved but enactment cancelled
+	| `{"approvedEnacted":${boolean}}` // Proposal approved and enacted (success/fail)
 	| "Disapproved" // The council voted against this proposal
 	| "ReferendumVetoed"; // The proposal was voted against during the referendum phase
 
-export const FINALIZED_STATES = [
+type ProposalStatus =
+	| Omit<ProposalStatusRaw, `{"approvedEnacted":${boolean}}`>
+	| "ApprovedEnacted"
+	| "ApprovedFailedEnactment";
+
+export const FINALIZED_STATES: Array<ProposalStatus> = [
 	"Disapproved",
 	"ReferendumVetoed",
 	"ApprovedEnactmentCancelled",
 	"ApprovedEnacted",
+	"ApprovedFailedEnactment",
 ];
 
 export interface ProposalInfo {
@@ -87,9 +93,14 @@ export const fetchProposalStatus = async (
 	api: Api,
 	proposalId: number
 ): Promise<ProposalStatus> => {
-	const proposalStatus = await api.query.governance.proposalStatus(proposalId);
-	let status = proposalStatus.toString() as ProposalStatus;
-	// for "ApprovedEnacted", the response is in JSON form `{"approvedEnacted":false}`
-	if (status.indexOf("approvedEnacted") >= 0) status = "ApprovedEnacted";
-	return status;
+	const proposalStatus = (
+		await api.query.governance.proposalStatus(proposalId)
+	).toString() as ProposalStatusRaw;
+
+	if (proposalStatus.indexOf("approvedEnacted") >= 0) {
+		const enacted = JSON.parse(proposalStatus).approvedEnacted;
+		return enacted ? "ApprovedEnacted" : "ApprovedFailedEnactment";
+	}
+
+	return proposalStatus;
 };
