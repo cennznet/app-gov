@@ -5,8 +5,11 @@ import {
 	fetchProposalInfo,
 	revalidateProposalRoute,
 } from "@app-gov/service/cennznet";
-import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
-import { REVALIDATE_SECRET } from "@app-gov/service/env-vars";
+import {
+	CENNZ_NETWORK,
+	MESSAGE_TIMEOUT,
+	REVALIDATE_SECRET,
+} from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
 import { getLogger, TimeoutError, waitForTime } from "./";
@@ -53,6 +56,7 @@ export const handleNewProposalMessage = async (
 		logger.info("Proposal #%d: revalidate proposal route done", proposalId);
 		const { revalidated } = await revalidateProposalRoute(
 			proposalId,
+			CENNZ_NETWORK.Website,
 			REVALIDATE_SECRET
 		);
 		if (!revalidated)
