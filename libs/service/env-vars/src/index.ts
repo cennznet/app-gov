@@ -66,3 +66,5 @@ export const MESSAGE_TIMEOUT = Number(process.env.MESSAGE_TIMEOUT || 10000);
 export const MESSAGE_MAX_RETRY = Number(process.env.MESSAGE_MAX_RETRY || 5);
 export const PROPOSAL_URL: string =
 	process.env.NX_PROPOSAL_URL ?? "http://localhost:4200";
+
+export const REVALIDATE_SECRET: string = process.env.REVALIDATE_SECRET ?? "";
