@@ -1,6 +1,7 @@
 import { VoidFn } from "@cennznet/api/types";
+import { hexToString } from "@polkadot/util";
 import { GetStaticProps, NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { If } from "react-extras";
 
 import { resolveProposalJustification } from "@app-gov/node/utils";
@@ -100,7 +101,8 @@ const Proposal: NextPage<ProposalProps> = ({
 	justification,
 }) => {
 	const proposal = useProposal(initialProposal);
-	const { proposalId, call, status } = proposal;
+	const { proposalId, call: initialCall, status } = proposal;
+	const call = useCall(initialCall);
 
 	const { open, openDialog, closeDialog } = useTransactionDialog();
 	const { onVote, onVeto, formState } = useProposalVoteForm(proposalId);
@@ -213,4 +215,25 @@ const useProposal = (initialProposal: ProposalModel) => {
 	}, [api, proposalId]);
 
 	return proposal;
+};
+
+interface RemarkArgs {
+	remark: `0x${string}`;
+}
+
+const useCall = (initialCall: ProposalModel["call"]) => {
+	return useMemo(() => {
+		if (initialCall.section !== "system" && initialCall.method !== "remark")
+			return initialCall;
+
+		if (!(initialCall.args as RemarkArgs).remark.startsWith("0x"))
+			return initialCall;
+
+		return {
+			...initialCall,
+			args: {
+				remark: hexToString((initialCall.args as RemarkArgs).remark),
+			},
+		};
+	}, [initialCall]);
 };
