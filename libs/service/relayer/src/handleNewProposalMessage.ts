@@ -43,17 +43,17 @@ export const handleNewProposalMessage = async (
 			proposalId,
 		});
 
-		logger.info("Proposal #%d: 🎾 fetch info [1/2]", proposalId);
+		logger.info("Proposal #%d: 🎾 fetch info [1/3]", proposalId);
 		const proposalInfo = await fetchProposalInfo(api, proposalId);
 		if (!proposalInfo) return;
 
-		logger.info("Proposal #%d: 🗂 file to DB [2/2]", proposalId);
+		logger.info("Proposal #%d: 🗂 file to DB [2/3]", proposalId);
 		await updateProposalRecord({
 			proposalId,
 			...proposalInfo,
 		});
 
-		logger.info("Proposal #%d: revalidate proposal route done", proposalId);
+		logger.info("Proposal #%d: revalidate proposal route [3/3]", proposalId);
 		const { revalidated } = await revalidateProposalRoute(
 			proposalId,
 			CENNZ_NETWORK.Website,
