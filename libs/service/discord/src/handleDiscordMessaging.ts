@@ -1,5 +1,6 @@
 import { Api } from "@cennznet/api";
 import { InteractionWebhook } from "discord.js";
+import { Logger } from "winston";
 
 import {
 	getHourInBlocks,
@@ -11,6 +12,7 @@ import { getDiscordUpdate } from "./";
 
 export const handleDiscordMessaging = async (
 	api: Api,
+	logger: Logger,
 	proposal: ProposalModel,
 	[proposalWebhook, referendumWebhook]: InteractionWebhook[],
 	proposalId: number,
@@ -47,6 +49,11 @@ export const handleDiscordMessaging = async (
 		proposalInfo
 	);
 
+	logger.debug(
+		"proposal %d: checking for discordProposalMessage",
+		proposalId,
+		proposal?.discordProposalMessage
+	);
 	let discordProposalMessage: string | undefined,
 		discordReferendumMessage: string | undefined;
 
@@ -76,6 +83,12 @@ export const handleDiscordMessaging = async (
 			proposal.discordReferendumMessage,
 			discordReferendumUpdate
 		);
+
+	logger.debug(
+		"proposal %d: discordProposalMessage after send/edit - %s",
+		proposalId,
+		discordProposalMessage
+	);
 
 	return {
 		...updatedData,
