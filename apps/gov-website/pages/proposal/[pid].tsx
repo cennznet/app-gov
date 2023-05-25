@@ -1,7 +1,6 @@
 import { VoidFn } from "@cennznet/api/types";
-import { hexToString } from "@polkadot/util";
 import { GetStaticProps, NextPage } from "next";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { If } from "react-extras";
 
 import { resolveProposalJustification } from "@app-gov/node/utils";

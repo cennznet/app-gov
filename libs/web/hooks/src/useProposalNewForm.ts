@@ -1,5 +1,4 @@
 import { Api } from "@cennznet/api";
-import { stringToHex } from "@polkadot/util";
 import { useCallback, useState } from "react";
 
 import { getHourInBlocks } from "@app-gov/node/utils";
