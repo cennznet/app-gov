@@ -77,13 +77,12 @@ export const useProposalNewForm = () => {
 				const { pinHash, pinUrl } = await pinProposalData(proposalData);
 
 				// 2. Send governance.submitProposal extrinsinc
+				// Note: passing an empty 'Vec<u8>' will skip the function call
 				const extrinsic = getSubmitProposalExtrinsic(
 					api,
 					pinUrl,
 					enactmentDelay,
-					functionCall.length
-						? functionCall
-						: api.tx.system.remark(stringToHex("Proposal enacted"))
+					functionCall?.length ? functionCall : null
 				);
 				await signAndSend([extrinsic, sponsor, { signer: wallet.signer }], {
 					onHashed() {

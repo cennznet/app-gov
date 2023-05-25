@@ -101,8 +101,7 @@ const Proposal: NextPage<ProposalProps> = ({
 	justification,
 }) => {
 	const proposal = useProposal(initialProposal);
-	const { proposalId, call: initialCall, status } = proposal;
-	const call = useCall(initialCall);
+	const { proposalId, call, status } = proposal;
 
 	const { open, openDialog, closeDialog } = useTransactionDialog();
 	const { onVote, onVeto, formState } = useProposalVoteForm(proposalId);
@@ -145,7 +144,9 @@ const Proposal: NextPage<ProposalProps> = ({
 					</div>
 					<div className="lg:col-span-2 lg:col-start-1 lg:row-start-1">
 						<ProposalBody.Justification justification={justification} />
-						<ProposalBody.Call call={call} />
+						<If condition={!!Object.keys(call)?.length}>
+							<ProposalBody.Call call={call} />
+						</If>
 						<If
 							condition={
 								status === "Deliberation" || status === "ReferendumDeliberation"
@@ -215,25 +216,4 @@ const useProposal = (initialProposal: ProposalModel) => {
 	}, [api, proposalId]);
 
 	return proposal;
-};
-
-interface RemarkArgs {
-	remark: `0x${string}`;
-}
-
-const useCall = (initialCall: ProposalModel["call"]) => {
-	return useMemo(() => {
-		if (initialCall.section !== "system" && initialCall.method !== "remark")
-			return initialCall;
-
-		if (!(initialCall.args as RemarkArgs).remark.startsWith("0x"))
-			return initialCall;
-
-		return {
-			...initialCall,
-			args: {
-				remark: hexToString((initialCall.args as RemarkArgs).remark),
-			},
-		};
-	}, [initialCall]);
 };
