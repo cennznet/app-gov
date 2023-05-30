@@ -1,8 +1,15 @@
 import { Api } from "@cennznet/api";
 import { Mongoose } from "mongoose";
 
-import { fetchProposalInfo } from "@app-gov/service/cennznet";
-import { MESSAGE_TIMEOUT } from "@app-gov/service/env-vars";
+import {
+	fetchProposalInfo,
+	revalidateProposalRoute,
+} from "@app-gov/service/cennznet";
+import {
+	CENNZ_NETWORK,
+	MESSAGE_TIMEOUT,
+	REVALIDATE_SECRET,
+} from "@app-gov/service/env-vars";
 import { createModelUpdater, ProposalModel } from "@app-gov/service/mongodb";
 
 import { getLogger, TimeoutError, waitForTime } from "./";
@@ -36,15 +43,24 @@ export const handleNewProposalMessage = async (
 			proposalId,
 		});
 
-		logger.info("Proposal #%d: 🎾 fetch info [1/2]", proposalId);
+		logger.info("Proposal #%d: 🎾 fetch info [1/3]", proposalId);
 		const proposalInfo = await fetchProposalInfo(api, proposalId);
 		if (!proposalInfo) return;
 
-		logger.info("Proposal #%d: 🗂  file to DB [2/2]", proposalId);
+		logger.info("Proposal #%d: 🗂 file to DB [2/3]", proposalId);
 		await updateProposalRecord({
 			proposalId,
 			...proposalInfo,
 		});
+
+		logger.info("Proposal #%d: revalidate proposal route [3/3]", proposalId);
+		const { revalidated } = await revalidateProposalRoute(
+			proposalId,
+			CENNZ_NETWORK.Website,
+			REVALIDATE_SECRET
+		);
+		if (!revalidated)
+			logger.warn("Unable to revalidate proposal #%d", proposalId);
 	};
 
 	const output = await Promise.race([
