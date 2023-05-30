@@ -143,7 +143,9 @@ const Proposal: NextPage<ProposalProps> = ({
 					</div>
 					<div className="lg:col-span-2 lg:col-start-1 lg:row-start-1">
 						<ProposalBody.Justification justification={justification} />
-						<ProposalBody.Call call={call} />
+						<If condition={!!Object.keys(call)?.length}>
+							<ProposalBody.Call call={call} />
+						</If>
 						<If
 							condition={
 								status === "Deliberation" || status === "ReferendumDeliberation"
