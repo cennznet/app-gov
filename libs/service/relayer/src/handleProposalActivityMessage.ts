@@ -44,6 +44,7 @@ export const handleProposalActivityMessage = async (
 			.model<ProposalModel>("Proposal")
 			.findOne({ proposalId });
 		if (!proposal) return;
+		logger.debug("proposal %d: proposal - %o", proposalId, proposal);
 
 		const status = await fetchProposalStatus(api, proposalId);
 		let updatedData = {} as Partial<ProposalModel>;
@@ -87,8 +88,10 @@ export const handleProposalActivityMessage = async (
 
 		if (!Object.keys(updatedData).length) return;
 		logger.info("Proposal #%d: 💬 update Discord [2/3]", proposalId);
+		logger.debug("proposal %d: updatedData - %o", proposalId, updatedData);
 		updatedData = await handleDiscordMessaging(
 			api,
+			logger,
 			proposal,
 			webhooks,
 			proposalId,
@@ -105,6 +108,11 @@ export const handleProposalActivityMessage = async (
 		waitForTime(MESSAGE_TIMEOUT),
 		handleMessage(),
 	]);
+	logger.debug(
+		"proposal %d: handleMessage result - %s",
+		proposalId,
+		output ?? "success"
+	);
 
 	if (output === "time-out") throw new TimeoutError(MESSAGE_TIMEOUT);
 };
