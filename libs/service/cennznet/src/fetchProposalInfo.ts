@@ -59,8 +59,15 @@ export const fetchProposalInfo = async (
 
 	if (!isValidUri) return;
 
-	let call;
+	// Proposal call of "0x" means no call
+	if (proposalCall === "0x")
+		return {
+			...proposalInfo,
+			status,
+			justificationUri,
+		};
 
+	let call;
 	try {
 		call = api.createType("Call", proposalCall).toHuman() as Record<
 			string,
@@ -77,15 +84,11 @@ export const fetchProposalInfo = async (
 		};
 	}
 
-	if (!call) return;
-
 	return {
 		...proposalInfo,
-		justificationUri: api
-			.createType("Vec<u8>", proposalInfo.justificationUri)
-			.toHuman() as string,
 		call,
 		status,
+		justificationUri,
 	};
 };
 
