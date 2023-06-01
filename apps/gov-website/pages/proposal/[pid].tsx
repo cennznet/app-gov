@@ -141,11 +141,13 @@ const Proposal: NextPage<ProposalProps> = ({
 							vetoThreshold={vetoThreshold}
 						/>
 					</div>
-					<div className="lg:col-span-2 lg:col-start-1 lg:row-start-1">
+					<div className="grid gap-4 lg:col-span-2 lg:col-start-1 lg:row-start-1">
 						<ProposalBody.Justification justification={justification} />
-						<If condition={!!Object.keys(call)?.length}>
+
+						<If condition={!!call}>
 							<ProposalBody.Call call={call} />
 						</If>
+
 						<If
 							condition={
 								status === "Deliberation" || status === "ReferendumDeliberation"
